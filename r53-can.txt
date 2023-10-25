@@ -1,0 +1,94 @@
+most of it is the exact same as E46 bmw. I am using canbus for water temp, rpm, wheelspeed, throttle position (actual TB not pedal)
+
+this should get you started
+
+--[CAN Id] = function(data) map_chan(<chan_id>, <data>, <CAN offset>, <CAN length>, <multiplier>, <adder>, [filter])
+
+----------------------------------------
+
+CAN_map = {
+
+
+[339 / 0x153] = function(data) map_chan(brakeId, data, 0, 1, 1, 0, brakeFilter) end,
+
+10 F8 3F 00 00 00 00 80
+[] 00 or 10 (fuel open-loop)
+   [   ] vehicle or wheel speed
+                     [] 80 when car is on? 
+
+[496 / 0x1F0] = function(data) processWheel(lfWheelId, data, 0)
+                                processWheel(rfWheelId, data, 2)
+                                processWheel(lrWheelId, data, 4)
+                                processWheel(rrWheelId, data, 6)
+FF E7 FF C7 FF 27 FF 87
+[] 8 bits + next 3 bits wheel speed
+   [] 00, 20, 40, 60 pattern + 3 bits of wheel speed
+      [] 8 bits + next 3 bits fwheel speed
+         [] 00, 20, 40, 60 pattern + 3 bits of wheel speed
+            [] 8 bits + next 3 bit wheel speed
+               [] 00, 20, 40, 60 pattern + 3 bits of wheel speed
+                  [] 8 bits + next 3 bit wheel speed
+                     [] 00, 20, 40, 60 pattern + 3 bits of wheel speed
+
+[501 / 0x1F5] = function (data) processSteering(data) end,
+[504 / 0x1F8] = function(data) map_chan(brakePressId, data, 2, 1, 1, 0) end,
+
+7F
+[] correlated to wheel speed
+
+[790 / 0x316] = function(data) map_chan(rpmId, data, 2, 2, 0.15625, 0, rpmFilter) end,
+
+01 00 FF 7F 00 00 00 00
+[] ignition on
+      [   ] RPM * 6 (LSBFirst)
+
+[809 / 0x329] = function(data) map_chan(tpsId, data, 5, 1 , 0.392156863, 0, tpsFilter)
+                                map_chan(tempId, data, 1, 1, 0.75, -48, toF)
+                                map_chan(clutchId, data, 3, 1, 1, 0, clutchFilter)
+
+F3 7F 00 00 00 FF 00 00
+[] 11, 62, 80, C0 pattern
+   [] coolant temp * 4 in C
+               [] throttle position
+
+[0x336]
+
+FF 7F 00 02 FF 1F FF 7F
+[] correlated with RPM. ignition advance?
+         [] ignition on
+
+[1083 / 0x43B] = function(data) map_chan(gearTempId, data, 0, 1, 1, -55, toF) end,
+[1349 / 0x545] = function(data) map_chan(oilTempId, data, 4, 1, 1, -48, toF) end,
+
+12 FF FF
+[] 12 when not running. parking brake?
+   [   ] fuel consumed?
+
+[1555 / 0x613] = function (data) map_chan(fuelId, data, 2, 1, 1, 0, fuelFilter) end,
+
+00 00 00 00 00 DF F7 00
+               [   ] ?
+
+[1557 / 0x615] = function (data) map_chan(extTempId, data, 3, 1, 1, 0, extTempFilter) end
+
+00 00 00 03 02 00 00 00
+            [] ignition on?
+
+[0x618]
+
+00 00 3F
+      [] ?
+
+[0x61A]
+
+07 00 00 FF 00 FF 00 00
+[] ?
+         [] odo?
+               [] ?
+
+[0x61F]
+
+FF FF 0F C0 42 00 00 00
+            [] bit 2 blinker
+
+}
