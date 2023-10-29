@@ -12,6 +12,8 @@ extern lv_font_t lcddot;
 static lv_obj_t * meter;
 static lv_obj_t * canvas;
 
+static lv_obj_t * speed_label;
+
 #define REDLINE 5500
 
 static lv_meter_indicator_t * rpm_normal;
@@ -32,6 +34,11 @@ static void set_value(void * indic, int32_t v)
     }
     // need_to_affect = true;
     update_effect();
+}
+
+
+static void set_speed_value(void * indic, int32_t v) {
+    lv_label_set_text_fmt(speed_label, "%d", v);
 }
 
 static void set_temp(void * bar, int32_t temp)
@@ -81,7 +88,7 @@ void test(void) {
 
 
 
-#define GAS_ANGLE 90
+#define GAS_ANGLE 72
 
 // gas
 {
@@ -98,22 +105,85 @@ void test(void) {
 
     /*Add a scale first*/
     lv_meter_scale_t * scale = lv_meter_add_scale(meter);
-    lv_meter_set_scale_ticks(meter, scale, 16, 1, 14, lv_color_black());
-    lv_meter_set_scale_major_ticks(meter, scale, 5, 5, 14, lv_color_black(), 20);
-    lv_meter_set_scale_range(meter, scale, 150, 0, GAS_ANGLE * 15.0/13.2, 360 - GAS_ANGLE * 15.0/13.2/2);
+    lv_meter_set_scale_ticks(meter, scale, 16, 1, 24, lv_color_black());
+    lv_meter_set_scale_major_ticks(meter, scale, 5, 5, 24, lv_color_black(), 20);
+    lv_meter_set_scale_range(meter, scale, 150, 0, GAS_ANGLE * 15.0/13.2, 360 + GAS_ANGLE / 2 - GAS_ANGLE * (15.0/13.2));
+
+
+    lv_obj_set_style_text_color(meter, lv_color_black(), NULL);
+
+
+    lv_meter_indicator_t * rpm_normal_bg = lv_meter_add_arc(meter, scale, 20, lv_color_change_lightness(lv_palette_main(LV_PALETTE_AMBER), 20), -1);
+    lv_meter_set_indicator_start_value(meter, rpm_normal_bg, 132);
+    lv_meter_set_indicator_end_value(meter, rpm_normal_bg, 0);
+
+    /*Add a three arc indicator*/
+    lv_meter_indicator_t * indic1 = lv_meter_add_arc(meter, scale, 20, lv_palette_main(LV_PALETTE_AMBER), -1);
+    lv_meter_set_indicator_start_value(meter, indic1, 120);
+    lv_meter_set_indicator_end_value(meter, indic1, 0);
+    // indic1->start_value = 0;
+    // indic1->end_value = 50;
+
+//     lv_anim_set_time(&a, 2000);
+//     lv_anim_set_playback_time(&a, 500);
+//     lv_anim_set_var(&a, indic1);
+//     lv_anim_start(&a);
+
+    lv_obj_t * gas_label = lv_label_create(meter);
+    lv_obj_align(gas_label, LV_ALIGN_RIGHT_MID, 0, 133);
+    lv_label_set_text(gas_label, "12.0");
+    lv_obj_set_style_text_color(gas_label, lv_palette_main(LV_PALETTE_AMBER), NULL);
+
+    lv_obj_t * fuel_label = lv_label_create(meter);
+    // lv_obj_align(fuel_label, LV_ALIGN_RIGHT_MID, 3, -146);
+    lv_obj_align(fuel_label, LV_ALIGN_RIGHT_MID, 0, -142);
+    lv_label_set_text(fuel_label, "FUEL");
+    lv_obj_set_style_text_color(fuel_label, lv_palette_main(LV_PALETTE_AMBER), NULL);
+    // lv_obj_set_style_transform_angle(fuel_label, 570, 0);
+}
+
+
+#define TEMP_ANGLE 72
+
+// temps
+{
+    meter = lv_meter_create(canvas);
+
+    /*Remove the circle from the middle*/
+    lv_obj_remove_style(meter, NULL, LV_PART_INDICATOR);
+    lv_obj_remove_style(meter, NULL, LV_PART_MAIN);
+    lv_obj_set_style_blend_mode(meter, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_center(meter);
+    lv_obj_set_size(meter, 480, 480);
+    // lv_obj_set_style_translate_x(meter, 200, 0);
+    // lv_obj_set_style_translate_y(meter, 50, 0);
+
+    /*Add a scale first*/
+    lv_meter_scale_t * scale = lv_meter_add_scale(meter);
+    lv_meter_set_scale_ticks(meter, scale, 10, 1, 24, lv_color_black());
+    lv_meter_set_scale_major_ticks(meter, scale, 5, 5, 24, lv_color_black(), 20);
+    lv_meter_set_scale_range(meter, scale, 80, 220, TEMP_ANGLE, 180 - TEMP_ANGLE / 2);
 
 
     lv_obj_set_style_text_color(meter, lv_color_black(), NULL);
 
 
     lv_meter_indicator_t * rpm_normal_bg = lv_meter_add_arc(meter, scale, 10, lv_color_change_lightness(lv_palette_main(LV_PALETTE_AMBER), 20), -1);
-    lv_meter_set_indicator_start_value(meter, rpm_normal_bg, 132);
-    lv_meter_set_indicator_end_value(meter, rpm_normal_bg, 0);
+    lv_meter_set_indicator_start_value(meter, rpm_normal_bg, 80);
+    lv_meter_set_indicator_end_value(meter, rpm_normal_bg, 220);
+
+    lv_meter_indicator_t * rpm_normal_bg2 = lv_meter_add_arc(meter, scale, 10, lv_color_change_lightness(lv_palette_main(LV_PALETTE_AMBER), 20), -12);
+    lv_meter_set_indicator_start_value(meter, rpm_normal_bg2, 80);
+    lv_meter_set_indicator_end_value(meter, rpm_normal_bg2, 220);
 
     /*Add a three arc indicator*/
     lv_meter_indicator_t * indic1 = lv_meter_add_arc(meter, scale, 10, lv_palette_main(LV_PALETTE_AMBER), -1);
-    lv_meter_set_indicator_start_value(meter, indic1, 120);
-    lv_meter_set_indicator_end_value(meter, indic1, 0);
+    lv_meter_set_indicator_start_value(meter, indic1, 80);
+    lv_meter_set_indicator_end_value(meter, indic1, 180);
+
+    lv_meter_indicator_t * indic2 = lv_meter_add_arc(meter, scale, 10, lv_palette_main(LV_PALETTE_AMBER), -12);
+    lv_meter_set_indicator_start_value(meter, indic2, 80);
+    lv_meter_set_indicator_end_value(meter, indic2, 160);
     // indic1->start_value = 0;
     // indic1->end_value = 50;
 
@@ -137,18 +207,24 @@ void test(void) {
 
     /*Add a scale first*/
     lv_meter_scale_t * scale = lv_meter_add_scale(meter);
-    lv_meter_set_scale_ticks(meter, scale, 81, 1, 12, lv_color_black());
-    lv_meter_set_scale_major_ticks(meter, scale, 10, 5, 12, lv_color_black(), 20);
+    lv_meter_set_scale_ticks(meter, scale, 81, 1, 24, lv_color_black());
+    // lv_meter_set_scale_major_ticks(meter, scale, 10, 5, 12, lv_color_black(), 20);
     lv_meter_set_scale_range(meter, scale, 0, 8000, 270, 135);
 
-    lv_obj_set_style_text_color(meter, lv_color_white(), NULL);
-    lv_obj_set_style_text_font(meter, &lv_font_montserrat_8, NULL);
 
-    lv_meter_indicator_t * rpm_normal_bg = lv_meter_add_arc(meter, scale, 10, lv_color_change_lightness(lv_palette_main(LV_PALETTE_AMBER), 15), -1);
+    lv_meter_scale_t * label_scale = lv_meter_add_scale(meter);
+    lv_meter_set_scale_ticks(meter, label_scale, 9, 1, 24, lv_color_black());
+    lv_meter_set_scale_major_ticks(meter, label_scale, 1, 5, 24, lv_color_black(), 20);
+    lv_meter_set_scale_range(meter, label_scale, 0, 8, 270, 135);
+
+    lv_obj_set_style_text_color(meter, lv_color_change_lightness(lv_palette_main(LV_PALETTE_AMBER), 100), NULL);
+    lv_obj_set_style_text_font(meter, &lv_font_montserrat_20, NULL);
+
+    lv_meter_indicator_t * rpm_normal_bg = lv_meter_add_arc(meter, scale, 20, lv_color_change_lightness(lv_palette_main(LV_PALETTE_AMBER), 15), -1);
     lv_meter_set_indicator_start_value(meter, rpm_normal_bg, 0);
     lv_meter_set_indicator_end_value(meter, rpm_normal_bg, REDLINE);
 
-    rpm_normal = lv_meter_add_arc(meter, scale, 10, lv_palette_main(LV_PALETTE_AMBER), -1);
+    rpm_normal = lv_meter_add_arc(meter, scale, 20, lv_palette_main(LV_PALETTE_AMBER), -1);
     lv_meter_set_indicator_start_value(meter, rpm_normal, 0);
     lv_meter_set_indicator_end_value(meter, rpm_normal, REDLINE);
 
@@ -166,12 +242,12 @@ void test(void) {
     lv_anim_set_var(&a, rpm_normal);
     lv_anim_start(&a);
 
-    lv_meter_indicator_t * rpm_red_bg = lv_meter_add_arc(meter, scale, 10, lv_color_change_lightness(lv_palette_main(LV_PALETTE_RED), 15), -1);
+    lv_meter_indicator_t * rpm_red_bg = lv_meter_add_arc(meter, scale, 20, lv_color_change_lightness(lv_palette_main(LV_PALETTE_RED), 15), -1);
     lv_meter_set_indicator_start_value(meter, rpm_red_bg, REDLINE);
     lv_meter_set_indicator_end_value(meter, rpm_red_bg, 8000);
 
     /*Add a red arc to the end*/
-    rpm_red = lv_meter_add_arc(meter, scale, 10, lv_palette_main(LV_PALETTE_RED), -1);
+    rpm_red = lv_meter_add_arc(meter, scale, 20, lv_palette_main(LV_PALETTE_RED), -1);
     lv_meter_set_indicator_start_value(meter, rpm_red, REDLINE);
     lv_meter_set_indicator_end_value(meter, rpm_red, 8000);
 
@@ -186,13 +262,14 @@ void test(void) {
     lv_obj_set_size(btn2, 140, 40);
     lv_obj_align(btn2, LV_ALIGN_CENTER, 0, 70);
     lv_obj_add_flag(btn2, LV_OBJ_FLAG_CHECKABLE);
+    lv_obj_set_style_blend_mode(btn2, LV_BLEND_MODE_ADDITIVE, 0);
     lv_obj_set_style_pad_all(btn2, 5, 0);
 
     // lv_obj_remove_style_all(btn2);
 
     static lv_style_t style;
     lv_style_init(&style);
-    lv_style_set_bg_color(&style, lv_color_change_lightness(lv_palette_main(LV_PALETTE_RED), 20));
+    lv_style_set_bg_color(&style, lv_color_change_lightness(lv_palette_main(LV_PALETTE_RED), 15));
     lv_style_set_outline_width(&style, 0);
     lv_style_set_border_width(&style, 0);
     lv_style_set_shadow_width(&style, 0);
@@ -218,57 +295,204 @@ void test(void) {
     lv_obj_center(label);
 
 }
-// // gas
-// {
 
-//     static lv_style_t style_indic;
+    static lv_coord_t col_dsc[] = {48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, LV_GRID_TEMPLATE_LAST};
+    static lv_coord_t row_dsc[] = {48, LV_GRID_TEMPLATE_LAST};
 
-//     lv_style_init(&style_indic);
-//     lv_style_set_bg_opa(&style_indic, LV_OPA_COVER);
-//     lv_style_set_bg_color(&style_indic, lv_palette_main(LV_PALETTE_AMBER));
-//     // lv_style_set_bg_grad_color(&style_indic, lv_palette_main(LV_PALETTE_RED));
-//     // lv_style_set_bg_grad_dir(&style_indic, LV_GRAD_DIR_VER);
-
-//     lv_obj_t * bar = lv_bar_create(canvas);
-//     lv_obj_add_style(bar, &style_indic, LV_PART_INDICATOR);
-//     lv_obj_set_size(bar, 20, 200);
-//     lv_obj_set_style_translate_x(bar, 600, 0);
-//     lv_obj_set_style_translate_y(bar, 200, 0);
-//     lv_bar_set_range(bar, -20, 40);
-
-//     lv_anim_t a;
-//     lv_anim_init(&a);
-//     lv_anim_set_exec_cb(&a, set_temp);
-//     lv_anim_set_time(&a, 3000);
-//     lv_anim_set_playback_time(&a, 3000);
-//     lv_anim_set_var(&a, bar);
-//     lv_anim_set_values(&a, -20, 40);
-//     lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
-//     lv_anim_start(&a);
-
-// }
-
-// misc text
+    /*Create a container with grid*/
+    lv_obj_t * cont = lv_obj_create(canvas);
+    lv_obj_remove_style_all(cont);
+    lv_obj_set_grid_align(cont, LV_GRID_ALIGN_CENTER, LV_GRID_ALIGN_CENTER);
+    lv_obj_set_style_grid_column_dsc_array(cont, col_dsc, 0);
+    lv_obj_set_style_grid_row_dsc_array(cont, row_dsc, 0);
+    lv_obj_set_size(cont, 800, 48);
+    lv_obj_center(cont);
+    lv_obj_align(cont, LV_ALIGN_CENTER, 0, 200);
+    lv_obj_set_layout(cont, LV_LAYOUT_GRID);
 
 {
+    LV_IMG_DECLARE(slice1);
+    
+    lv_obj_t * icon = lv_img_create(cont);
+    lv_img_set_src(icon, &slice1);
+    lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
 
-    lv_draw_label_dsc_t label_dsc;
-    lv_draw_label_dsc_init(&label_dsc);
-    label_dsc.color = lv_palette_main(LV_PALETTE_AMBER);
-    label_dsc.font = &lv_font_montserrat_16;
-
-    lv_canvas_draw_text(canvas, 100, 300, 300, &label_dsc, "Goin fast");
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_img_recolor(&style, lv_palette_main(LV_PALETTE_RED));
+    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
+    lv_obj_add_style(icon, &style, 0);
 }
 
-// {
+{
+    LV_IMG_DECLARE(slice2);
+    
+    lv_obj_t * icon = lv_img_create(cont);
+    lv_img_set_src(icon, &slice2);
+    lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
 
-//     lv_draw_label_dsc_t label_dsc;
-//     lv_draw_label_dsc_init(&label_dsc);
-//     label_dsc.color = lv_palette_main(LV_PALETTE_AMBER);
-//     label_dsc.font = &lv_font_montserrat_16;
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_img_recolor(&style, lv_palette_main(LV_PALETTE_AMBER));
+    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
+    lv_obj_add_style(icon, &style, 0);
+}
 
-//     lv_canvas_draw_text(canvas, 700, 100, 100, &label_dsc, "Mini Cooper");
-// }
+{
+    LV_IMG_DECLARE(slice3);
+    
+    lv_obj_t * icon = lv_img_create(cont);
+    lv_img_set_src(icon, &slice3);
+    lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_STRETCH, 2, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_img_recolor(&style, lv_palette_main(LV_PALETTE_AMBER));
+    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
+    lv_obj_add_style(icon, &style, 0);
+}
+
+{
+    LV_IMG_DECLARE(slice5);
+    
+    lv_obj_t * icon = lv_img_create(cont);
+    lv_img_set_src(icon, &slice5);
+    lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_STRETCH, 3, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_img_recolor(&style, lv_palette_main(LV_PALETTE_RED));
+    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
+    lv_obj_add_style(icon, &style, 0);
+}
+
+{
+    LV_IMG_DECLARE(slice6);
+    
+    lv_obj_t * icon = lv_img_create(cont);
+    lv_img_set_src(icon, &slice6);
+    lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_STRETCH, 4, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_img_recolor(&style, lv_palette_main(LV_PALETTE_RED));
+    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
+    lv_obj_add_style(icon, &style, 0);
+}
+
+{
+    LV_IMG_DECLARE(slice7);
+    
+    lv_obj_t * icon = lv_img_create(cont);
+    lv_img_set_src(icon, &slice7);
+    lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_STRETCH, 5, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_img_recolor(&style, lv_palette_main(LV_PALETTE_RED));
+    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
+    lv_obj_add_style(icon, &style, 0);
+}
+
+{
+    LV_IMG_DECLARE(slice8);
+    
+    lv_obj_t * icon = lv_img_create(cont);
+    lv_img_set_src(icon, &slice8);
+    lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_STRETCH, 6, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_img_recolor(&style, lv_palette_main(LV_PALETTE_AMBER));
+    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
+    lv_obj_add_style(icon, &style, 0);
+}
+
+{
+    LV_IMG_DECLARE(slice9);
+    
+    lv_obj_t * icon = lv_img_create(cont);
+    lv_img_set_src(icon, &slice9);
+    lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_STRETCH, 7, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_img_recolor(&style, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
+    lv_obj_add_style(icon, &style, 0);
+}
+
+
+{
+    LV_IMG_DECLARE(slice10);
+    
+    lv_obj_t * icon = lv_img_create(cont);
+    lv_img_set_src(icon, &slice10);
+    lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_STRETCH, 8, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_img_recolor(&style, lv_palette_main(LV_PALETTE_GREEN));
+    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
+    lv_obj_add_style(icon, &style, 0);
+}
+
+
+{
+    LV_IMG_DECLARE(slice11);
+    
+    lv_obj_t * icon = lv_img_create(cont);
+    lv_img_set_src(icon, &slice11);
+    lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_STRETCH, 9, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_img_recolor(&style, lv_palette_main(LV_PALETTE_AMBER));
+    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
+    lv_obj_add_style(icon, &style, 0);
+}
+
+
+{
+    LV_IMG_DECLARE(slice12);
+    
+    lv_obj_t * icon = lv_img_create(cont);
+    lv_img_set_src(icon, &slice12);
+    lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_STRETCH, 10, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_img_recolor(&style, lv_palette_main(LV_PALETTE_AMBER));
+    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
+    lv_obj_add_style(icon, &style, 0);
+}
+
+
+{
+    LV_IMG_DECLARE(slice13);
+    
+    lv_obj_t * icon = lv_img_create(cont);
+    lv_img_set_src(icon, &slice13);
+    lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_STRETCH, 11, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_img_recolor(&style, lv_palette_main(LV_PALETTE_RED));
+    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
+    lv_obj_add_style(icon, &style, 0);
+}
 
 // speed
 {
@@ -278,11 +502,25 @@ void test(void) {
     lv_style_set_text_color(&style, lv_palette_main(LV_PALETTE_AMBER));
     lv_style_set_text_font(&style, &lcddot);
 
-    lv_obj_t * main_label = lv_label_create(canvas);
-    lv_label_set_text(main_label, "50");
-    lv_obj_add_style(main_label, &style, 0);
+    speed_label = lv_label_create(canvas);
+    lv_label_set_text_fmt(speed_label, "%d", 50);
+    lv_obj_add_style(speed_label, &style, 0);
 
-    lv_obj_align(main_label, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_align(speed_label, LV_ALIGN_CENTER, 0, 0);
+
+    lv_anim_t a;
+    lv_anim_init(&a);
+    lv_anim_set_exec_cb(&a, set_speed_value);
+    lv_anim_set_values(&a, 0, 80);
+    lv_anim_set_repeat_delay(&a, 100);
+    lv_anim_set_playback_delay(&a, 100);
+    lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
+
+    lv_anim_set_time(&a, 2000);
+    lv_anim_set_playback_time(&a, 500);
+    lv_anim_set_var(&a, speed_label);
+    lv_anim_start(&a);
+
 }
     update_effect();
 
@@ -324,25 +562,25 @@ static lv_color_t ebuf2[LV_CANVAS_BUF_SIZE_TRUE_COLOR_ALPHA(CANVAS_WIDTH, CANVAS
 void setup_effect() {
     // memcpy(cbuf_tmp, cbuf, sizeof(cbuf_tmp));
     img.data = (void *)cbuf_tmp;
-    img.header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA;
+    img.header.cf = LV_IMG_CF_TRUE_COLOR;
     img.header.w = CANVAS_WIDTH;
     img.header.h = CANVAS_HEIGHT;
 
     effect1 = lv_canvas_create(lv_scr_act());
-    lv_canvas_set_buffer(effect1, ebuf1, CANVAS_WIDTH, CANVAS_HEIGHT, LV_IMG_CF_TRUE_COLOR_ALPHA);
+    lv_canvas_set_buffer(effect1, ebuf1, CANVAS_WIDTH, CANVAS_HEIGHT, LV_IMG_CF_TRUE_COLOR);
     lv_obj_set_style_bg_color(effect1, lv_color_black(), 0);    
     // lv_obj_move_background(effect1);
     lv_obj_center(effect1);
-    lv_obj_set_style_opa(effect1, LV_OPA_20, 0);
+    lv_obj_set_style_opa(effect1, 25, 0);
     lv_obj_set_style_blend_mode(effect1, LV_BLEND_MODE_ADDITIVE, 0);
 
 
     effect2 = lv_canvas_create(lv_scr_act());
-    lv_canvas_set_buffer(effect2, ebuf2, CANVAS_WIDTH, CANVAS_HEIGHT, LV_IMG_CF_TRUE_COLOR_ALPHA);
+    lv_canvas_set_buffer(effect2, ebuf2, CANVAS_WIDTH, CANVAS_HEIGHT, LV_IMG_CF_TRUE_COLOR);
     lv_obj_set_style_bg_color(effect2, lv_color_black(), 0);    
     // lv_obj_move_background(effect2);
     lv_obj_center(effect2);
-    lv_obj_set_style_opa(effect2, LV_OPA_20, 0);
+    lv_obj_set_style_opa(effect2, 15, 0);
     lv_obj_set_style_blend_mode(effect2, LV_BLEND_MODE_ADDITIVE, 0);
 }
 
@@ -350,18 +588,18 @@ void update_effect() {
     if (!effect1) {
         setup_effect();
     }
-    lv_snapshot_take_to_buf(canvas, LV_IMG_CF_TRUE_COLOR_ALPHA, &img, &cbuf_tmp, sizeof(cbuf_tmp));
+    lv_snapshot_take_to_buf(canvas, LV_IMG_CF_TRUE_COLOR, &img, &cbuf_tmp, sizeof(cbuf_tmp));
  
     // lv_canvas_transform(effect1, &img, 0, 260, (260.0/256.0 - 1) * CANVAS_WIDTH / 2, (260.0/256.0 - 1) * CANVAS_HEIGHT / 2, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, true);
     lv_canvas_transform(effect1, &img, 0, 260, 0, 0, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, true);
 
-    lv_canvas_blur_hor(effect1, NULL, 3);
-    lv_canvas_blur_ver(effect1, NULL, 3);
+    // lv_canvas_blur_hor(effect1, NULL, 3);
+    // lv_canvas_blur_ver(effect1, NULL, 3);
     // lv_canvas_blur_hor(effect1, NULL, 2);
     // lv_canvas_blur_ver(effect1, NULL, 2);
     // lv_canvas_blur_hor(effect1, NULL, 2);
     // lv_canvas_blur_ver(effect1, NULL, 2);
-    lv_snapshot_take_to_buf(effect1, LV_IMG_CF_TRUE_COLOR_ALPHA, &img, &cbuf_tmp, sizeof(cbuf_tmp));
+    lv_snapshot_take_to_buf(effect1, LV_IMG_CF_TRUE_COLOR, &img, &cbuf_tmp, sizeof(cbuf_tmp));
 
     // lv_canvas_transform(effect2, &img, 0, 264, (264.0/256.0 - 1) * CANVAS_WIDTH / 2, (264.0/256.0 - 1) * CANVAS_HEIGHT / 2, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, true);
     // lv_canvas_transform(effect2, &img, 0, 264, 0, 0, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, true);
