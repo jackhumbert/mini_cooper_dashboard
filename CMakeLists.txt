@@ -1,5 +1,29 @@
-cmake_minimum_required(VERSION 3.10)
-project(r53_dash LANGUAGES C CXX)
+cmake_minimum_required(VERSION 3.16)
+
+set(IDF_TARGET "esp32s3")
+set(ENV{IDF_PATH} "/Users/jackhumbert/esp/esp-idf")
+
+set(PYTHON /Users/jackhumbert/.espressif/python_env/idf5.1_py3.9_env/bin/python3)
+set(TARGET esp32s3)
+# -m venv /Users/jackhumbert/.espressif/python_env/idf5.1_py3.9_env/")
+# set(__CHECK_PYTHON FALSE)
+
+# set(CMAKE_C_COMPILER "/Users/jackhumbert/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-gcc")
+# set(CMAKE_CXX_COMPILER "/Users/jackhumbert/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-g++")
+
+list(APPEND CMAKE_PROGRAM_PATH "/Users/jackhumbert/.espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin")
+
+set(CMAKE_TOOLCHAIN_FILE "$ENV{IDF_PATH}/tools/cmake/toolchain-${IDF_TARGET}.cmake")
+# include($ENV{IDF_PATH}/tools/cmake/toolchain-${IDF_TARGET}.cmake)
+
+# set(EXTRA_COMPONENT_DIRS src)
+
+project(r53_dash C)
+
+include($ENV{IDF_PATH}/tools/cmake/idf.cmake)
+
+idf_build_process("esp32s3")
+
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -28,14 +52,16 @@ file(GLOB_RECURSE SOURCES "src/*.c" )
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(CMAKE_CXX_FLAGS "-O3")
 
-find_package(SDL2 REQUIRED SDL2)
-find_package(Freetype REQUIRED Freetype)
+find_package(SDL2)
+find_package(Freetype)
 # include_directories(${SDL2_INCLUDE_DIRS})
-add_executable(main main.c ${SOURCES} ${INCLUDES})
-target_link_libraries(main PRIVATE SDL2 Freetype m pthread lvgl::lvgl lvgl::drivers)
+add_executable(${CMAKE_PROJECT_NAME}.elf main.c ${SOURCES} ${INCLUDES})
+target_link_libraries(${CMAKE_PROJECT_NAME}.elf PRIVATE SDL2 Freetype m pthread lvgl::lvgl lvgl::drivers)
+
+# Let the build system know what the project executable is to attach more targets, dependencies, etc.
+idf_build_executable(${CMAKE_PROJECT_NAME}.elf)
 
 add_executable(simulator sim.c ${SOURCES} ${INCLUDES})
 target_link_libraries(simulator PRIVATE SDL2 Freetype m pthread lvgl::lvgl lvgl::drivers)
-
 
 add_custom_target (simulator_run COMMAND $<TARGET_FILE:simulator> WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} DEPENDS simulator)
