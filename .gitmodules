@@ -1,0 +1,9 @@
+[submodule "lib/lvgl"]
+	path = lib/lvgl
+	url = https://github.com/lvgl/lvgl.git
+[submodule "lib/lv_drivers"]
+	path = lib/lv_drivers
+	url = https://github.com/lvgl/lv_drivers.git
+[submodule "lib/dbcc"]
+	path = lib/dbcc
+	url = https://github.com/howerj/dbcc.git
