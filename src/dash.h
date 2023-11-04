@@ -15,4 +15,7 @@
 #define GREEN_ON lv_palette_main(LV_PALETTE_GREEN)
 #define GREEN_OFF lv_color_change_lightness(lv_palette_main(LV_PALETTE_GREEN), 20)
 
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
+
 void dash(void);

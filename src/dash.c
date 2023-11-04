@@ -1,4 +1,5 @@
 #include "dash.h"
+#include "tach.h"
 
 lv_obj_t * canvas;
 
@@ -29,5 +30,7 @@ void dash(void) {
     // lv_canvas_fill_bg(canvas, lv_palette_darken(LV_PALETTE_AMBER, 3), LV_OPA_COVER);
 
     // lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_BLUE), LV_OPA_COVER);
+
+    tach(canvas);
 
 }
