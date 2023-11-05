@@ -41,7 +41,7 @@ lv_obj_t * time_create(lv_obj_t * parent) {
     lv_obj_t * time_label = lv_label_create(parent);
     lv_label_set_text(time_label, "5:30 PM");
     lv_obj_add_style(time_label, &style, 0);
-    lv_obj_set_style_blend_mode(time_label, LV_BLEND_MODE_ADDITIVE, 0);
+    // lv_obj_set_style_blend_mode(time_label, LV_BLEND_MODE_ADDITIVE, 0);
 
     lv_obj_align(time_label, LV_ALIGN_CENTER, 0, 0);
 

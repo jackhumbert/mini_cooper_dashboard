@@ -37,7 +37,7 @@ lv_obj_t * coolant_create(lv_obj_t * parent) {
     /*Remove the circle from the middle*/
     lv_obj_remove_style(meter, NULL, LV_PART_INDICATOR);
     lv_obj_remove_style(meter, NULL, LV_PART_MAIN);
-    lv_obj_set_style_blend_mode(meter, LV_BLEND_MODE_ADDITIVE, 0);
+    // lv_obj_set_style_blend_mode(meter, LV_BLEND_MODE_ADDITIVE, 0);
     lv_obj_align(meter, LV_ALIGN_BOTTOM_RIGHT, 0, 0);
     lv_obj_set_size(meter, 100, 100);
 

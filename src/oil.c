@@ -85,7 +85,7 @@ lv_obj_t * oil_create(lv_obj_t * parent) {
     /*Remove the circle from the middle*/
     lv_obj_remove_style(oil_temp_meter, NULL, LV_PART_INDICATOR);
     lv_obj_remove_style(oil_temp_meter, NULL, LV_PART_MAIN);
-    lv_obj_set_style_blend_mode(oil_temp_meter, LV_BLEND_MODE_ADDITIVE, 0);
+    // lv_obj_set_style_blend_mode(oil_temp_meter, LV_BLEND_MODE_ADDITIVE, 0);
     lv_obj_set_size(oil_temp_meter, 100, 100);
     lv_obj_align(oil_temp_meter, LV_ALIGN_CENTER, 45, 50);
 
@@ -148,7 +148,7 @@ lv_obj_t * oil_create(lv_obj_t * parent) {
     /*Remove the circle from the middle*/
     lv_obj_remove_style(oil_pressure_meter, NULL, LV_PART_INDICATOR);
     lv_obj_remove_style(oil_pressure_meter, NULL, LV_PART_MAIN);
-    lv_obj_set_style_blend_mode(oil_pressure_meter, LV_BLEND_MODE_ADDITIVE, 0);
+    // lv_obj_set_style_blend_mode(oil_pressure_meter, LV_BLEND_MODE_ADDITIVE, 0);
     lv_obj_set_size(oil_pressure_meter, 100, 100);
     lv_obj_align(oil_pressure_meter, LV_ALIGN_CENTER, -45, 50);
 

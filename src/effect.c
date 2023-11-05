@@ -17,7 +17,7 @@ void effect_callback(lv_timer_t * timer) {
         lv_snapshot_take_to_buf(canvas, LV_IMG_CF_TRUE_COLOR, &img, &cbuf_tmp, sizeof(cbuf_tmp));
     
         // lv_canvas_transform(effect1, &img, 0, 260, (260.0/256.0 - 1) * CANVAS_WIDTH / 2, (260.0/256.0 - 1) * CANVAS_HEIGHT / 2, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, true);
-        lv_canvas_transform(effect1, &img, 0, 260, 0, 0, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, true);
+        lv_canvas_transform(effect1, &img, 0, 260, 0, 0, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, false);
 
         // lv_canvas_blur_hor(effect1, NULL, 3);
         // lv_canvas_blur_ver(effect1, NULL, 3);
@@ -29,7 +29,7 @@ void effect_callback(lv_timer_t * timer) {
 
         // lv_canvas_transform(effect2, &img, 0, 264, (264.0/256.0 - 1) * CANVAS_WIDTH / 2, (264.0/256.0 - 1) * CANVAS_HEIGHT / 2, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, true);
         // lv_canvas_transform(effect2, &img, 0, 264, 0, 0, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, true);
-        lv_canvas_transform(effect2, &img, 0, 260, 0, 0, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, true);
+        lv_canvas_transform(effect2, &img, 0, 260, 0, 0, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, false);
 
         // lv_canvas_blur_hor(effect2, NULL, 3);
         // lv_canvas_blur_ver(effect2, NULL, 3);

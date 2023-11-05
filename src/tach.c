@@ -80,7 +80,7 @@ void tach(lv_obj_t * canvas) {
     /*Remove the circle from the middle*/
     lv_obj_remove_style(meter, NULL, LV_PART_INDICATOR);
     lv_obj_remove_style(meter, NULL, LV_PART_MAIN);
-    lv_obj_set_style_blend_mode(meter, LV_BLEND_MODE_ADDITIVE, 0);
+    // lv_obj_set_style_blend_mode(meter, LV_BLEND_MODE_ADDITIVE, 0);
     lv_obj_center(meter);
     lv_obj_set_size(meter, 400, 400);
 
