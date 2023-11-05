@@ -18,4 +18,4 @@
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
-void dash(void);
+lv_obj_t * dash(void);
