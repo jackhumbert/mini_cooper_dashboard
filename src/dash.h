@@ -1,11 +1,10 @@
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 
 #define CANVAS_WIDTH  800
 #define CANVAS_HEIGHT 480
 
-#define REDLINE 6750
-
 #define AMBER_ON lv_palette_main(LV_PALETTE_AMBER)
+#define AMBER_HALF lv_color_change_lightness(lv_palette_main(LV_PALETTE_AMBER), 64)
 #define AMBER_OFF lv_color_change_lightness(lv_palette_main(LV_PALETTE_AMBER), 20)
 #define RED_ON lv_palette_main(LV_PALETTE_RED)
 #define RED_HALF lv_color_change_lightness(lv_palette_main(LV_PALETTE_RED), 64)

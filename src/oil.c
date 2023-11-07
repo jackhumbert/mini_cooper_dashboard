@@ -51,26 +51,30 @@ lv_obj_t * oil_create(lv_obj_t * parent) {
     // lv_obj_set_style_blend_mode(oil_cont, LV_BLEND_MODE_ADDITIVE, 0);
     lv_obj_set_scrollbar_mode(oil_cont, LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_scroll_dir(oil_cont, LV_DIR_NONE);
-    lv_obj_set_size(oil_cont, 300, 200);
+    lv_obj_set_size(oil_cont, 170, 100);
     // lv_obj_align(oil_cont, LV_ALIGN_CENTER, 0, 0);
     // lv_obj_set_style_blend_mode(oil_cont, LV_BLEND_MODE_ADDITIVE, 0);
     // lv_obj_center(oil_cont);
 
 {
-    static lv_ft_info_t info;
-    /*FreeType uses C standard file system, so no driver letter is required.*/
-    // info.name = "./fonts/Rajdhani-Regular.ttf";
-    info.name = "./fonts/Bould-Regular.otf";
-    info.weight = 16;
-    info.style = FT_FONT_STYLE_NORMAL;
-    info.mem = NULL;
-    if(!lv_ft_font_init(&info)) {
-        LV_LOG_ERROR("create failed.");
-    }
+    // static lv_ft_info_t info;
+    // /*FreeType uses C standard file system, so no driver letter is required.*/
+    // // info.name = "./fonts/Rajdhani-Regular.ttf";
+    // info.name = "./fonts/Bould-Regular.otf";
+    // info.weight = 14;
+    // info.style = FT_FONT_STYLE_NORMAL;
+    // info.mem = NULL;
+    // if(!lv_ft_font_init(&info)) {
+    //     LV_LOG_ERROR("create failed.");
+    // }
+
+
+
+    lv_font_t * font = lv_tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 14);
 
     lv_obj_t * engine_temp_label = lv_label_create(oil_cont);
-    lv_obj_align(engine_temp_label, LV_ALIGN_CENTER, 0, 5);
-    lv_obj_set_style_text_font(engine_temp_label, info.font, 0);
+    lv_obj_align(engine_temp_label, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_set_style_text_font(engine_temp_label, font, 0);
     lv_label_set_text(engine_temp_label, "OIL");
     lv_obj_set_style_text_color(engine_temp_label, AMBER_ON, 0);
 }
@@ -87,13 +91,13 @@ lv_obj_t * oil_create(lv_obj_t * parent) {
     lv_obj_remove_style(oil_temp_meter, NULL, LV_PART_MAIN);
     // lv_obj_set_style_blend_mode(oil_temp_meter, LV_BLEND_MODE_ADDITIVE, 0);
     lv_obj_set_size(oil_temp_meter, 100, 100);
-    lv_obj_align(oil_temp_meter, LV_ALIGN_CENTER, 45, 50);
+    lv_obj_align(oil_temp_meter, LV_ALIGN_BOTTOM_RIGHT, 0, 0);
 
     /*Add a scale first*/
     lv_meter_scale_t * scale = lv_meter_add_scale(oil_temp_meter);
     lv_meter_set_scale_ticks(oil_temp_meter, scale, 11, 1, 50, lv_color_black());
     lv_meter_set_scale_major_ticks(oil_temp_meter, scale, 5, 5, 50, lv_color_black(), 20);
-    lv_meter_set_scale_range(oil_temp_meter, scale, 320, 100, 180 + 90, 270);
+    lv_meter_set_scale_range(oil_temp_meter, scale, 320, 100, 180, 270);
 
     lv_obj_set_style_text_color(oil_temp_meter, lv_color_black(), 0);
 
@@ -106,20 +110,24 @@ lv_obj_t * oil_create(lv_obj_t * parent) {
     lv_meter_set_indicator_end_value(oil_temp_meter, oil_temp_indic, 100);
 
     {
-        static lv_ft_info_t info;
-        /*FreeType uses C standard file system, so no driver letter is required.*/
-        // info.name = "./fonts/Rajdhani-Regular.ttf";
-        info.name = "./fonts/Bould-Regular.otf";
-        info.weight = 20;
-        info.style = FT_FONT_STYLE_NORMAL;
-        info.mem = NULL;
-        if(!lv_ft_font_init(&info)) {
-            LV_LOG_ERROR("create failed.");
-        }
+        // static lv_ft_info_t info;
+        // /*FreeType uses C standard file system, so no driver letter is required.*/
+        // // info.name = "./fonts/Rajdhani-Regular.ttf";
+        // info.name = "./fonts/Bould-Regular.otf";
+        // info.weight = 20;
+        // info.style = FT_FONT_STYLE_NORMAL;
+        // info.mem = NULL;
+        // if(!lv_ft_font_init(&info)) {
+        //     LV_LOG_ERROR("create failed.");
+        // }
+
+
+
+        lv_font_t * font = lv_tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 20);
 
         oil_temp_label = lv_label_create(oil_temp_meter);
         // lv_obj_align(oil_temp_label, LV_ALIGN_RIGHT_MID, 0, 133);
-        lv_obj_set_style_text_font(oil_temp_label, info.font, 0);
+        lv_obj_set_style_text_font(oil_temp_label, font, 0);
         lv_obj_center(oil_temp_label);
         lv_label_set_text(oil_temp_label, "210°F");
         lv_obj_set_style_text_color(oil_temp_label, AMBER_ON, 0);
@@ -150,13 +158,13 @@ lv_obj_t * oil_create(lv_obj_t * parent) {
     lv_obj_remove_style(oil_pressure_meter, NULL, LV_PART_MAIN);
     // lv_obj_set_style_blend_mode(oil_pressure_meter, LV_BLEND_MODE_ADDITIVE, 0);
     lv_obj_set_size(oil_pressure_meter, 100, 100);
-    lv_obj_align(oil_pressure_meter, LV_ALIGN_CENTER, -45, 50);
+    lv_obj_align(oil_pressure_meter, LV_ALIGN_BOTTOM_LEFT, 0, 0);
 
     /*Add a scale first*/
     lv_meter_scale_t * scale = lv_meter_add_scale(oil_pressure_meter);
     lv_meter_set_scale_ticks(oil_pressure_meter, scale, 11, 1, 50, lv_color_black());
     lv_meter_set_scale_major_ticks(oil_pressure_meter, scale, 5, 5, 50, lv_color_black(), 20);
-    lv_meter_set_scale_range(oil_pressure_meter, scale, 0, 70, 180 + 45, 90 - 45);
+    lv_meter_set_scale_range(oil_pressure_meter, scale, 0, 70, 180, 90);
 
     lv_obj_set_style_text_color(oil_pressure_meter, lv_color_black(), 0);
 
@@ -169,19 +177,23 @@ lv_obj_t * oil_create(lv_obj_t * parent) {
     lv_meter_set_indicator_end_value(oil_pressure_meter, oil_pressure_indic, 35);
 
     {
-        static lv_ft_info_t info;
-        /*FreeType uses C standard file system, so no driver letter is required.*/
-        // info.name = "./fonts/Rajdhani-Regular.ttf";
-        info.name = "./fonts/Bould-Regular.otf";
-        info.weight = 20;
-        info.style = FT_FONT_STYLE_NORMAL;
-        info.mem = NULL;
-        if(!lv_ft_font_init(&info)) {
-            LV_LOG_ERROR("create failed.");
-        }
+        // static lv_ft_info_t info;
+        // /*FreeType uses C standard file system, so no driver letter is required.*/
+        // // info.name = "./fonts/Rajdhani-Regular.ttf";
+        // info.name = "./fonts/Bould-Regular.otf";
+        // info.weight = 20;
+        // info.style = FT_FONT_STYLE_NORMAL;
+        // info.mem = NULL;
+        // if(!lv_ft_font_init(&info)) {
+        //     LV_LOG_ERROR("create failed.");
+        // }
+
+
+
+        lv_font_t * font = lv_tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 20);
 
         oil_pressure_label = lv_label_create(oil_pressure_meter);
-        lv_obj_set_style_text_font(oil_pressure_label, info.font, 0);
+        lv_obj_set_style_text_font(oil_pressure_label, font, 0);
         lv_obj_center(oil_pressure_label);
         lv_label_set_text(oil_pressure_label, "35 psi");
         lv_obj_set_style_text_color(oil_pressure_label, AMBER_ON, 0);

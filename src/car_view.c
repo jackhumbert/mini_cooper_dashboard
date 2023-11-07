@@ -11,8 +11,8 @@ lv_obj_t * car_view_create(lv_obj_t * parent) {
     lv_obj_set_scroll_dir(car_view_cont, LV_DIR_NONE);
     // lv_obj_align(car_view_cont, LV_ALIGN_CENTER, 0, 0);
     // lv_obj_set_style_blend_mode(car_view_cont, LV_BLEND_MODE_ADDITIVE, 0);
-    lv_obj_center(car_view_cont);
-    // lv_obj_set_size(car_view_cont, 83, 157);
+    // lv_obj_center(car_view_cont);
+    lv_obj_set_size(car_view_cont, 84, 158);
 
 {
     LV_IMG_DECLARE(car_view);

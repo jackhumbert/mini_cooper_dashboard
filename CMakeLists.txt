@@ -16,7 +16,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # set(CMAKE_COLOR_DIAGNOSTICS ON)
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
 INCLUDE_DIRECTORIES(/opt/homebrew/include/)
@@ -27,7 +27,7 @@ LINK_DIRECTORIES(/opt/homebrew/opt/freetype/lib)
 
 set(LV_CONF_INCLUDE_SIMPLE ON)
 set(LV_CONF_PATH
-    ${CMAKE_CURRENT_SOURCE_DIR}/lv_conf.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/lv_conf.h
     CACHE STRING "" FORCE)
 
 add_subdirectory(lib/lvgl/)
@@ -39,6 +39,7 @@ file(GLOB_RECURSE SOURCES "src/*.c" )
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(CMAKE_CXX_FLAGS "-O3")
 
+
 find_package(SDL2)
 find_package(Freetype)
 # include_directories(${SDL2_INCLUDE_DIRS})
@@ -48,4 +49,4 @@ find_package(Freetype)
 #     BUILD_DIR ${CMAKE_BINARY_DIR})
 
 add_subdirectory(simulation)
-add_subdirectory(device)
+# add_subdirectory(device)

@@ -84,17 +84,21 @@ void tach(lv_obj_t * canvas) {
     lv_obj_center(meter);
     lv_obj_set_size(meter, 400, 400);
 
-    static lv_ft_info_t info;
-    /*FreeType uses C standard file system, so no driver letter is required.*/
-    // info.name = "./fonts/Microgramma-D-Extended-Medium.otf";
-    // info.name = "./fonts/Rajdhani-Bold.ttf";
-    info.name = "./fonts/Bould-Regular.otf";
-    info.weight = 24;
-    info.style = FT_FONT_STYLE_NORMAL;
-    info.mem = NULL;
-    if(!lv_ft_font_init(&info)) {
-        LV_LOG_ERROR("create failed.");
-    }
+    // static lv_ft_info_t info;
+    // /*FreeType uses C standard file system, so no driver letter is required.*/
+    // // info.name = "./fonts/Microgramma-D-Extended-Medium.otf";
+    // // info.name = "./fonts/Rajdhani-Bold.ttf";
+    // info.name = "./fonts/Bould-Regular.otf";
+    // info.weight = 24;
+    // info.style = FT_FONT_STYLE_NORMAL;
+    // info.mem = NULL;
+    // if(!lv_ft_font_init(&info)) {
+    //     LV_LOG_ERROR("create failed.");
+    // }
+
+
+
+    lv_font_t * font = lv_tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 24);
 
 
 
@@ -111,7 +115,7 @@ void tach(lv_obj_t * canvas) {
     lv_meter_set_scale_range(meter, label_scale, 0, 8, 270, 135);
 
     lv_obj_set_style_text_color(meter, AMBER_ON, 0);
-    lv_obj_set_style_text_font(meter, info.font, 0);
+    lv_obj_set_style_text_font(meter, font, 0);
 
     lv_meter_indicator_t * rpm_normal_bg = lv_meter_add_arc(meter, scale, 20, AMBER_OFF, -1);
     lv_meter_set_indicator_start_value(meter, rpm_normal_bg, 0);

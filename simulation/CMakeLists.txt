@@ -8,7 +8,8 @@ set(CMAKE_C_COMPILER ${HOST_C_COMPILER})
 set(CMAKE_C_FLAGS ${HOST_C_FLAGS})
 set(CURRENT_COMPILER "HOST" CACHE STRING "Which compiler we are using." FORCE)
   
-add_executable(simulation ${CMAKE_CURRENT_LIST_DIR}/main.c ${SOURCES} ${INCLUDES})
+add_executable(simulation ${SOURCES} ${INCLUDES})
+target_compile_options(simulation PUBLIC "-DDASH_SIMULATION")
 target_link_libraries(simulation PRIVATE SDL2 Freetype m pthread lvgl::lvgl lvgl::drivers)
 
 add_custom_target(simulation_run COMMAND $<TARGET_FILE:simulation> WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} DEPENDS simulation)
