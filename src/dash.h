@@ -1,4 +1,5 @@
 #include "lvgl.h"
+#include "tiny_ttf.h"
 
 #define CANVAS_WIDTH  800
 #define CANVAS_HEIGHT 480

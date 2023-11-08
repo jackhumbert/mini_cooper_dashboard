@@ -21,9 +21,13 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
 INCLUDE_DIRECTORIES(/opt/homebrew/include/)
 INCLUDE_DIRECTORIES(/opt/homebrew/opt/freetype/include/freetype2)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/.pio/libdeps/esp32-s3-devkitc-1-myboard/tiny_ttf/include)
 
 LINK_DIRECTORIES(/opt/homebrew/lib)
 LINK_DIRECTORIES(/opt/homebrew/opt/freetype/lib)
+
+add_compile_definitions(TINY_TTF_FILE_SUPPORT=1)
+add_compile_definitions(DASH_SIMULATION=1)
 
 set(LV_CONF_INCLUDE_SIMPLE ON)
 set(LV_CONF_PATH
@@ -35,18 +39,27 @@ add_subdirectory(lib/lv_drivers/)
 
 file(GLOB_RECURSE INCLUDES "src/*.h" )
 file(GLOB_RECURSE SOURCES "src/*.c" )
+file(GLOB TINY_TTF_INCLUDES ".pio/libdeps/esp32-s3-devkitc-1-myboard/tiny_ttf/include/*")
+file(GLOB TINY_TTF_SOURCES ".pio/libdeps/esp32-s3-devkitc-1-myboard/tiny_ttf/src/*")
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(CMAKE_CXX_FLAGS "-O3")
 
 
 find_package(SDL2)
-find_package(Freetype)
+# find_package(Freetype)
+
+add_executable(simulation ${SOURCES} ${INCLUDES} ${TINY_TTF_SOURCES} ${TINY_TTF_INCLUDES})
+target_compile_definitions(simulation PUBLIC DASH_SIMULATION)
+target_link_libraries(simulation PRIVATE SDL2 Freetype m pthread lvgl::lvgl lvgl::drivers)
+
+add_custom_target(simulation_run COMMAND $<TARGET_FILE:simulation> WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} DEPENDS simulation)
+
 # include_directories(${SDL2_INCLUDE_DIRS})
 
 # Let the build system know what the project executable is to attach more targets, dependencies, etc.
 # idf_build_executable(${CMAKE_PROJECT_NAME}.elf
 #     BUILD_DIR ${CMAKE_BINARY_DIR})
 
-add_subdirectory(simulation)
+# add_subdirectory(simulation)
 # add_subdirectory(device)

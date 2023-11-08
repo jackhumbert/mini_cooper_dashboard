@@ -1,20 +1,14 @@
-/**
- * @file main
- *
- */
-
-#define _DEFAULT_SOURCE /* needed for usleep() */
-#include <stdlib.h>
-#include <unistd.h>
-#define SDL_MAIN_HANDLED /*To fix SDL's "undefined reference to WinMain" issue*/
-#include "lvgl.h"
-#include "dash.h"
-
 #if DASH_SIMULATION
 
 #include "../simulation/main.c"
 
 #else
+
+#define _DEFAULT_SOURCE /* needed for usleep() */
+#include <stdlib.h>
+#include <unistd.h>
+#include "lvgl.h"
+#include "dash.h"
 
 int main(int argc, char **argv)
 {

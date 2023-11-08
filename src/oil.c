@@ -5,6 +5,8 @@ lv_obj_t * oil_temp_meter;
 lv_meter_indicator_t * oil_temp_indic;
 
 lv_obj_t * oil_temp_label;
+lv_font_t * font_big;
+lv_font_t * font_small;
 
 static void set_oil_temp_value(void * indic, int32_t v) {
     lv_label_set_text_fmt(oil_temp_label, "%d°F", v);
@@ -70,11 +72,11 @@ lv_obj_t * oil_create(lv_obj_t * parent) {
 
 
 
-    lv_font_t * font = lv_tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 14);
+    font_small = tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 14);
 
     lv_obj_t * engine_temp_label = lv_label_create(oil_cont);
     lv_obj_align(engine_temp_label, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_set_style_text_font(engine_temp_label, font, 0);
+    lv_obj_set_style_text_font(engine_temp_label, font_small, 0);
     lv_label_set_text(engine_temp_label, "OIL");
     lv_obj_set_style_text_color(engine_temp_label, AMBER_ON, 0);
 }
@@ -123,11 +125,11 @@ lv_obj_t * oil_create(lv_obj_t * parent) {
 
 
 
-        lv_font_t * font = lv_tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 20);
+        font_big = tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 20);
 
         oil_temp_label = lv_label_create(oil_temp_meter);
         // lv_obj_align(oil_temp_label, LV_ALIGN_RIGHT_MID, 0, 133);
-        lv_obj_set_style_text_font(oil_temp_label, font, 0);
+        lv_obj_set_style_text_font(oil_temp_label, font_big, 0);
         lv_obj_center(oil_temp_label);
         lv_label_set_text(oil_temp_label, "210°F");
         lv_obj_set_style_text_color(oil_temp_label, AMBER_ON, 0);
@@ -190,10 +192,10 @@ lv_obj_t * oil_create(lv_obj_t * parent) {
 
 
 
-        lv_font_t * font = lv_tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 20);
+        // font_big = tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 20);
 
         oil_pressure_label = lv_label_create(oil_pressure_meter);
-        lv_obj_set_style_text_font(oil_pressure_label, font, 0);
+        lv_obj_set_style_text_font(oil_pressure_label, font_big, 0);
         lv_obj_center(oil_pressure_label);
         lv_label_set_text(oil_pressure_label, "35 psi");
         lv_obj_set_style_text_color(oil_pressure_label, AMBER_ON, 0);

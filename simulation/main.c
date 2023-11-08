@@ -1,8 +1,3 @@
-/**
- * @file sim
- *
- */
-
 #define _DEFAULT_SOURCE /* needed for usleep() */
 #include <stdlib.h>
 #include <unistd.h>
@@ -13,6 +8,7 @@
 #include "lvgl/demos/lv_demos.h"
 #include "lv_drivers/sdl/sdl.h"
 #include "dash.h"
+#include <stdio.h>
 
 static void hal_init(void);
 
@@ -20,6 +16,8 @@ int main(int argc, char **argv)
 {
   (void)argc; /*Unused*/
   (void)argv; /*Unused*/
+
+  // printf("Initializing simulation\n");
 
   /*Initialize LVGL*/
   lv_init();

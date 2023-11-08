@@ -1,5 +1,8 @@
 #include "coolant.h"
 
+lv_font_t * font_big;
+lv_font_t * font_small;
+
 lv_obj_t * coolant_create(lv_obj_t * parent) {
 
     lv_obj_t * coolant_cont = lv_obj_create(parent);
@@ -24,11 +27,11 @@ lv_obj_t * coolant_create(lv_obj_t * parent) {
     //     LV_LOG_ERROR("create failed.");
     // }
 
-    lv_font_t * font = lv_tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 14);
+    font_small = tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 14);
 
     lv_obj_t * engine_temp_label = lv_label_create(coolant_cont);
     lv_obj_align(engine_temp_label, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_set_style_text_font(engine_temp_label, font, 0);
+    lv_obj_set_style_text_font(engine_temp_label, font_small, 0);
     lv_label_set_text(engine_temp_label, "COOLANT");
     lv_obj_set_style_text_color(engine_temp_label, AMBER_ON, 0);
 }
@@ -73,11 +76,11 @@ lv_obj_t * coolant_create(lv_obj_t * parent) {
 
 
 
-    lv_font_t * font = lv_tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 20);
+    font_big = tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 20);
 
     lv_obj_t * engine_temp_label = lv_label_create(meter);
     // lv_obj_align(engine_temp_label, LV_ALIGN_RIGHT_MID, 0, 133);
-    lv_obj_set_style_text_font(engine_temp_label, font, 0);
+    lv_obj_set_style_text_font(engine_temp_label, font_big, 0);
     lv_obj_center(engine_temp_label);
     lv_label_set_text_fmt(engine_temp_label, "%d°F", 140);
     lv_obj_set_style_text_color(engine_temp_label, AMBER_ON, 0);

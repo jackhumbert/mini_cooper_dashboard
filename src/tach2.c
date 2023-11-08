@@ -4,6 +4,8 @@
 #define TACH_HEIGHT 20
 #define TACH_SEGMENTS 8
 
+lv_font_t * font;
+
 lv_obj_t * tach2(lv_obj_t * canvas) {
     static lv_style_t style_bg;
     static lv_style_t style_indic;
@@ -27,7 +29,7 @@ lv_obj_t * tach2(lv_obj_t * canvas) {
 
 
 
-    lv_font_t * font = lv_tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 16);
+    font = tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 16);
 
     {
         lv_obj_t * label = lv_label_create(tach_cont);

@@ -10,6 +10,7 @@ static lv_meter_indicator_t * rpm_normal;
 // lv_meter_indicator_t * rpm_normal2;
 static lv_meter_indicator_t * rpm_red;
 bool animation_active = false;
+lv_font_t * font;
 
 static void redline_anim_toggle(void * indic, int32_t v) {
     if (v) {
@@ -98,7 +99,7 @@ void tach(lv_obj_t * canvas) {
 
 
 
-    lv_font_t * font = lv_tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 24);
+    font = tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 24);
 
 
 

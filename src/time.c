@@ -1,5 +1,7 @@
 #include "time.h"
 
+lv_font_t * font;
+
 lv_obj_t * time_create(lv_obj_t * parent) {
 
     // static lv_ft_info_t info;
@@ -17,7 +19,7 @@ lv_obj_t * time_create(lv_obj_t * parent) {
 
 
 
-    lv_font_t * font = lv_tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 22);
+    font = tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 22);
 
 // {
 //     static lv_style_t style;

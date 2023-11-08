@@ -2,6 +2,7 @@
 
 lv_obj_t * speed_label;
 lv_obj_t * speed_label2;
+static lv_font_t * font;
 
 static void set_speed_value(void * indic, int32_t v) {
     if (v >= 10) {
@@ -31,9 +32,7 @@ lv_obj_t * speed_create(lv_obj_t * parent) {
     //     LV_LOG_ERROR("create failed.");
     // }
 
-
-
-    lv_font_t * font = lv_tiny_ttf_create_file("A:fonts/Rajdhani-Bold.ttf", 96);
+    font = tiny_ttf_create_file("A:/fonts/Rajdhani-Medium.ttf", 120);
 
     // {
     //     static lv_style_t style;
