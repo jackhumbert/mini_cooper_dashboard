@@ -27,7 +27,9 @@ lv_obj_t * coolant_create(lv_obj_t * parent) {
     //     LV_LOG_ERROR("create failed.");
     // }
 
-    font_small = tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 14);
+    extern const unsigned char RAJDHANI_REGULAR_TTF[];
+    extern const size_t RAJDHANI_REGULAR_TTF_SIZE;
+    font_small = tiny_ttf_create_data(RAJDHANI_REGULAR_TTF, RAJDHANI_REGULAR_TTF_SIZE, 14);
 
     lv_obj_t * engine_temp_label = lv_label_create(coolant_cont);
     lv_obj_align(engine_temp_label, LV_ALIGN_BOTTOM_MID, 0, 0);
@@ -75,8 +77,9 @@ lv_obj_t * coolant_create(lv_obj_t * parent) {
     // }
 
 
-
-    font_big = tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 20);
+    extern const unsigned char RAJDHANI_REGULAR_TTF[];
+    extern const size_t RAJDHANI_REGULAR_TTF_SIZE;
+    font_big = tiny_ttf_create_data(RAJDHANI_REGULAR_TTF, RAJDHANI_REGULAR_TTF_SIZE, 20);
 
     lv_obj_t * engine_temp_label = lv_label_create(meter);
     // lv_obj_align(engine_temp_label, LV_ALIGN_RIGHT_MID, 0, 133);

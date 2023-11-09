@@ -49,11 +49,21 @@ SET(CMAKE_CXX_FLAGS "-O3")
 find_package(SDL2)
 # find_package(Freetype)
 
-add_executable(simulation ${SOURCES} ${INCLUDES} ${TINY_TTF_SOURCES} ${TINY_TTF_INCLUDES})
+add_executable(simulation simulation/main.c ${SOURCES} ${INCLUDES} ${TINY_TTF_SOURCES} ${TINY_TTF_INCLUDES})
 target_compile_definitions(simulation PUBLIC DASH_SIMULATION)
 target_link_libraries(simulation PRIVATE SDL2 Freetype m pthread lvgl::lvgl lvgl::drivers)
 
 add_custom_target(simulation_run COMMAND $<TARGET_FILE:simulation> WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} DEPENDS simulation)
+
+include(bin2h.cmake)
+
+file(WRITE src/assets/fonts.c "#include <stddef.h>\n")
+file(GLOB_RECURSE FONTS "fonts/Raj*.ttf")
+foreach(file ${FONTS})
+    get_filename_component(variableName ${file} NAME)
+    bin2h(SOURCE_FILE ${file} HEADER_FILE src/assets/fonts.c VARIABLE_NAME ${variableName} APPEND NULL_TERMINATE)
+    file(APPEND src/assets/fonts.c "\n")
+endforeach()
 
 # include_directories(${SDL2_INCLUDE_DIRS})
 

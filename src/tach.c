@@ -97,10 +97,9 @@ void tach(lv_obj_t * canvas) {
     //     LV_LOG_ERROR("create failed.");
     // }
 
-
-
-    font = tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 24);
-
+    extern const unsigned char RAJDHANI_REGULAR_TTF[];
+    extern const size_t RAJDHANI_REGULAR_TTF_SIZE;
+    font = tiny_ttf_create_data(RAJDHANI_REGULAR_TTF, RAJDHANI_REGULAR_TTF_SIZE, 24);
 
 
     /*Add a scale first*/

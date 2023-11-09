@@ -32,7 +32,9 @@ lv_obj_t * speed_create(lv_obj_t * parent) {
     //     LV_LOG_ERROR("create failed.");
     // }
 
-    font = tiny_ttf_create_file("A:/fonts/Rajdhani-Medium.ttf", 120);
+    extern const unsigned char RAJDHANI_MEDIUM_TTF[];
+    extern const size_t RAJDHANI_MEDIUM_TTF_SIZE;
+    font = tiny_ttf_create_data(RAJDHANI_MEDIUM_TTF, RAJDHANI_MEDIUM_TTF_SIZE, 120);
 
     // {
     //     static lv_style_t style;

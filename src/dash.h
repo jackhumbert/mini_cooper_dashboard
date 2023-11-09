@@ -18,4 +18,13 @@
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 lv_obj_t * dash(void);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif

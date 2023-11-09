@@ -71,8 +71,10 @@ lv_obj_t * oil_create(lv_obj_t * parent) {
     // }
 
 
+    extern const unsigned char RAJDHANI_REGULAR_TTF[];
+    extern const size_t RAJDHANI_REGULAR_TTF_SIZE;
+    font_small = tiny_ttf_create_data(RAJDHANI_REGULAR_TTF, RAJDHANI_REGULAR_TTF_SIZE, 14);
 
-    font_small = tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 14);
 
     lv_obj_t * engine_temp_label = lv_label_create(oil_cont);
     lv_obj_align(engine_temp_label, LV_ALIGN_BOTTOM_MID, 0, 0);
@@ -124,8 +126,9 @@ lv_obj_t * oil_create(lv_obj_t * parent) {
         // }
 
 
-
-        font_big = tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 20);
+        extern const unsigned char RAJDHANI_REGULAR_TTF[];
+        extern const size_t RAJDHANI_REGULAR_TTF_SIZE;
+        font_big = tiny_ttf_create_data(RAJDHANI_REGULAR_TTF, RAJDHANI_REGULAR_TTF_SIZE, 20);
 
         oil_temp_label = lv_label_create(oil_temp_meter);
         // lv_obj_align(oil_temp_label, LV_ALIGN_RIGHT_MID, 0, 133);
@@ -189,10 +192,6 @@ lv_obj_t * oil_create(lv_obj_t * parent) {
         // if(!lv_ft_font_init(&info)) {
         //     LV_LOG_ERROR("create failed.");
         // }
-
-
-
-        // font_big = tiny_ttf_create_file("A:fonts/Rajdhani-Regular.ttf", 20);
 
         oil_pressure_label = lv_label_create(oil_pressure_meter);
         lv_obj_set_style_text_font(oil_pressure_label, font_big, 0);

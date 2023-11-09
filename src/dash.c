@@ -1,14 +1,22 @@
 #include "dash.h"
 #include "tach2.h"
 #include "speed.h"
-#include "time.h"
+#include "clock.h"
 #include "car_view.h"
 #include "turn_signal.h"
 #include "oil.h"
 #include "coolant.h"
 #include "effect.h"
+#if DASH_SIMULATION
+    #include <stdlib.h>
+    #define ps_malloc malloc
+#else
+    #include <esp32-hal-psram.h>
+#endif
 
 lv_obj_t * canvas;
+
+// lv_color_t cbuf[LV_CANVAS_BUF_SIZE_TRUE_COLOR(CANVAS_WIDTH, CANVAS_HEIGHT)];
 
 // static void canvas_draw_end(lv_event_t * e) {
     // if (need_to_affect) {
@@ -18,6 +26,9 @@ lv_obj_t * canvas;
 // }
 
 lv_obj_t * dash(void) {
+
+
+    // fs_init();
 
     // lv_obj_set_style_bg_opa(lv_scr_act(), LV_OPA_TRANSP, LV_PART_MAIN);
     // lv_disp_set_bg_opa(NULL, LV_OPA_TRANSP);
@@ -33,12 +44,16 @@ lv_obj_t * dash(void) {
 
     // lv_canvas_fill_bg(screen, lv_palette_main(LV_PALETTE_NONE), LV_OPA_COVER);
 
-    static lv_color_t cbuf[LV_CANVAS_BUF_SIZE_TRUE_COLOR(CANVAS_WIDTH, CANVAS_HEIGHT)];
+    // lv_color_t * cbuf = heap_caps_malloc((CANVAS_WIDTH * CANVAS_HEIGHT * sizeof(lv_color_t)) / 4, MALLOC_CAP_DMA | MALLOC_CAP_SPIRAM);
+
+    // DMA_ATTR lv_color_t cbuf = (lv_color_t *)malloc(screenWidth * BUFF_SIZE * sizeof(lv_color_t));
 
     /*Create a canvas and initialize its palette*/
     canvas = lv_canvas_create(lv_scr_act());
     // lv_obj_add_event_cb(canvas, canvas_draw_end, LV_EVENT_STYLE_CHANGED, NULL);
     lv_obj_set_size(canvas, 800, 480);
+
+    lv_color_t * cbuf = (lv_color_t *)ps_malloc(LV_CANVAS_BUF_SIZE_TRUE_COLOR(CANVAS_WIDTH, CANVAS_HEIGHT));
     lv_canvas_set_buffer(canvas, cbuf, CANVAS_WIDTH, CANVAS_HEIGHT, LV_IMG_CF_TRUE_COLOR);
     lv_obj_center(canvas);
     lv_obj_set_style_blend_mode(canvas, LV_BLEND_MODE_ADDITIVE, 0);
@@ -66,8 +81,8 @@ lv_obj_t * dash(void) {
     lv_obj_t * speed = speed_create(cont);
     lv_obj_set_grid_cell(speed, LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_CENTER, 2, 2);
 
-    lv_obj_t * time = time_create(cont);
-    lv_obj_set_grid_cell(time, LV_GRID_ALIGN_CENTER, 1, 3, LV_GRID_ALIGN_CENTER, 4, 1);
+    lv_obj_t * clock = clock_create(cont);
+    lv_obj_set_grid_cell(clock, LV_GRID_ALIGN_CENTER, 1, 3, LV_GRID_ALIGN_CENTER, 4, 1);
 
     lv_obj_t * turn_left = turn_signal_left_create(cont);
     lv_obj_set_grid_cell(turn_left, LV_GRID_ALIGN_CENTER, 4, 1, LV_GRID_ALIGN_CENTER, 2, 2);
@@ -84,6 +99,6 @@ lv_obj_t * dash(void) {
     lv_obj_t * coolant_view = coolant_create(canvas);
     lv_obj_align(coolant_view, LV_ALIGN_CENTER, -280, 50);
 
-    setup_effect(canvas);
+    // setup_effect(canvas);
     return canvas;
 }

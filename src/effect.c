@@ -1,12 +1,12 @@
 #include "effect.h"
 
-static lv_color_t cbuf_tmp[LV_CANVAS_BUF_SIZE_TRUE_COLOR(CANVAS_WIDTH, CANVAS_HEIGHT)];
-static lv_img_dsc_t img;
+lv_color_t cbuf_tmp[LV_CANVAS_BUF_SIZE_TRUE_COLOR(CANVAS_WIDTH, CANVAS_HEIGHT)];
+lv_img_dsc_t img;
 
-static lv_obj_t * effect1;
-static lv_obj_t * effect2;
-static lv_color_t ebuf1[LV_CANVAS_BUF_SIZE_TRUE_COLOR(CANVAS_WIDTH, CANVAS_HEIGHT)];
-static lv_color_t ebuf2[LV_CANVAS_BUF_SIZE_TRUE_COLOR(CANVAS_WIDTH, CANVAS_HEIGHT)];
+lv_obj_t * effect1;
+lv_obj_t * effect2;
+lv_color_t ebuf1[LV_CANVAS_BUF_SIZE_TRUE_COLOR(CANVAS_WIDTH, CANVAS_HEIGHT)];
+lv_color_t ebuf2[LV_CANVAS_BUF_SIZE_TRUE_COLOR(CANVAS_WIDTH, CANVAS_HEIGHT)];
 
 bool should_update_effect = false;
 

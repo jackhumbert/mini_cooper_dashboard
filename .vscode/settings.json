@@ -7,5 +7,14 @@
         "target/esp32s3.cfg"
     ],
     "idf.espIdfPath": "/Users/jackhumbert/esp/esp-idf",
-    "idf.toolsPath": "/Users/jackhumbert/.espressif"
+    "idf.toolsPath": "/Users/jackhumbert/.espressif",
+    "files.associations": {
+        "esp32-hal-psram.h": "c",
+        "sdkconfig.h": "c",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "utility": "c",
+        "unistd.h": "c"
+    }
 }
