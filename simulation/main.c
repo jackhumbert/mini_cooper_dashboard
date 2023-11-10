@@ -30,11 +30,13 @@ int main(int argc, char **argv)
       /* Periodically call the lv_task handler.
        * It could be done in a timer interrupt or an OS task too.*/
       lv_timer_handler();
-      usleep(5 * 1000);
+      // usleep(5 * 1000);
   }
 
   return 0;
 }
+
+#define DISPLAY_BUFFER_SIZE 800 * 480 / 4
 
 /**
  * Initialize the Hardware Abstraction Layer (HAL) for the LVGL graphics
@@ -47,9 +49,9 @@ static void hal_init(void)
 
   /*Create a display buffer*/
   static lv_disp_draw_buf_t disp_buf1;
-  static lv_color_t buf1_1[SDL_HOR_RES * 100];
+  static lv_color_t buf1_1[DISPLAY_BUFFER_SIZE];
   // static lv_color_t buf2_1[SDL_HOR_RES * 100];
-  lv_disp_draw_buf_init(&disp_buf1, buf1_1, NULL, SDL_HOR_RES * 100);
+  lv_disp_draw_buf_init(&disp_buf1, buf1_1, NULL, DISPLAY_BUFFER_SIZE);
 
   /*Create a display*/
   static lv_disp_drv_t disp_drv;

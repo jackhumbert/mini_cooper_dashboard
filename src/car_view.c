@@ -1,6 +1,6 @@
 #include "car_view.h"
 
-lv_obj_t * car_view_cont;
+static lv_obj_t * car_view_cont;
 
 lv_obj_t * car_view_create(lv_obj_t * parent) {
 

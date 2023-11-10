@@ -1,20 +1,20 @@
 #include "dash.h"
+#include "tach.h"
 #include "tach2.h"
+#include "tach3.h"
 #include "speed.h"
 #include "clock.h"
+#include "temp.h"
 #include "car_view.h"
 #include "turn_signal.h"
 #include "oil.h"
 #include "coolant.h"
+#include "gas.h"
+#include "messages.h"
 #include "effect.h"
-#if DASH_SIMULATION
-    #include <stdlib.h>
-    #define ps_malloc malloc
-#else
-    #include <esp32-hal-psram.h>
-#endif
+#include "theme.h"
 
-lv_obj_t * canvas;
+static lv_obj_t * canvas;
 
 // lv_color_t cbuf[LV_CANVAS_BUF_SIZE_TRUE_COLOR(CANVAS_WIDTH, CANVAS_HEIGHT)];
 
@@ -25,15 +25,31 @@ lv_obj_t * canvas;
     // }
 // }
 
-lv_obj_t * dash(void) {
+static void toggle_lights(lv_event_t * e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
 
+    if(code == LV_EVENT_CLICKED) {
+        LV_LOG_USER("Clicked");
+    }
+    else if(code == LV_EVENT_VALUE_CHANGED) {
+        LV_LOG_USER("Toggled");
+        theme_init();
+    }
+}
+
+lv_obj_t * dash(void) {
 
     // fs_init();
 
     // lv_obj_set_style_bg_opa(lv_scr_act(), LV_OPA_TRANSP, LV_PART_MAIN);
     // lv_disp_set_bg_opa(NULL, LV_OPA_TRANSP);
 
-    lv_obj_set_style_bg_color(lv_scr_act(), lv_color_hex3(0x0F0100), 0);
+    // slightly red screen bg
+    // lv_obj_set_style_bg_color(lv_scr_act(), lv_color_hex3(0x0F0100), 0);
+    lv_obj_set_style_bg_color(lv_scr_act(), lv_color_black(), 0);
+    lv_obj_set_scrollbar_mode(lv_scr_act(), LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_scroll_dir(lv_scr_act(), LV_DIR_NONE);
 
     /*Create a buffer for the canvas*/
     // static uint8_t sbuf[CANVAS_WIDTH * CANVAS_HEIGHT * 4];
@@ -49,56 +65,88 @@ lv_obj_t * dash(void) {
     // DMA_ATTR lv_color_t cbuf = (lv_color_t *)malloc(screenWidth * BUFF_SIZE * sizeof(lv_color_t));
 
     /*Create a canvas and initialize its palette*/
-    canvas = lv_canvas_create(lv_scr_act());
-    // lv_obj_add_event_cb(canvas, canvas_draw_end, LV_EVENT_STYLE_CHANGED, NULL);
-    lv_obj_set_size(canvas, 800, 480);
+    // canvas = lv_canvas_create(lv_scr_act());
+    // // lv_obj_add_event_cb(canvas, canvas_draw_end, LV_EVENT_STYLE_CHANGED, NULL);
+    // lv_obj_set_size(canvas, 800, 480);
 
-    lv_color_t * cbuf = (lv_color_t *)ps_malloc(LV_CANVAS_BUF_SIZE_TRUE_COLOR(CANVAS_WIDTH, CANVAS_HEIGHT));
-    lv_canvas_set_buffer(canvas, cbuf, CANVAS_WIDTH, CANVAS_HEIGHT, LV_IMG_CF_TRUE_COLOR);
-    lv_obj_center(canvas);
-    lv_obj_set_style_blend_mode(canvas, LV_BLEND_MODE_ADDITIVE, 0);
-    // lv_canvas_fill_bg(canvas, lv_palette_darken(LV_PALETTE_AMBER, 3), LV_OPA_COVER);
+    // lv_color_t * cbuf = (lv_color_t *)ps_malloc(LV_CANVAS_BUF_SIZE_TRUE_COLOR(CANVAS_WIDTH, CANVAS_HEIGHT));
+    // lv_canvas_set_buffer(canvas, cbuf, CANVAS_WIDTH, CANVAS_HEIGHT, LV_IMG_CF_TRUE_COLOR);
+    // lv_obj_center(canvas);
+    // // lv_obj_set_style_blend_mode(canvas, LV_BLEND_MODE_ADDITIVE, 0);
+    // lv_canvas_fill_bg(canvas, lv_color_black(), LV_OPA_COVER);
 
-    // lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_BLUE), LV_OPA_COVER);
+    
+    canvas = lv_scr_act();
 
-    lv_obj_t * tach = tach2(canvas);
-    lv_obj_align(tach, LV_ALIGN_TOP_MID, 0, 10);
+    lv_obj_t * tach = tach3_create(canvas);
+    lv_obj_align(tach, LV_ALIGN_TOP_MID, 0, 240);
+
+
+
+    lv_obj_t * speed = speed_create(canvas);
+    lv_obj_align(speed, LV_ALIGN_TOP_MID, 0, 40);
+    // lv_obj_set_grid_cell(speed, LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_CENTER, 2, 2);
 
     static lv_coord_t col_dsc[] = {48, 48, 48, 48, 48, LV_GRID_TEMPLATE_LAST};
     static lv_coord_t row_dsc[] = {72, 48, 48, 48, 48, 48, 157, 20, LV_GRID_TEMPLATE_LAST};
 
     /*Create a container with grid*/
-    lv_obj_t * cont = lv_obj_create(canvas);
-    lv_obj_remove_style_all(cont);
-    lv_obj_set_grid_align(cont, LV_GRID_ALIGN_CENTER, LV_GRID_ALIGN_CENTER);
-    lv_obj_set_style_grid_column_dsc_array(cont, col_dsc, 0);
-    lv_obj_set_style_grid_row_dsc_array(cont, row_dsc, 0);
-    lv_obj_set_size(cont, 800, 480);
-    lv_obj_center(cont);
-    lv_obj_align(cont, LV_ALIGN_CENTER, 0, 0);
-    lv_obj_set_layout(cont, LV_LAYOUT_GRID);
+    // lv_obj_t * cont = lv_obj_create(canvas);
+    // lv_obj_remove_style_all(cont);
+    // lv_obj_set_grid_align(cont, LV_GRID_ALIGN_CENTER, LV_GRID_ALIGN_CENTER);
+    // lv_obj_set_style_grid_column_dsc_array(cont, col_dsc, 0);
+    // lv_obj_set_style_grid_row_dsc_array(cont, row_dsc, 0);
+    // lv_obj_set_size(cont, 800, 480);
+    // lv_obj_center(cont);
+    // lv_obj_align(cont, LV_ALIGN_CENTER, 0, 0);
+    // lv_obj_set_layout(cont, LV_LAYOUT_GRID);
 
-    lv_obj_t * speed = speed_create(cont);
-    lv_obj_set_grid_cell(speed, LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_CENTER, 2, 2);
+    lv_obj_t * clock = clock_create(canvas);
+    lv_obj_align(clock, LV_ALIGN_TOP_LEFT, 300, 180);
 
-    lv_obj_t * clock = clock_create(cont);
-    lv_obj_set_grid_cell(clock, LV_GRID_ALIGN_CENTER, 1, 3, LV_GRID_ALIGN_CENTER, 4, 1);
+    lv_obj_t * temp = temp_create(canvas);
+    lv_obj_align(temp, LV_ALIGN_TOP_RIGHT, -300, 180);
 
-    lv_obj_t * turn_left = turn_signal_left_create(cont);
-    lv_obj_set_grid_cell(turn_left, LV_GRID_ALIGN_CENTER, 4, 1, LV_GRID_ALIGN_CENTER, 2, 2);
+    lv_obj_t * turn_left = turn_signal_left_create(canvas);
+    lv_obj_align(turn_left, LV_ALIGN_TOP_LEFT, 295 - 24, 308 - 24);
+    // lv_obj_set_grid_cell(turn_left, LV_GRID_ALIGN_CENTER, 4, 1, LV_GRID_ALIGN_CENTER, 2, 2);
 
-    lv_obj_t * turn_right = turn_signal_right_create(cont);
-    lv_obj_set_grid_cell(turn_right, LV_GRID_ALIGN_CENTER, 1, 1, LV_GRID_ALIGN_CENTER, 3, 2);
+    lv_obj_t * turn_right = turn_signal_right_create(canvas);
+    lv_obj_align(turn_right, LV_ALIGN_TOP_LEFT, 505 - 24, 308 - 24);
+    // lv_obj_set_grid_cell(turn_right, LV_GRID_ALIGN_CENTER, 1, 1, LV_GRID_ALIGN_CENTER, 3, 2);
 
-    lv_obj_t * car_view = car_view_create(cont);
-    lv_obj_set_grid_cell(car_view, LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_CENTER, 6, 1);
+    lv_obj_t * car_view = car_view_create(canvas);
+    lv_obj_align(car_view, LV_ALIGN_BOTTOM_MID, 0, -20);
+    // lv_obj_set_grid_cell(car_view, LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_CENTER, 6, 1);
 
-    lv_obj_t * oil_view = oil_create(canvas);
-    lv_obj_align(oil_view, LV_ALIGN_CENTER, -280, 150);
+    lv_obj_t * oil_pressure_view = oil_pressure_create(canvas);
+    lv_obj_align(oil_pressure_view, LV_ALIGN_TOP_LEFT, 41, 357);
+
+    lv_obj_t * oil_temp_view = oil_temp_create(canvas);
+    lv_obj_align(oil_temp_view, LV_ALIGN_TOP_LEFT, 180, 316);
 
     lv_obj_t * coolant_view = coolant_create(canvas);
-    lv_obj_align(coolant_view, LV_ALIGN_CENTER, -280, 50);
+    lv_obj_align(coolant_view, LV_ALIGN_TOP_RIGHT, -180, 316);
+
+    lv_obj_t * gas_view = gas_create(canvas);
+    lv_obj_align(gas_view, LV_ALIGN_TOP_RIGHT, -41, 357);
+
+    lv_obj_t * messages_view = messages_create(canvas);
+    lv_obj_align(messages_view, LV_ALIGN_TOP_LEFT, 10, 10);
+
+    lv_obj_t * toggle = lv_btn_create(canvas);
+    lv_obj_add_flag(toggle, LV_OBJ_FLAG_CHECKABLE);
+    lv_obj_align(toggle, LV_ALIGN_TOP_RIGHT, -10, 80);
+    lv_obj_add_event_cb(toggle, toggle_lights, LV_EVENT_ALL, NULL);
+
+    lv_obj_t * label = lv_label_create(toggle);
+    lv_label_set_text(label, "Theme");
+    lv_obj_center(label);
+
 
     // setup_effect(canvas);
     return canvas;
+}
+
+void dash_loop(void) {
 }

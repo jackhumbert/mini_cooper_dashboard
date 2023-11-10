@@ -4,7 +4,7 @@
 #define TACH_HEIGHT 20
 #define TACH_SEGMENTS 8
 
-lv_font_t * font;
+static lv_font_t * font;
 
 lv_obj_t * tach2(lv_obj_t * canvas) {
     static lv_style_t style_bg;

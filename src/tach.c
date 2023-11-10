@@ -9,8 +9,7 @@ static lv_anim_t * redline_anim;
 static lv_meter_indicator_t * rpm_normal;
 // lv_meter_indicator_t * rpm_normal2;
 static lv_meter_indicator_t * rpm_red;
-bool animation_active = false;
-lv_font_t * font;
+static bool animation_active = false;
 
 static void redline_anim_toggle(void * indic, int32_t v) {
     if (v) {
@@ -54,16 +53,15 @@ static void stop_redline_anim(void) {
     animation_active = false;
 }
 
-static void set_value(void * indic, int32_t v)
-{
-    if (v > REDLINE) {
-        if (!animation_active) {
-            start_redline_anim();
-        }
-    } else {
-        stop_redline_anim();
-        // rpm_normal2->type_data.arc.color = lv_color_change_lightness(lv_color_black(), 240);
-    }
+static void set_value(void * indic, int32_t v) {
+    // if (v > REDLINE) {
+    //     if (!animation_active) {
+    //         start_redline_anim();
+    //     }
+    // } else {
+    //     stop_redline_anim();
+    //     // rpm_normal2->type_data.arc.color = lv_color_change_lightness(lv_color_black(), 240);
+    // }
     if (rpm_normal) {
         lv_meter_set_indicator_end_value(meter, rpm_normal, MIN(v, REDLINE));
         // lv_meter_set_indicator_end_value(meter2, rpm_normal2, MIN(v, REDLINE));
@@ -71,11 +69,10 @@ static void set_value(void * indic, int32_t v)
     if (rpm_red) {
         lv_meter_set_indicator_end_value(meter, rpm_red, MAX(v, REDLINE));
     }
-    // need_to_affect = true;
     update_effect();
 }
 
-void tach(lv_obj_t * canvas) {
+lv_obj_t * tach_create(lv_obj_t * canvas) {
     meter = lv_meter_create(canvas);
 
     /*Remove the circle from the middle*/
@@ -97,10 +94,10 @@ void tach(lv_obj_t * canvas) {
     //     LV_LOG_ERROR("create failed.");
     // }
 
-    extern const unsigned char RAJDHANI_REGULAR_TTF[];
-    extern const size_t RAJDHANI_REGULAR_TTF_SIZE;
-    font = tiny_ttf_create_data(RAJDHANI_REGULAR_TTF, RAJDHANI_REGULAR_TTF_SIZE, 24);
-
+    // extern const unsigned char RAJDHANI_REGULAR_TTF[];
+    // extern const size_t RAJDHANI_REGULAR_TTF_SIZE;
+    // font = tiny_ttf_create_data(RAJDHANI_REGULAR_TTF, RAJDHANI_REGULAR_TTF_SIZE, 24);
+    DASH_FONT(RAJDHANI_REGULAR, 24);
 
     /*Add a scale first*/
     lv_meter_scale_t * scale = lv_meter_add_scale(meter);
@@ -115,7 +112,7 @@ void tach(lv_obj_t * canvas) {
     lv_meter_set_scale_range(meter, label_scale, 0, 8, 270, 135);
 
     lv_obj_set_style_text_color(meter, AMBER_ON, 0);
-    lv_obj_set_style_text_font(meter, font, 0);
+    lv_obj_set_style_text_font(meter, RAJDHANI_REGULAR_24, 0);
 
     lv_meter_indicator_t * rpm_normal_bg = lv_meter_add_arc(meter, scale, 20, AMBER_OFF, -1);
     lv_meter_set_indicator_start_value(meter, rpm_normal_bg, 0);
@@ -161,13 +158,15 @@ void tach(lv_obj_t * canvas) {
     lv_anim_set_playback_time(&a, 500);
     lv_anim_start(&a);
 
-    lv_meter_indicator_t * rpm_red_bg = lv_meter_add_arc(meter, scale, 20, lv_color_change_lightness(lv_palette_main(LV_PALETTE_RED), 15), -1);
+    lv_meter_indicator_t * rpm_red_bg = lv_meter_add_arc(meter, scale, 20, RED_OFF, -1);
     lv_meter_set_indicator_start_value(meter, rpm_red_bg, REDLINE);
     lv_meter_set_indicator_end_value(meter, rpm_red_bg, 8000);
 
     /*Add a red arc to the end*/
-    rpm_red = lv_meter_add_arc(meter, scale, 20, lv_palette_main(LV_PALETTE_RED), -1);
+    rpm_red = lv_meter_add_arc(meter, scale, 20, RED_ON, -1);
     lv_meter_set_indicator_start_value(meter, rpm_red, REDLINE);
     lv_meter_set_indicator_end_value(meter, rpm_red, 8000);
+
+    return meter;
 
 }

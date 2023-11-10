@@ -15,6 +15,18 @@
         "string_view": "c",
         "initializer_list": "c",
         "utility": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "coolant.h": "c",
+        "tach2.h": "c",
+        "clock.h": "c",
+        "speed.h": "c",
+        "car_view.h": "c",
+        "oil.h": "c",
+        "effect.h": "c",
+        "messages.h": "c",
+        "new": "cpp",
+        "adafruit_tinyusb.h": "c",
+        "adafruit_usbh_cdc.h": "c",
+        "hardwareserial.h": "c"
     }
 }

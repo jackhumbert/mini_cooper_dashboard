@@ -34,7 +34,7 @@ set(LV_CONF_PATH
     ${CMAKE_CURRENT_SOURCE_DIR}/include/lv_conf.h
     CACHE STRING "" FORCE)
 
-add_subdirectory(lib/lvgl/)
+add_subdirectory(.pio/libdeps/esp32-s3-devkitc-1-myboard/lvgl/)
 add_subdirectory(lib/lv_drivers/)
 
 file(GLOB_RECURSE INCLUDES "src/*.h" )
@@ -55,15 +55,17 @@ target_link_libraries(simulation PRIVATE SDL2 Freetype m pthread lvgl::lvgl lvgl
 
 add_custom_target(simulation_run COMMAND $<TARGET_FILE:simulation> WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} DEPENDS simulation)
 
-include(bin2h.cmake)
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/src/assets/fonts.c") 
+    include(bin2h.cmake)
 
-file(WRITE src/assets/fonts.c "#include <stddef.h>\n")
-file(GLOB_RECURSE FONTS "fonts/Raj*.ttf")
-foreach(file ${FONTS})
-    get_filename_component(variableName ${file} NAME)
-    bin2h(SOURCE_FILE ${file} HEADER_FILE src/assets/fonts.c VARIABLE_NAME ${variableName} APPEND NULL_TERMINATE)
-    file(APPEND src/assets/fonts.c "\n")
-endforeach()
+    file(WRITE src/assets/fonts.c "#include <stddef.h>\n")
+    file(GLOB_RECURSE FONTS "fonts/*.ttf")
+    foreach(file ${FONTS})
+        get_filename_component(variableName ${file} NAME)
+        bin2h(SOURCE_FILE ${file} HEADER_FILE src/assets/fonts.c VARIABLE_NAME ${variableName} APPEND NULL_TERMINATE)
+        file(APPEND src/assets/fonts.c "\n")
+    endforeach()
+endif()
 
 # include_directories(${SDL2_INCLUDE_DIRS})
 
