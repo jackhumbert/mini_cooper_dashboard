@@ -1,6 +1,29 @@
 #include "clock.h"
 #include <sys/time.h>
 
+#define SEC_PER_DAY   86400
+#define SEC_PER_HOUR  3600
+#define SEC_PER_MIN   60
+
+static lv_obj_t * time_label;
+
+void clock_update() {
+    // Tear apart hms into h:m:s
+    int hour = get_dash()->running_clock / SEC_PER_HOUR;
+    int min = (get_dash()->running_clock % SEC_PER_HOUR) / SEC_PER_MIN;
+    //   int sec = (hms % SEC_PER_HOUR) % SEC_PER_MIN; // or hms % SEC_PER_MIN
+
+    bool pm =  hour >= 12;
+
+    if (hour > 12) {
+      hour -= 12;
+    } else if (hour == 0) {
+      hour += 12;
+    }
+
+    lv_label_set_text_fmt(time_label, "%d:%02d %s", hour, min, pm ? "PM" : "AM");
+}
+
 lv_obj_t * clock_create(lv_obj_t * parent) {
 
     // static lv_ft_info_t info;
@@ -42,42 +65,25 @@ lv_obj_t * clock_create(lv_obj_t * parent) {
     lv_style_set_text_font(&style, RAJDHANI_REGULAR_36);
     lv_style_set_text_align(&style, LV_TEXT_ALIGN_LEFT);
 
-    lv_obj_t * time_label = lv_label_create(parent);
-    // lv_label_set_text(time_label, "5:30 PM");
-
-#define SEC_PER_DAY   86400
-#define SEC_PER_HOUR  3600
-#define SEC_PER_MIN   60
-
-  struct timeval tv;
-  struct timezone tz;
-  gettimeofday(&tv, &tz);
-
-  // Form the seconds of the day
-  long hms = tv.tv_sec % SEC_PER_DAY;
-  hms += tz.tz_dsttime * SEC_PER_HOUR;
-  hms -= tz.tz_minuteswest * SEC_PER_MIN;
-  // mod `hms` to insure in positive range of [0...SEC_PER_DAY)
-  hms = (hms + SEC_PER_DAY) % SEC_PER_DAY;
-
-  // Tear apart hms into h:m:s
-  int hour = hms / SEC_PER_HOUR;
-  int min = (hms % SEC_PER_HOUR) / SEC_PER_MIN;
-//   int sec = (hms % SEC_PER_HOUR) % SEC_PER_MIN; // or hms % SEC_PER_MIN
-
-  bool pm =  hour >= 12;
-
-  if (hour > 12) {
-    hour -= 12;
-  } else if (hour == 0) {
-    hour += 12;
-  }
-
-    lv_label_set_text_fmt(time_label, "%d:%02d %s", hour, min, pm ? "PM" : "AM");
+    time_label = lv_label_create(parent);
     lv_obj_add_style(time_label, &style, 0);
+
+    struct timeval tv;
+    struct timezone tz;
+    gettimeofday(&tv, &tz);
+
+    // Form the seconds of the day
+    long hms = tv.tv_sec % SEC_PER_DAY;
+    hms += tz.tz_dsttime * SEC_PER_HOUR;
+    hms -= tz.tz_minuteswest * SEC_PER_MIN;
+    // mod `hms` to insure in positive range of [0...SEC_PER_DAY)
+    hms = (hms + SEC_PER_DAY) % SEC_PER_DAY;
+
+    get_dash()->running_clock = hms;
+    clock_update();
+
     // lv_obj_set_style_blend_mode(time_label, LV_BLEND_MODE_ADDITIVE, 0);
 
-    // lv_obj_align(time_label, LV_ALIGN_LEFT_MID, 0, 0);
 
     return time_label;
 }

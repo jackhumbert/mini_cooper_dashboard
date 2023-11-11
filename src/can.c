@@ -4,6 +4,9 @@
 #include "messages.h"
 #include "temp.h"
 #include "gas.h"
+#include "oil.h"
+#include "clock.h"
+#include "coolant.h"
 
 static can_obj_e46_h_t can_data;
 
@@ -28,33 +31,48 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
     if (unpack_message(&can_data, id, u64_from_can_msg(data), 8, timestamp) < 0) {
         return -1;
     } else {
-        double value_d;
-        int value_i;
-        uint8_t value_u8;
-        uint16_t value_u16;
         switch (id) {
             case 0x153:
-                decode_can_0x153_Speed(&can_data, &value_d);
-                speed_set(value_d);
+                decode_can_0x153_Speed(&can_data, &get_dash()->speed);
+                speed_update();
+                return 0;
+            case 0x1F0: 
+            case 0x1F3: return 0;
+            case 0x1F5: return 0; // same as 0x610
+            case 0x1F8: return 0; // never changes?
+            case 0x329:
+                decode_can_0x329_Engine_Temp(&can_data, &get_dash()->engine_temp);
+                coolant_update();
+                decode_can_0x329_Clutch_Switch(&can_data, &get_dash()->clutch_switch);
+                return 0;
+            case 0x338:
+                decode_can_0x338_Clutch(&can_data, &get_dash()->clutch);
                 return 0;
             case 0x316:
-                decode_can_0x316_RPM(&can_data, &value_d);
-                tach3_set(round(value_d));
-                decode_can_0x316_Key(&can_data, &value_u8);
-                add_message_fmt("Key: %d", value_u8);
-                decode_can_0x316_Starter(&can_data, &value_u8);
-                add_message_fmt("Starter: %d", value_u8);
+                decode_can_0x316_RPM(&can_data, &get_dash()->rpm);
+                tach3_update();
+                decode_can_0x316_Key(&can_data, &get_dash()->key);
+                decode_can_0x316_Starter(&can_data, &get_dash()->starter);
                 return 0;
+            case 0x329: return 0;
+            case 0x336: return 0;
+            case 0x501: return 0;
+            case 0x545: return 0;
+            case 0x565: return 0;
+            case 0x610: return 0;
             case 0x613:
-                decode_can_0x613_Fuel_Level(&can_data, &value_u8);
-                gas_set(value_u8);
-                decode_can_0x613_Running_Clock(&can_data, &value_u16);
-                add_message_fmt("Running clock: %d", value_u16);
+                decode_can_0x613_Fuel_Level(&can_data, &get_dash()->fuel_level);
+                gas_update();
+                decode_can_0x613_Running_Clock(&can_data, &get_dash()->running_clock);
+                clock_update();
                 return 0;
             case 0x615:
-                decode_can_0x615_OutsideTemp(&can_data, &value_u8);
-                temp_set(value_u8);
+                decode_can_0x615_OutsideTemp(&can_data, &get_dash()->outside_temp);
+                temp_update();
                 return 0;
+            case 0x618: return 0;
+            case 0x61A: return 0;
+            case 0x61F: return 0;
         }
         return -1;
     }

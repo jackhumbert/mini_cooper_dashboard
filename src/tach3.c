@@ -53,32 +53,29 @@ static void stop_redline_anim(void) {
     }
     rpm_normal->type_data.arc.color = AMBER_ON;
     rpm_normal->opa = LV_OPA_100;
+    lv_obj_invalidate(meter);
     animation_active = false;
 }
 
-static void set_value(void * indic, int32_t v) {
-    // if (rpm_red) {
-    //     lv_meter_set_indicator_end_value(meter, rpm_red, MAX(v, REDLINE));
-    // }
-    tach3_set(v);
-    update_effect();
-}
+// static void set_value(void * indic, int32_t v) {
+//     // if (rpm_red) {
+//     //     lv_meter_set_indicator_end_value(meter, rpm_red, MAX(v, REDLINE));
+//     // }
+//     tach3_update();
+//     update_effect();
+// }
 
-void tach3_set(int32_t tach) {
-    int32_t v = tach;
-    if (v > REDLINE) {
+void tach3_update() {
+    if (get_dash()->rpm > REDLINE) {
         if (!animation_active) {
             start_redline_anim();
         }
     } else {
-        stop_redline_anim();
-        // rpm_normal2->type_data.arc.color = lv_color_change_lightness(lv_color_black(), 240);
+        if (animation_active) {
+            stop_redline_anim();
+        }
     }
-    if (rpm_normal) {
-        lv_meter_set_indicator_end_value(meter, rpm_normal, v);
-        // lv_meter_set_indicator_end_value(meter, rpm_normal, MIN(v, REDLINE));
-        // lv_meter_set_indicator_end_value(meter2, rpm_normal2, MIN(v, REDLINE));
-    }
+    lv_meter_set_indicator_end_value(meter, rpm_normal, get_dash()->rpm);
 }
 
 lv_obj_t * tach3_create(lv_obj_t * canvas) {

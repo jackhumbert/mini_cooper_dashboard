@@ -150,10 +150,10 @@ int main()
   if (fd < 0) { return 1; }
  
   uint8_t command[12] = {0};
-  FILE * fptr = fopen("data9-fixed.bin", "r");
+  FILE * fptr = fopen("data10.bin", "r");
   while(fgets((char*)command, 12, fptr)) {
     write_port(fd, command, 12);
-    // delay(5);
+    delay(20);
   }
  
   close(fd);

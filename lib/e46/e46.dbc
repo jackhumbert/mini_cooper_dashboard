@@ -72,12 +72,13 @@ BO_ 496 ABS_1: 8 DME_Etc
    SG_ Wheel_2_Right_Front_Speed : 16|12@1+ (0.0625,0) [0|0] "" DME_Etc
    SG_ Wheel_3_Left_Rear_Speed : 32|12@1+ (0.0625,0) [0|0] "" DME_Etc
    SG_ Wheel_4_Right_Rear_Speed : 48|12@1+ (0.0625,0) [0|0] "" Vector__XXX
-
+   
 BO_ 501 Steering_Angle_Sensor: 8 DME_Etc
    SG_ Steering_Angle : 0|15@1+ (0.045,0) [0|0] "" DME_Etc
    SG_ Steering_Angle_Velocity : 16|15@1+ (0.045,0) [0|0] "" DME_Etc
    SG_ Steering_Angle_Direction : 15|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Steering_Angle_Velocity_Direction : 31|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ Steering_Counter : 44|4@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 339 ASC_1: 8 DME_Etc
    SG_ Speed : 11|13@1+ (1,9.94) [0|0] "" DME_Etc

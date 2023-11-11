@@ -3,11 +3,8 @@
 
 lv_obj_t * temp_label;
 
-static int outside_temp = 65;
-
-void temp_set(int temp) {
-    outside_temp = temp;
-    lv_label_set_text_fmt(temp_label, "%d°F", outside_temp);
+void temp_update() {
+    lv_label_set_text_fmt(temp_label, "%d°F", get_dash()->outside_temp);
 }
 
 lv_obj_t * temp_create(lv_obj_t * parent) {
@@ -54,7 +51,7 @@ lv_obj_t * temp_create(lv_obj_t * parent) {
     temp_label = lv_label_create(parent);
     // lv_label_set_text(temp_label, "5:30 PM");
 
-    lv_label_set_text_fmt(temp_label, "%d°F", outside_temp);
+    lv_label_set_text(temp_label, "--°F");
     lv_obj_add_style(temp_label, &style, 0);
     // lv_obj_set_style_blend_mode(temp_label, LV_BLEND_MODE_ADDITIVE, 0);
 

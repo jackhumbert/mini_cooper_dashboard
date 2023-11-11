@@ -143,6 +143,7 @@ void setup() {
 }
 
 #include "can.h"
+extern File * sd_card_get_log_file(void);
 
 void loop() {
     // lv_refr_now();
@@ -167,16 +168,15 @@ void loop() {
             //     file.write((uint8_t*)log, 35);
             //     file.close();
             // }
-            File file = SD.open("/log.txt", FILE_APPEND);
-            if (file) {
+            File * file = sd_card_get_log_file();
+            if (*file) {
                 uint32_t ticks = xTaskGetTickCount();
-                file.printf("[%08X] ", ticks);
-                file.printf("%08X ", id);
+                file->printf("[%08X] ", ticks);
+                file->printf("%08X ", id);
                 for (int i = 0; i < 8; i++) {
-                    file.printf("%02X ", buf[i]);
+                    file->printf("%02X ", buf[i]);
                 }
-                file.print('\n');
-                file.close();
+                file->print('\n');
             }
 
             // add_message(sbuf);
@@ -188,15 +188,14 @@ void loop() {
             }
         } else {
             if (buf[12]) {
-                File file = SD.open("/log.txt", FILE_APPEND);
-                if (file) {
+                File * file = sd_card_get_log_file();
+                if (*file) {
                     uint32_t ticks = xTaskGetTickCount();
-                    file.printf("[%08X] ", ticks);
+                    file->printf("[%08X] ", ticks);
                     for (int i = 0; i < buf[12]; i++) {
-                        file.printf("%02X ", buf[i]);
+                        file->printf("%02X ", buf[i]);
                     }
-                    file.print('\n');
-                    file.close();
+                    file->print('\n');
                 }
             }
         }

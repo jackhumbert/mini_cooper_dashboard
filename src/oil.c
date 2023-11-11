@@ -8,6 +8,22 @@ static lv_obj_t * oil_temp_label;
 static lv_font_t * font_big;
 static lv_font_t * font_small;
 
+void oil_temp_set(int32_t temp) {
+    lv_label_set_text_fmt(oil_temp_label, "%d°F", temp);
+    lv_meter_set_indicator_end_value(oil_temp_meter, oil_temp_indic, temp);
+    lv_color_t old_color = oil_temp_indic->type_data.arc.color;
+    if (temp > 260) {
+        oil_temp_indic->type_data.arc.color = RED_ON;
+        lv_obj_set_style_text_color(oil_temp_label, RED_ON, 0);
+    } else {
+        oil_temp_indic->type_data.arc.color = AMBER_ON;
+        lv_obj_set_style_text_color(oil_temp_label, AMBER_ON, 0);
+    }
+    if (old_color.full != oil_temp_indic->type_data.arc.color.full) {
+        lv_obj_invalidate(oil_temp_meter);
+    }
+}
+
 static void set_oil_temp_value(void * indic, int32_t v) {
     lv_label_set_text_fmt(oil_temp_label, "%d°F", v);
     lv_meter_set_indicator_end_value(oil_temp_meter, oil_temp_indic, v);

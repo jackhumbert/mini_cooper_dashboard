@@ -15,7 +15,12 @@
 #include "theme.h"
 #include "sd_card.h"
 
+static dashboard_t dashboard;
 static lv_obj_t * canvas;
+
+dashboard_t * get_dash(void) {
+    return &dashboard;
+}
 
 static void dump_messages(lv_event_t * e) {
     lv_event_code_t code = lv_event_get_code(e);
@@ -146,7 +151,7 @@ lv_obj_t * dash(void) {
     lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -10, 100);
 
     lv_obj_t * label = lv_label_create(msg_clea);
-    lv_label_set_text(label, "Clear Messages");
+    lv_label_set_text(label, "Close Log File");
 }
 
 

@@ -72,7 +72,7 @@ void add_message(const char * message) {
     lv_obj_del_delayed(messages_label, MESSAGE_LIFETIME + MESSAGE_FADE_OUT);
 }
 
-void add_message_fmt(char *format, ...) {
+void add_message_fmt(const char *format, ...) {
     char buffer[256];
     va_list args;
     va_start(args, format);
