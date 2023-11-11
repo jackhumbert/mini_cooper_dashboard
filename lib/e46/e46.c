@@ -236,6 +236,189 @@ int print_can_0x1f0_ABS_1(const can_obj_e46_h_t *o, FILE *output) {
 	return r;
 }
 
+static int pack_can_0x1f3_IDK1(can_obj_e46_h_t *o, uint64_t *data) {
+	assert(o);
+	assert(data);
+	register uint64_t x;
+	register uint64_t i = 0;
+	/* IDK1_unk4: start-bit 24, length 8, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x1f3_IDK1.IDK1_unk4)) & 0xff;
+	x <<= 24; 
+	i |= x;
+	/* IDK1_unk6: start-bit 38, length 2, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x1f3_IDK1.IDK1_unk6)) & 0x3;
+	x <<= 38; 
+	i |= x;
+	/* IDK1_unk1: start-bit 7, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x1f3_IDK1.IDK1_unk1)) & 0x1;
+	x <<= 7; 
+	i |= x;
+	/* IDK1_unk2: start-bit 8, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x1f3_IDK1.IDK1_unk2)) & 0x1;
+	x <<= 8; 
+	i |= x;
+	/* IDK1_unk3: start-bit 15, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x1f3_IDK1.IDK1_unk3)) & 0x1;
+	x <<= 15; 
+	i |= x;
+	/* IDK1_unk5: start-bit 32, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x1f3_IDK1.IDK1_unk5)) & 0x1;
+	x <<= 32; 
+	i |= x;
+	/* IDK1_unk7: start-bit 59, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x1f3_IDK1.IDK1_unk7)) & 0x1;
+	x <<= 59; 
+	i |= x;
+	*data = (i);
+	o->can_0x1f3_IDK1_tx = 1;
+	return 8;
+}
+
+static int unpack_can_0x1f3_IDK1(can_obj_e46_h_t *o, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp) {
+	assert(o);
+	assert(dlc <= 8);
+	register uint64_t x;
+	register uint64_t i = (data);
+	if (dlc < 8)
+		return -1;
+	/* IDK1_unk4: start-bit 24, length 8, endianess intel, scaling 1, offset 0 */
+	x = (i >> 24) & 0xff;
+	o->can_0x1f3_IDK1.IDK1_unk4 = x;
+	/* IDK1_unk6: start-bit 38, length 2, endianess intel, scaling 1, offset 0 */
+	x = (i >> 38) & 0x3;
+	o->can_0x1f3_IDK1.IDK1_unk6 = x;
+	/* IDK1_unk1: start-bit 7, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 7) & 0x1;
+	o->can_0x1f3_IDK1.IDK1_unk1 = x;
+	/* IDK1_unk2: start-bit 8, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 8) & 0x1;
+	o->can_0x1f3_IDK1.IDK1_unk2 = x;
+	/* IDK1_unk3: start-bit 15, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 15) & 0x1;
+	o->can_0x1f3_IDK1.IDK1_unk3 = x;
+	/* IDK1_unk5: start-bit 32, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 32) & 0x1;
+	o->can_0x1f3_IDK1.IDK1_unk5 = x;
+	/* IDK1_unk7: start-bit 59, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 59) & 0x1;
+	o->can_0x1f3_IDK1.IDK1_unk7 = x;
+	o->can_0x1f3_IDK1_rx = 1;
+	o->can_0x1f3_IDK1_time_stamp_rx = time_stamp;
+	return 8;
+}
+
+int decode_can_0x1f3_IDK1_unk4(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x1f3_IDK1.IDK1_unk4);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x1f3_IDK1_unk4(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x1f3_IDK1.IDK1_unk4 = in;
+	return 0;
+}
+
+int decode_can_0x1f3_IDK1_unk6(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x1f3_IDK1.IDK1_unk6);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x1f3_IDK1_unk6(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x1f3_IDK1.IDK1_unk6 = in;
+	return 0;
+}
+
+int decode_can_0x1f3_IDK1_unk1(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x1f3_IDK1.IDK1_unk1);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x1f3_IDK1_unk1(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x1f3_IDK1.IDK1_unk1 = in;
+	return 0;
+}
+
+int decode_can_0x1f3_IDK1_unk2(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x1f3_IDK1.IDK1_unk2);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x1f3_IDK1_unk2(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x1f3_IDK1.IDK1_unk2 = in;
+	return 0;
+}
+
+int decode_can_0x1f3_IDK1_unk3(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x1f3_IDK1.IDK1_unk3);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x1f3_IDK1_unk3(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x1f3_IDK1.IDK1_unk3 = in;
+	return 0;
+}
+
+int decode_can_0x1f3_IDK1_unk5(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x1f3_IDK1.IDK1_unk5);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x1f3_IDK1_unk5(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x1f3_IDK1.IDK1_unk5 = in;
+	return 0;
+}
+
+int decode_can_0x1f3_IDK1_unk7(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x1f3_IDK1.IDK1_unk7);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x1f3_IDK1_unk7(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x1f3_IDK1.IDK1_unk7 = in;
+	return 0;
+}
+
+int print_can_0x1f3_IDK1(const can_obj_e46_h_t *o, FILE *output) {
+	assert(o);
+	assert(output);
+	int r = 0;
+	r = print_helper(r, fprintf(output, "IDK1_unk4 = (wire: %.0f)\n", (double)(o->can_0x1f3_IDK1.IDK1_unk4)));
+	r = print_helper(r, fprintf(output, "IDK1_unk6 = (wire: %.0f)\n", (double)(o->can_0x1f3_IDK1.IDK1_unk6)));
+	r = print_helper(r, fprintf(output, "IDK1_unk1 = (wire: %.0f)\n", (double)(o->can_0x1f3_IDK1.IDK1_unk1)));
+	r = print_helper(r, fprintf(output, "IDK1_unk2 = (wire: %.0f)\n", (double)(o->can_0x1f3_IDK1.IDK1_unk2)));
+	r = print_helper(r, fprintf(output, "IDK1_unk3 = (wire: %.0f)\n", (double)(o->can_0x1f3_IDK1.IDK1_unk3)));
+	r = print_helper(r, fprintf(output, "IDK1_unk5 = (wire: %.0f)\n", (double)(o->can_0x1f3_IDK1.IDK1_unk5)));
+	r = print_helper(r, fprintf(output, "IDK1_unk7 = (wire: %.0f)\n", (double)(o->can_0x1f3_IDK1.IDK1_unk7)));
+	return r;
+}
+
 static int pack_can_0x1f5_Steering_Angle_Sensor(can_obj_e46_h_t *o, uint64_t *data) {
 	assert(o);
 	assert(data);
@@ -1008,6 +1191,205 @@ int print_can_0x545_DME4(const can_obj_e46_h_t *o, FILE *output) {
 	return r;
 }
 
+static int pack_can_0x565_IDK2(can_obj_e46_h_t *o, uint64_t *data) {
+	assert(o);
+	assert(data);
+	register uint64_t x;
+	register uint64_t i = 0;
+	/* IDK2_unk4: start-bit 16, length 8, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x565_IDK2.IDK2_unk4)) & 0xff;
+	x <<= 16; 
+	i |= x;
+	/* IDK2_unk7: start-bit 56, length 8, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x565_IDK2.IDK2_unk7)) & 0xff;
+	x <<= 56; 
+	i |= x;
+	/* IDK2_unk1: start-bit 4, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x565_IDK2.IDK2_unk1)) & 0x1;
+	x <<= 4; 
+	i |= x;
+	/* IDK2_unk2: start-bit 6, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x565_IDK2.IDK2_unk2)) & 0x1;
+	x <<= 6; 
+	i |= x;
+	/* IDK2_unk3: start-bit 13, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x565_IDK2.IDK2_unk3)) & 0x1;
+	x <<= 13; 
+	i |= x;
+	/* IDK2_unk5: start-bit 25, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x565_IDK2.IDK2_unk5)) & 0x1;
+	x <<= 25; 
+	i |= x;
+	/* IDK2_unk6: start-bit 41, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x565_IDK2.IDK2_unk6)) & 0x1;
+	x <<= 41; 
+	i |= x;
+	*data = (i);
+	o->can_0x565_IDK2_tx = 1;
+	return 8;
+}
+
+static int unpack_can_0x565_IDK2(can_obj_e46_h_t *o, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp) {
+	assert(o);
+	assert(dlc <= 8);
+	register uint64_t x;
+	register uint64_t i = (data);
+	if (dlc < 8)
+		return -1;
+	/* IDK2_unk4: start-bit 16, length 8, endianess intel, scaling 1, offset 0 */
+	x = (i >> 16) & 0xff;
+	o->can_0x565_IDK2.IDK2_unk4 = x;
+	/* IDK2_unk7: start-bit 56, length 8, endianess intel, scaling 1, offset 0 */
+	x = (i >> 56) & 0xff;
+	o->can_0x565_IDK2.IDK2_unk7 = x;
+	/* IDK2_unk1: start-bit 4, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 4) & 0x1;
+	o->can_0x565_IDK2.IDK2_unk1 = x;
+	/* IDK2_unk2: start-bit 6, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 6) & 0x1;
+	o->can_0x565_IDK2.IDK2_unk2 = x;
+	/* IDK2_unk3: start-bit 13, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 13) & 0x1;
+	o->can_0x565_IDK2.IDK2_unk3 = x;
+	/* IDK2_unk5: start-bit 25, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 25) & 0x1;
+	o->can_0x565_IDK2.IDK2_unk5 = x;
+	/* IDK2_unk6: start-bit 41, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 41) & 0x1;
+	o->can_0x565_IDK2.IDK2_unk6 = x;
+	o->can_0x565_IDK2_rx = 1;
+	o->can_0x565_IDK2_time_stamp_rx = time_stamp;
+	return 8;
+}
+
+int decode_can_0x565_IDK2_unk4(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x565_IDK2.IDK2_unk4);
+	if (rval <= 1) {
+		*out = rval;
+		return 0;
+	} else {
+		*out = (uint8_t)0;
+		return -1;
+	}
+}
+
+int encode_can_0x565_IDK2_unk4(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x565_IDK2.IDK2_unk4 = 0;
+	if (in > 1)
+		return -1;
+	o->can_0x565_IDK2.IDK2_unk4 = in;
+	return 0;
+}
+
+int decode_can_0x565_IDK2_unk7(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x565_IDK2.IDK2_unk7);
+	if (rval <= 1) {
+		*out = rval;
+		return 0;
+	} else {
+		*out = (uint8_t)0;
+		return -1;
+	}
+}
+
+int encode_can_0x565_IDK2_unk7(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x565_IDK2.IDK2_unk7 = 0;
+	if (in > 1)
+		return -1;
+	o->can_0x565_IDK2.IDK2_unk7 = in;
+	return 0;
+}
+
+int decode_can_0x565_IDK2_unk1(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x565_IDK2.IDK2_unk1);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x565_IDK2_unk1(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x565_IDK2.IDK2_unk1 = in;
+	return 0;
+}
+
+int decode_can_0x565_IDK2_unk2(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x565_IDK2.IDK2_unk2);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x565_IDK2_unk2(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x565_IDK2.IDK2_unk2 = in;
+	return 0;
+}
+
+int decode_can_0x565_IDK2_unk3(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x565_IDK2.IDK2_unk3);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x565_IDK2_unk3(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x565_IDK2.IDK2_unk3 = in;
+	return 0;
+}
+
+int decode_can_0x565_IDK2_unk5(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x565_IDK2.IDK2_unk5);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x565_IDK2_unk5(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x565_IDK2.IDK2_unk5 = in;
+	return 0;
+}
+
+int decode_can_0x565_IDK2_unk6(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x565_IDK2.IDK2_unk6);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x565_IDK2_unk6(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x565_IDK2.IDK2_unk6 = in;
+	return 0;
+}
+
+int print_can_0x565_IDK2(const can_obj_e46_h_t *o, FILE *output) {
+	assert(o);
+	assert(output);
+	int r = 0;
+	r = print_helper(r, fprintf(output, "IDK2_unk4 = (wire: %.0f)\n", (double)(o->can_0x565_IDK2.IDK2_unk4)));
+	r = print_helper(r, fprintf(output, "IDK2_unk7 = (wire: %.0f)\n", (double)(o->can_0x565_IDK2.IDK2_unk7)));
+	r = print_helper(r, fprintf(output, "IDK2_unk1 = (wire: %.0f)\n", (double)(o->can_0x565_IDK2.IDK2_unk1)));
+	r = print_helper(r, fprintf(output, "IDK2_unk2 = (wire: %.0f)\n", (double)(o->can_0x565_IDK2.IDK2_unk2)));
+	r = print_helper(r, fprintf(output, "IDK2_unk3 = (wire: %.0f)\n", (double)(o->can_0x565_IDK2.IDK2_unk3)));
+	r = print_helper(r, fprintf(output, "IDK2_unk5 = (wire: %.0f)\n", (double)(o->can_0x565_IDK2.IDK2_unk5)));
+	r = print_helper(r, fprintf(output, "IDK2_unk6 = (wire: %.0f)\n", (double)(o->can_0x565_IDK2.IDK2_unk6)));
+	return r;
+}
+
 static int pack_can_0x613_Instrument_Cluster(can_obj_e46_h_t *o, uint64_t *data) {
 	assert(o);
 	assert(data);
@@ -1155,6 +1537,123 @@ int print_can_0x615_IKE(const can_obj_e46_h_t *o, FILE *output) {
 	return r;
 }
 
+static int pack_can_0x618_IDK3(can_obj_e46_h_t *o, uint64_t *data) {
+	assert(o);
+	assert(data);
+	register uint64_t x;
+	register uint64_t i = 0;
+	/* IDK3unk1: start-bit 16, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x618_IDK3.IDK3unk1)) & 0x1;
+	x <<= 16; 
+	i |= x;
+	/* IDK3unk2: start-bit 17, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x618_IDK3.IDK3unk2)) & 0x1;
+	x <<= 17; 
+	i |= x;
+	/* IDK3unk3: start-bit 19, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x618_IDK3.IDK3unk3)) & 0x1;
+	x <<= 19; 
+	i |= x;
+	/* IDK3unk4: start-bit 23, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x618_IDK3.IDK3unk4)) & 0x1;
+	x <<= 23; 
+	i |= x;
+	*data = (i);
+	o->can_0x618_IDK3_tx = 1;
+	return 8;
+}
+
+static int unpack_can_0x618_IDK3(can_obj_e46_h_t *o, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp) {
+	assert(o);
+	assert(dlc <= 8);
+	register uint64_t x;
+	register uint64_t i = (data);
+	if (dlc < 8)
+		return -1;
+	/* IDK3unk1: start-bit 16, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 16) & 0x1;
+	o->can_0x618_IDK3.IDK3unk1 = x;
+	/* IDK3unk2: start-bit 17, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 17) & 0x1;
+	o->can_0x618_IDK3.IDK3unk2 = x;
+	/* IDK3unk3: start-bit 19, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 19) & 0x1;
+	o->can_0x618_IDK3.IDK3unk3 = x;
+	/* IDK3unk4: start-bit 23, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 23) & 0x1;
+	o->can_0x618_IDK3.IDK3unk4 = x;
+	o->can_0x618_IDK3_rx = 1;
+	o->can_0x618_IDK3_time_stamp_rx = time_stamp;
+	return 8;
+}
+
+int decode_can_0x618_IDK3unk1(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x618_IDK3.IDK3unk1);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x618_IDK3unk1(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x618_IDK3.IDK3unk1 = in;
+	return 0;
+}
+
+int decode_can_0x618_IDK3unk2(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x618_IDK3.IDK3unk2);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x618_IDK3unk2(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x618_IDK3.IDK3unk2 = in;
+	return 0;
+}
+
+int decode_can_0x618_IDK3unk3(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x618_IDK3.IDK3unk3);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x618_IDK3unk3(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x618_IDK3.IDK3unk3 = in;
+	return 0;
+}
+
+int decode_can_0x618_IDK3unk4(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x618_IDK3.IDK3unk4);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x618_IDK3unk4(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x618_IDK3.IDK3unk4 = in;
+	return 0;
+}
+
+int print_can_0x618_IDK3(const can_obj_e46_h_t *o, FILE *output) {
+	assert(o);
+	assert(output);
+	int r = 0;
+	r = print_helper(r, fprintf(output, "IDK3unk1 = (wire: %.0f)\n", (double)(o->can_0x618_IDK3.IDK3unk1)));
+	r = print_helper(r, fprintf(output, "IDK3unk2 = (wire: %.0f)\n", (double)(o->can_0x618_IDK3.IDK3unk2)));
+	r = print_helper(r, fprintf(output, "IDK3unk3 = (wire: %.0f)\n", (double)(o->can_0x618_IDK3.IDK3unk3)));
+	r = print_helper(r, fprintf(output, "IDK3unk4 = (wire: %.0f)\n", (double)(o->can_0x618_IDK3.IDK3unk4)));
+	return r;
+}
+
 int unpack_message(can_obj_e46_h_t *o, const unsigned long id, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp) {
 	assert(o);
 	assert(id < (1ul << 29)); /* 29-bit CAN ID is largest possible */
@@ -1162,13 +1661,16 @@ int unpack_message(can_obj_e46_h_t *o, const unsigned long id, uint64_t data, ui
 	switch (id) {
 	case 0x153: return unpack_can_0x153_ASC_1(o, data, dlc, time_stamp);
 	case 0x1f0: return unpack_can_0x1f0_ABS_1(o, data, dlc, time_stamp);
+	case 0x1f3: return unpack_can_0x1f3_IDK1(o, data, dlc, time_stamp);
 	case 0x1f5: return unpack_can_0x1f5_Steering_Angle_Sensor(o, data, dlc, time_stamp);
 	case 0x316: return unpack_can_0x316_DME1(o, data, dlc, time_stamp);
 	case 0x329: return unpack_can_0x329_DME2(o, data, dlc, time_stamp);
 	case 0x338: return unpack_can_0x338_DME3(o, data, dlc, time_stamp);
 	case 0x545: return unpack_can_0x545_DME4(o, data, dlc, time_stamp);
+	case 0x565: return unpack_can_0x565_IDK2(o, data, dlc, time_stamp);
 	case 0x613: return unpack_can_0x613_Instrument_Cluster(o, data, dlc, time_stamp);
 	case 0x615: return unpack_can_0x615_IKE(o, data, dlc, time_stamp);
+	case 0x618: return unpack_can_0x618_IDK3(o, data, dlc, time_stamp);
 	default: break; 
 	}
 	return -1; 
@@ -1180,13 +1682,16 @@ int pack_message(can_obj_e46_h_t *o, const unsigned long id, uint64_t *data) {
 	switch (id) {
 	case 0x153: return pack_can_0x153_ASC_1(o, data);
 	case 0x1f0: return pack_can_0x1f0_ABS_1(o, data);
+	case 0x1f3: return pack_can_0x1f3_IDK1(o, data);
 	case 0x1f5: return pack_can_0x1f5_Steering_Angle_Sensor(o, data);
 	case 0x316: return pack_can_0x316_DME1(o, data);
 	case 0x329: return pack_can_0x329_DME2(o, data);
 	case 0x338: return pack_can_0x338_DME3(o, data);
 	case 0x545: return pack_can_0x545_DME4(o, data);
+	case 0x565: return pack_can_0x565_IDK2(o, data);
 	case 0x613: return pack_can_0x613_Instrument_Cluster(o, data);
 	case 0x615: return pack_can_0x615_IKE(o, data);
+	case 0x618: return pack_can_0x618_IDK3(o, data);
 	default: break; 
 	}
 	return -1; 
@@ -1199,13 +1704,16 @@ int print_message(const can_obj_e46_h_t *o, const unsigned long id, FILE *output
 	switch (id) {
 	case 0x153: return print_can_0x153_ASC_1(o, output);
 	case 0x1f0: return print_can_0x1f0_ABS_1(o, output);
+	case 0x1f3: return print_can_0x1f3_IDK1(o, output);
 	case 0x1f5: return print_can_0x1f5_Steering_Angle_Sensor(o, output);
 	case 0x316: return print_can_0x316_DME1(o, output);
 	case 0x329: return print_can_0x329_DME2(o, output);
 	case 0x338: return print_can_0x338_DME3(o, output);
 	case 0x545: return print_can_0x545_DME4(o, output);
+	case 0x565: return print_can_0x565_IDK2(o, output);
 	case 0x613: return print_can_0x613_Instrument_Cluster(o, output);
 	case 0x615: return print_can_0x615_IKE(o, output);
+	case 0x618: return print_can_0x618_IDK3(o, output);
 	default: break; 
 	}
 	return -1; 
