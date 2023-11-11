@@ -1,7 +1,14 @@
 #include "temp.h"
 #include <sys/time.h>
 
+lv_obj_t * temp_label;
+
 static int outside_temp = 65;
+
+void temp_set(int temp) {
+    outside_temp = temp;
+    lv_label_set_text_fmt(temp_label, "%d°F", outside_temp);
+}
 
 lv_obj_t * temp_create(lv_obj_t * parent) {
 
@@ -44,7 +51,7 @@ lv_obj_t * temp_create(lv_obj_t * parent) {
     lv_style_set_text_font(&style, RAJDHANI_REGULAR_36);
     lv_style_set_text_align(&style, LV_TEXT_ALIGN_RIGHT);
 
-    lv_obj_t * temp_label = lv_label_create(parent);
+    temp_label = lv_label_create(parent);
     // lv_label_set_text(temp_label, "5:30 PM");
 
     lv_label_set_text_fmt(temp_label, "%d°F", outside_temp);

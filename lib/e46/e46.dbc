@@ -90,6 +90,9 @@ BO_ 824 DME3: 8 DME_Etc
    SG_ Engine_Running : 28|1@1+ (1,0) [0|0] "" DME_Etc
    SG_ Brake_Switch : 48|1@1+ (1,0) [0|0] "" Vector__XXX
 
+BO_ 499 IDK: 8 Vector__XXX
+   SG_ unk1 : 7|1@1+ (0,0) [0|1] "" Vector__XXX
+
 BA_DEF_ BO_ "GenMsgBackgroundColor" STRING ;
 BA_DEF_ BO_ "GenMsgForegroundColor" STRING ;
 BA_DEF_ BO_ "isj1939dbc" INT 0 0;
@@ -120,3 +123,4 @@ VAL_ 339 Brake_Pedal_Pressed 0 "Not_pressed" 1 "Pressed";
 VAL_ 824 Clutch 0 "Not_pressed" 1 "Pressed";
 VAL_ 824 Engine_Running 0 "Not_running" 1 "Running";
 VAL_ 824 Brake_Switch 0 "Not_pressed" 1 "Pressed";
+

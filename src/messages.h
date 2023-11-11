@@ -10,6 +10,7 @@ extern "C"
 
 void add_message(const char * message);
 void add_message_fmt(char *fmt, ...);
+void dash_log(char* message);
 
 #ifdef __cplusplus
 } // extern "C"

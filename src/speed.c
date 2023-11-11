@@ -4,6 +4,11 @@ static lv_obj_t * speed_label;
 static lv_obj_t * speed_label2;
 
 static void set_speed_value(void * indic, int32_t v) {
+    speed_set(v);
+}
+
+void speed_set(double speed) {
+    uint8_t v = (uint8_t)round(speed);
     if (v >= 10) {
         lv_label_set_text_fmt(speed_label, "%d", (int)(v / 10));
         lv_obj_set_grid_cell(speed_label2, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_CENTER, 0, 1);
@@ -12,9 +17,7 @@ static void set_speed_value(void * indic, int32_t v) {
         lv_obj_set_grid_cell(speed_label2, LV_GRID_ALIGN_CENTER, 0, 2, LV_GRID_ALIGN_CENTER, 0, 1);
     }
     lv_label_set_text_fmt(speed_label2, "%d", v % 10);
-    // update_effect();
 }
-
 
 lv_obj_t * speed_create(lv_obj_t * parent) {
 

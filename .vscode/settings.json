@@ -27,6 +27,21 @@
         "new": "cpp",
         "adafruit_tinyusb.h": "c",
         "adafruit_usbh_cdc.h": "c",
-        "hardwareserial.h": "c"
+        "hardwareserial.h": "c",
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "optional": "c",
+        "istream": "c",
+        "ostream": "c",
+        "ratio": "c",
+        "system_error": "c",
+        "functional": "c",
+        "tuple": "c",
+        "type_traits": "c"
     }
 }

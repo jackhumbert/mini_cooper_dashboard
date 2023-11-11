@@ -57,6 +57,15 @@ static void stop_redline_anim(void) {
 }
 
 static void set_value(void * indic, int32_t v) {
+    // if (rpm_red) {
+    //     lv_meter_set_indicator_end_value(meter, rpm_red, MAX(v, REDLINE));
+    // }
+    tach3_set(v);
+    update_effect();
+}
+
+void tach3_set(int32_t tach) {
+    int32_t v = tach;
     if (v > REDLINE) {
         if (!animation_active) {
             start_redline_anim();
@@ -70,10 +79,6 @@ static void set_value(void * indic, int32_t v) {
         // lv_meter_set_indicator_end_value(meter, rpm_normal, MIN(v, REDLINE));
         // lv_meter_set_indicator_end_value(meter2, rpm_normal2, MIN(v, REDLINE));
     }
-    // if (rpm_red) {
-    //     lv_meter_set_indicator_end_value(meter, rpm_red, MAX(v, REDLINE));
-    // }
-    update_effect();
 }
 
 lv_obj_t * tach3_create(lv_obj_t * canvas) {
@@ -167,17 +172,17 @@ lv_obj_t * tach3_create(lv_obj_t * canvas) {
 
 
     /*Create an animation to set the value*/
-    lv_anim_t a;
-    lv_anim_init(&a);
-    lv_anim_set_exec_cb(&a, set_value);
-    lv_anim_set_values(&a, 800, 8000);
-    lv_anim_set_repeat_delay(&a, 100);
-    lv_anim_set_playback_delay(&a, 100);
-    lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
+    // lv_anim_t a;
+    // lv_anim_init(&a);
+    // lv_anim_set_exec_cb(&a, set_value);
+    // lv_anim_set_values(&a, 800, 8000);
+    // lv_anim_set_repeat_delay(&a, 100);
+    // lv_anim_set_playback_delay(&a, 100);
+    // lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
 
-    lv_anim_set_time(&a, 3000);
-    lv_anim_set_playback_time(&a, 500);
-    lv_anim_start(&a);
+    // lv_anim_set_time(&a, 3000);
+    // lv_anim_set_playback_time(&a, 500);
+    // lv_anim_start(&a);
 
     /*Add a red arc to the end*/
     // rpm_red = lv_meter_add_arc(meter, scale, 20, RED_ON, -1);

@@ -4,12 +4,11 @@
 
 #define MESSAGES_WIDTH 280
 #define MESSAGES_HEIGHT 240
-#define MESSAGE_LIFETIME 10000
+#define MESSAGE_LIFETIME 30000
 #define MESSAGE_FADE_OUT 300
 
 
 static lv_obj_t * messages;
-// static lv_obj_t * messages_label;
 
 lv_obj_t * messages_create(lv_obj_t * parent) {
 
@@ -30,7 +29,6 @@ lv_obj_t * messages_create(lv_obj_t * parent) {
 }
 
 {
-
     static lv_style_t style;
     lv_style_init(&style);
     lv_style_set_border_side(&style, LV_BORDER_SIDE_BOTTOM);
@@ -60,7 +58,7 @@ lv_obj_t * messages_create(lv_obj_t * parent) {
 }
 
 void add_message(const char * message) {
-    // lv_label_set_text_fmt(messages_label, "%s\n%s", lv_label_get_text(messages_label), message);
+    // LV_LOG_USER(message);
 
     DASH_FONT(FIRACODE_REGULAR, 12);
 
@@ -70,13 +68,9 @@ void add_message(const char * message) {
     lv_obj_set_style_text_color(messages_label, AMBER_ON, 0);
     lv_obj_set_width(messages_label, MESSAGES_WIDTH);
 
-    // lv_timer_t * timer = lv_timer_create(hide_message, 5000,  &messages_label);
-    // lv_timer_set_repeat_count(timer, 1);
-
     lv_obj_fade_out(messages_label, MESSAGE_FADE_OUT, MESSAGE_LIFETIME);
     lv_obj_del_delayed(messages_label, MESSAGE_LIFETIME + MESSAGE_FADE_OUT);
 }
-
 
 void add_message_fmt(char *format, ...) {
     char buffer[256];

@@ -13,32 +13,31 @@
 #include "messages.h"
 #include "effect.h"
 #include "theme.h"
+#include "sd_card.h"
 
 static lv_obj_t * canvas;
 
-// lv_color_t cbuf[LV_CANVAS_BUF_SIZE_TRUE_COLOR(CANVAS_WIDTH, CANVAS_HEIGHT)];
-
-// static void canvas_draw_end(lv_event_t * e) {
-    // if (need_to_affect) {
-    //     need_to_affect = false;
-        // update_effect();
-    // }
-// }
-
-static void toggle_lights(lv_event_t * e)
-{
+static void dump_messages(lv_event_t * e) {
     lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t * obj = lv_event_get_target(e);
 
     if(code == LV_EVENT_CLICKED) {
-        LV_LOG_USER("Clicked");
+        sd_card_dump_messages();
     }
-    else if(code == LV_EVENT_VALUE_CHANGED) {
-        LV_LOG_USER("Toggled");
-        theme_init();
+}
+
+static void clear_messages(lv_event_t * e) {
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t * obj = lv_event_get_target(e);
+
+    if(code == LV_EVENT_CLICKED) {
+        sd_card_clear_messages();
     }
 }
 
 lv_obj_t * dash(void) {
+
+    theme_init();
 
     // fs_init();
 
@@ -80,8 +79,6 @@ lv_obj_t * dash(void) {
 
     lv_obj_t * tach = tach3_create(canvas);
     lv_obj_align(tach, LV_ALIGN_TOP_MID, 0, 240);
-
-
 
     lv_obj_t * speed = speed_create(canvas);
     lv_obj_align(speed, LV_ALIGN_TOP_MID, 0, 40);
@@ -134,14 +131,23 @@ lv_obj_t * dash(void) {
     lv_obj_t * messages_view = messages_create(canvas);
     lv_obj_align(messages_view, LV_ALIGN_TOP_LEFT, 10, 10);
 
-    lv_obj_t * toggle = lv_btn_create(canvas);
-    lv_obj_add_flag(toggle, LV_OBJ_FLAG_CHECKABLE);
-    lv_obj_align(toggle, LV_ALIGN_TOP_RIGHT, -10, 80);
-    lv_obj_add_event_cb(toggle, toggle_lights, LV_EVENT_ALL, NULL);
+{
+    lv_obj_t * msg_dump = lv_btn_create(canvas);
+    lv_obj_add_event_cb(msg_dump, dump_messages, LV_EVENT_ALL, NULL);
+    lv_obj_align(msg_dump, LV_ALIGN_TOP_RIGHT, -10, 50);
 
-    lv_obj_t * label = lv_label_create(toggle);
-    lv_label_set_text(label, "Theme");
-    lv_obj_center(label);
+    lv_obj_t * label = lv_label_create(msg_dump);
+    lv_label_set_text(label, "Dump Messages");
+}
+
+{
+    lv_obj_t * msg_clea = lv_btn_create(canvas);
+    lv_obj_add_event_cb(msg_clea, clear_messages, LV_EVENT_ALL, NULL);
+    lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -10, 100);
+
+    lv_obj_t * label = lv_label_create(msg_clea);
+    lv_label_set_text(label, "Clear Messages");
+}
 
 
     // setup_effect(canvas);

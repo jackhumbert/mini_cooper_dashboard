@@ -16,9 +16,9 @@
 #define BLUE_HALF lv_color_hsv_to_rgb(190, 100, 50)
 #define BLUE_OFF lv_color_hsv_to_rgb(185, 100, 8)
 
-#define GREEN_ON lv_color_hsv_to_rgb(120, 100, 100)
-#define GREEN_HALF lv_color_hsv_to_rgb(115, 100, 50)
-#define GREEN_OFF lv_color_hsv_to_rgb(110, 100, 8)
+#define GREEN_ON lv_color_hsv_to_rgb(130, 100, 100)
+#define GREEN_HALF lv_color_hsv_to_rgb(125, 100, 50)
+#define GREEN_OFF lv_color_hsv_to_rgb(120, 100, 8)
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))

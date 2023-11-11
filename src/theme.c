@@ -4,6 +4,14 @@
 static lv_style_t style_btn;
 static lv_theme_t day_theme;
 
+static void apply_theme_cb(lv_theme_t * th, lv_obj_t * obj) {
+    LV_UNUSED(th);
+
+    if(lv_obj_check_type(obj, &lv_btn_class)) {
+        lv_obj_add_style(obj, &style_btn, 0);
+    }
+}
+
 void theme_init() {
     /*Initialize the styles*/
     lv_style_init(&style_btn);
@@ -22,10 +30,6 @@ void theme_init() {
     lv_disp_set_theme(NULL, &day_theme);
 }
 
-void apply_theme_cb(lv_theme_t * th, lv_obj_t * obj) {
-    LV_UNUSED(th);
-
-    if(lv_obj_check_type(obj, &lv_btn_class)) {
-        lv_obj_add_style(obj, &style_btn, 0);
-    }
+void apply_day_theme() {
+    
 }
