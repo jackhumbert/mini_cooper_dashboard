@@ -93,6 +93,9 @@ BO_ 824 DME3: 8 DME_Etc
 BO_ 499 IDK: 8 Vector__XXX
    SG_ unk1 : 7|1@1+ (0,0) [0|1] "" Vector__XXX
 
+BO_ 1381 IDK2: 8 Vector__XXX
+   SG_ unk1 : 4|1@1+ (0,0) [0|0] "" Vector__XXX
+
 BA_DEF_ BO_ "GenMsgBackgroundColor" STRING ;
 BA_DEF_ BO_ "GenMsgForegroundColor" STRING ;
 BA_DEF_ BO_ "isj1939dbc" INT 0 0;
