@@ -39,7 +39,7 @@ lv_obj_t * car_view_create(lv_obj_t * parent) {
 
     static lv_style_t style;
     lv_style_init(&style);
-    lv_style_set_img_recolor(&style, RED_ON);
+    lv_style_set_img_recolor(&style, RED_OFF);
     lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
     lv_obj_add_style(icon, &style, 0);
 }
@@ -54,7 +54,7 @@ lv_obj_t * car_view_create(lv_obj_t * parent) {
 
     static lv_style_t style;
     lv_style_init(&style);
-    lv_style_set_img_recolor(&style, RED_ON);
+    lv_style_set_img_recolor(&style, RED_OFF);
     lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
     lv_obj_add_style(icon, &style, 0);
 }
@@ -70,7 +70,7 @@ lv_obj_t * car_view_create(lv_obj_t * parent) {
     static lv_style_t style;
     lv_style_init(&style);
     // lv_style_set_img_recolor(&style, BLUE_ON);
-    lv_style_set_img_recolor(&style, lv_color_white());
+    lv_style_set_img_recolor(&style, AMBER_OFF);
     lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
     lv_obj_add_style(icon, &style, 0);
 }
@@ -86,7 +86,7 @@ lv_obj_t * car_view_create(lv_obj_t * parent) {
 
     static lv_style_t style;
     lv_style_init(&style);
-    lv_style_set_img_recolor(&style, RED_ON);
+    lv_style_set_img_recolor(&style, RED_OFF);
     lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
     lv_obj_add_style(icon, &style, 0);
 }
@@ -103,7 +103,7 @@ lv_obj_t * car_view_create(lv_obj_t * parent) {
 
     static lv_style_t style;
     lv_style_init(&style);
-    lv_style_set_img_recolor(&style, RED_ON);
+    lv_style_set_img_recolor(&style, RED_OFF);
     lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
     lv_obj_add_style(icon, &style, 0);
 }
@@ -120,7 +120,7 @@ lv_obj_t * car_view_create(lv_obj_t * parent) {
 
     static lv_style_t style;
     lv_style_init(&style);
-    lv_style_set_img_recolor(&style, RED_ON);
+    lv_style_set_img_recolor(&style, RED_OFF);
     lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
     lv_obj_add_style(icon, &style, 0);
 }
@@ -137,7 +137,7 @@ lv_obj_t * car_view_create(lv_obj_t * parent) {
 
     static lv_style_t style;
     lv_style_init(&style);
-    lv_style_set_img_recolor(&style, RED_ON);
+    lv_style_set_img_recolor(&style, RED_OFF);
     lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
     lv_obj_add_style(icon, &style, 0);
 }
@@ -154,7 +154,7 @@ lv_obj_t * car_view_create(lv_obj_t * parent) {
 
     static lv_style_t style;
     lv_style_init(&style);
-    lv_style_set_img_recolor(&style, lv_color_white());
+    lv_style_set_img_recolor(&style, AMBER_OFF);
     lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
     lv_obj_add_style(icon, &style, 0);
 }

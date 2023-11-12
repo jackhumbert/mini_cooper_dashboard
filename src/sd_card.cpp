@@ -10,7 +10,7 @@
 #define SD_SCK 12
 #define SD_CS 10
 
-static char log_filename[18];
+static char log_filename[20];
 static File log_file;
 
 static int get_file_count() {
@@ -24,7 +24,7 @@ static int get_file_count() {
 			return count_files;
 		}
 		String file_name = entry.name();
-		if( file_name.indexOf('~') != 0) {
+		if( file_name.indexOf('~') != 0 && !entry.isDirectory()) {
 			count_files++;
 		}
 	}
@@ -32,7 +32,7 @@ static int get_file_count() {
 
 void sd_card_init() {
     SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
-    delay(100);
+    // delay(100);
     if (!SD.begin(SD_CS)) {
         add_message("SD Card Mount Failed");
         return;
@@ -46,9 +46,11 @@ void sd_card_init() {
     uint64_t cardSize = SD.cardSize() / (1024 * 1024);
     add_message_fmt("SD Card Size: %lluMB", cardSize);
 
-    sprintf(log_filename, "/log_%08X.txt", get_file_count());
+    sprintf(log_filename, "/log_%08X.crtd", get_file_count());
     add_message_fmt("Log file: %s", log_filename);
     log_file = SD.open(log_filename, FILE_APPEND);
+    log_file.printf("%08.3f CXX R53 Custom Dash by Jack Humbert\n", xTaskGetTickCount() / 1000.0);
+    log_file.flush();
 }
 
 File * sd_card_get_log_file(void) {

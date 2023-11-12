@@ -150,10 +150,19 @@ int main()
   if (fd < 0) { return 1; }
  
   uint8_t command[12] = {0};
-  FILE * fptr = fopen("data10.bin", "r");
-  while(fgets((char*)command, 12, fptr)) {
+  FILE * fptr = fopen("log_5.bin", "r");
+  fseek(fptr, 12 * 3000, SEEK_SET);
+  while(fread(&command, sizeof(uint8_t), 12, fptr)) {
     write_port(fd, command, 12);
-    delay(20);
+    printf("%02X", command[0]);
+    printf("%02X", command[1]);
+    printf("%02X", command[2]);
+    printf("%02X", command[3]);
+    for (int i = 4; i < 12; i++) {
+      printf(" %02X", command[i]);
+    }
+    printf("\n");
+    delay(10);
   }
  
   close(fd);

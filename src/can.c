@@ -7,6 +7,7 @@
 #include "oil.h"
 #include "clock.h"
 #include "coolant.h"
+#include "turn_signal.h"
 
 static can_obj_e46_h_t can_data;
 
@@ -44,9 +45,7 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 decode_can_0x329_Engine_Temp(&can_data, &get_dash()->engine_temp);
                 coolant_update();
                 decode_can_0x329_Clutch_Switch(&can_data, &get_dash()->clutch_switch);
-                return 0;
-            case 0x338:
-                decode_can_0x338_Clutch(&can_data, &get_dash()->clutch);
+                decode_can_0x329_Throttle_Position(&can_data, &get_dash()->throttle_position);
                 return 0;
             case 0x316:
                 decode_can_0x316_RPM(&can_data, &get_dash()->rpm);
@@ -54,8 +53,10 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 decode_can_0x316_Key(&can_data, &get_dash()->key);
                 decode_can_0x316_Starter(&can_data, &get_dash()->starter);
                 return 0;
-            case 0x329: return 0;
             case 0x336: return 0;
+            case 0x338:
+                decode_can_0x338_Clutch(&can_data, &get_dash()->clutch);
+                return 0;
             case 0x501: return 0;
             case 0x545: return 0;
             case 0x565: return 0;
@@ -72,7 +73,10 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 return 0;
             case 0x618: return 0;
             case 0x61A: return 0;
-            case 0x61F: return 0;
+            case 0x61F: 
+                decode_can_0x61f_Blinker(&can_data, &get_dash()->blinker);
+                turn_signal_update();
+                return 0;
         }
         return -1;
     }

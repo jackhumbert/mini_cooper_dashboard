@@ -8,7 +8,7 @@ static lv_obj_t * speed_label2;
 // }
 
 void speed_update() {
-    int v = round(get_dash()->speed);
+    int v = round(get_dash()->speed / 1.609);
     if (v >= 10) {
         lv_label_set_text_fmt(speed_label, "%d", (int)(v / 10));
         lv_obj_set_grid_cell(speed_label2, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_CENTER, 0, 1);
@@ -45,7 +45,7 @@ lv_obj_t * speed_create(lv_obj_t * parent) {
     lv_style_set_text_font(&style, RAJDHANI_SEMIBOLD_120);
 
     speed_label = lv_label_create(speed_cont);
-    lv_label_set_text_fmt(speed_label, "%d", (int)(50 / 10));
+    lv_label_set_text(speed_label, "-");
     lv_obj_add_style(speed_label, &style, 0);
     // lv_obj_set_style_blend_mode(speed_label, LV_BLEND_MODE_ADDITIVE, 0);
     lv_obj_set_grid_cell(speed_label, LV_GRID_ALIGN_END, 0, 1, LV_GRID_ALIGN_CENTER, 0, 1);
@@ -53,7 +53,7 @@ lv_obj_t * speed_create(lv_obj_t * parent) {
     lv_obj_align(speed_label, LV_ALIGN_TOP_RIGHT, 0, 0);
 
     speed_label2 = lv_label_create(speed_cont);
-    lv_label_set_text_fmt(speed_label2, "%d", 50 % 10);
+    lv_label_set_text(speed_label2, "-");
     lv_obj_add_style(speed_label2, &style, 0);
     // lv_obj_set_style_blend_mode(speed_label2, LV_BLEND_MODE_ADDITIVE, 0);
     lv_obj_set_grid_cell(speed_label2, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_CENTER, 0, 1);

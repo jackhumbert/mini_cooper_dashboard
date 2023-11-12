@@ -67,6 +67,9 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/src/assets/fonts.c")
     endforeach()
 endif()
 
+add_custom_target(e46 COMMAND ../dbcc/dbcc e46.dbc WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/lib/e46)
+
+
 # include_directories(${SDL2_INCLUDE_DIRS})
 
 # Let the build system know what the project executable is to attach more targets, dependencies, etc.

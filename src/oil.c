@@ -136,7 +136,7 @@ lv_obj_t * oil_temp_create(lv_obj_t * parent) {
         oil_temp_label = lv_label_create(oil_temp_meter);
         lv_obj_align(oil_temp_label, LV_ALIGN_CENTER, 0, -4);
         lv_obj_set_style_text_font(oil_temp_label, RAJDHANI_REGULAR_24, 0);
-        lv_label_set_text(oil_temp_label, "210°F");
+        lv_label_set_text(oil_temp_label, "-°F");
         lv_obj_set_style_text_color(oil_temp_label, AMBER_ON, 0);
     }
 
@@ -200,7 +200,7 @@ lv_obj_t * oil_pressure_create(lv_obj_t * parent) {
         oil_pressure_label = lv_label_create(oil_pressure_meter);
         lv_obj_align(oil_pressure_label, LV_ALIGN_CENTER, 0, -4);
         lv_obj_set_style_text_font(oil_pressure_label, RAJDHANI_REGULAR_24, 0);
-        lv_label_set_text(oil_pressure_label, "35 psi");
+        lv_label_set_text(oil_pressure_label, "- psi");
         lv_obj_set_style_text_color(oil_pressure_label, AMBER_ON, 0);
     }
 

@@ -87,6 +87,8 @@ typedef struct dashboard_t {
     uint8_t fuel_level;
 
     uint8_t outside_temp;
+
+    uint8_t blinker;
 } dashboard_t;
 
 dashboard_t * get_dash(void);

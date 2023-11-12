@@ -21,9 +21,13 @@ static int pack_can_0x153_ASC_1(can_obj_e46_h_t *o, uint64_t *data) {
 	assert(data);
 	register uint64_t x;
 	register uint64_t i = 0;
-	/* Speed: start-bit 11, length 13, endianess intel, scaling 1, offset 9.94 */
+	/* Speed: start-bit 11, length 13, endianess intel, scaling 0.0625, offset 0 */
 	x = ((uint16_t)(o->can_0x153_ASC_1.Speed)) & 0x1fff;
 	x <<= 11; 
+	i |= x;
+	/* Unk4: start-bit 40, length 8, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x153_ASC_1.Unk4)) & 0xff;
+	x <<= 40; 
 	i |= x;
 	/* Tyre_Pressure_Set: start-bit 0, length 1, endianess intel, scaling 1, offset 0 */
 	x = ((uint8_t)(o->can_0x153_ASC_1.Tyre_Pressure_Set)) & 0x1;
@@ -44,9 +48,12 @@ static int unpack_can_0x153_ASC_1(can_obj_e46_h_t *o, uint64_t data, uint8_t dlc
 	register uint64_t i = (data);
 	if (dlc < 8)
 		return -1;
-	/* Speed: start-bit 11, length 13, endianess intel, scaling 1, offset 9.94 */
+	/* Speed: start-bit 11, length 13, endianess intel, scaling 0.0625, offset 0 */
 	x = (i >> 11) & 0x1fff;
 	o->can_0x153_ASC_1.Speed = x;
+	/* Unk4: start-bit 40, length 8, endianess intel, scaling 1, offset 0 */
+	x = (i >> 40) & 0xff;
+	o->can_0x153_ASC_1.Unk4 = x;
 	/* Tyre_Pressure_Set: start-bit 0, length 1, endianess intel, scaling 1, offset 0 */
 	x = i & 0x1;
 	o->can_0x153_ASC_1.Tyre_Pressure_Set = x;
@@ -62,15 +69,29 @@ int decode_can_0x153_Speed(const can_obj_e46_h_t *o, double *out) {
 	assert(o);
 	assert(out);
 	double rval = (double)(o->can_0x153_ASC_1.Speed);
-	rval += 9.94;
+	rval *= 0.0625;
 	*out = rval;
 	return 0;
 }
 
 int encode_can_0x153_Speed(can_obj_e46_h_t *o, double in) {
 	assert(o);
-	in += -9.94;
+	in *= 16;
 	o->can_0x153_ASC_1.Speed = in;
+	return 0;
+}
+
+int decode_can_0x153_Unk4(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x153_ASC_1.Unk4);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x153_Unk4(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x153_ASC_1.Unk4 = in;
 	return 0;
 }
 
@@ -107,6 +128,7 @@ int print_can_0x153_ASC_1(const can_obj_e46_h_t *o, FILE *output) {
 	assert(output);
 	int r = 0;
 	r = print_helper(r, fprintf(output, "Speed = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.Speed)));
+	r = print_helper(r, fprintf(output, "Unk4 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.Unk4)));
 	r = print_helper(r, fprintf(output, "Tyre_Pressure_Set = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.Tyre_Pressure_Set)));
 	r = print_helper(r, fprintf(output, "Brake_Pedal_Pressed = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.Brake_Pedal_Pressed)));
 	return r;
@@ -431,6 +453,10 @@ static int pack_can_0x1f5_Steering_Angle_Sensor(can_obj_e46_h_t *o, uint64_t *da
 	x = ((uint16_t)(o->can_0x1f5_Steering_Angle_Sensor.Steering_Angle_Velocity)) & 0x7fff;
 	x <<= 16; 
 	i |= x;
+	/* Steering_Counter: start-bit 44, length 4, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x1f5_Steering_Angle_Sensor.Steering_Counter)) & 0xf;
+	x <<= 44; 
+	i |= x;
 	/* Steering_Angle_Direction: start-bit 15, length 1, endianess intel, scaling 1, offset 0 */
 	x = ((uint8_t)(o->can_0x1f5_Steering_Angle_Sensor.Steering_Angle_Direction)) & 0x1;
 	x <<= 15; 
@@ -457,6 +483,9 @@ static int unpack_can_0x1f5_Steering_Angle_Sensor(can_obj_e46_h_t *o, uint64_t d
 	/* Steering_Angle_Velocity: start-bit 16, length 15, endianess intel, scaling 0.045, offset 0 */
 	x = (i >> 16) & 0x7fff;
 	o->can_0x1f5_Steering_Angle_Sensor.Steering_Angle_Velocity = x;
+	/* Steering_Counter: start-bit 44, length 4, endianess intel, scaling 1, offset 0 */
+	x = (i >> 44) & 0xf;
+	o->can_0x1f5_Steering_Angle_Sensor.Steering_Counter = x;
 	/* Steering_Angle_Direction: start-bit 15, length 1, endianess intel, scaling 1, offset 0 */
 	x = (i >> 15) & 0x1;
 	o->can_0x1f5_Steering_Angle_Sensor.Steering_Angle_Direction = x;
@@ -500,6 +529,20 @@ int encode_can_0x1f5_Steering_Angle_Velocity(can_obj_e46_h_t *o, double in) {
 	return 0;
 }
 
+int decode_can_0x1f5_Steering_Counter(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x1f5_Steering_Angle_Sensor.Steering_Counter);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x1f5_Steering_Counter(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x1f5_Steering_Angle_Sensor.Steering_Counter = in;
+	return 0;
+}
+
 int decode_can_0x1f5_Steering_Angle_Direction(const can_obj_e46_h_t *o, uint8_t *out) {
 	assert(o);
 	assert(out);
@@ -534,6 +577,7 @@ int print_can_0x1f5_Steering_Angle_Sensor(const can_obj_e46_h_t *o, FILE *output
 	int r = 0;
 	r = print_helper(r, fprintf(output, "Steering_Angle = (wire: %.0f)\n", (double)(o->can_0x1f5_Steering_Angle_Sensor.Steering_Angle)));
 	r = print_helper(r, fprintf(output, "Steering_Angle_Velocity = (wire: %.0f)\n", (double)(o->can_0x1f5_Steering_Angle_Sensor.Steering_Angle_Velocity)));
+	r = print_helper(r, fprintf(output, "Steering_Counter = (wire: %.0f)\n", (double)(o->can_0x1f5_Steering_Angle_Sensor.Steering_Counter)));
 	r = print_helper(r, fprintf(output, "Steering_Angle_Direction = (wire: %.0f)\n", (double)(o->can_0x1f5_Steering_Angle_Sensor.Steering_Angle_Direction)));
 	r = print_helper(r, fprintf(output, "Steering_Angle_Velocity_Direction = (wire: %.0f)\n", (double)(o->can_0x1f5_Steering_Angle_Sensor.Steering_Angle_Velocity_Direction)));
 	return r;
@@ -1654,6 +1698,56 @@ int print_can_0x618_IDK3(const can_obj_e46_h_t *o, FILE *output) {
 	return r;
 }
 
+static int pack_can_0x61f_DME_EtcMsg352(can_obj_e46_h_t *o, uint64_t *data) {
+	assert(o);
+	assert(data);
+	register uint64_t x;
+	register uint64_t m = 0;
+	/* Blinker: start-bit 18, length 1, endianess motorola, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x61f_DME_EtcMsg352.Blinker)) & 0x1;
+	x <<= 42; 
+	m |= x;
+	*data = reverse_byte_order(m);
+	o->can_0x61f_DME_EtcMsg352_tx = 1;
+	return 0;
+}
+
+static int unpack_can_0x61f_DME_EtcMsg352(can_obj_e46_h_t *o, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp) {
+	assert(o);
+	assert(dlc <= 8);
+	register uint64_t x;
+	register uint64_t m = reverse_byte_order(data);
+	UNUSED(dlc);
+	/* Blinker: start-bit 18, length 1, endianess motorola, scaling 1, offset 0 */
+	x = (m >> 42) & 0x1;
+	o->can_0x61f_DME_EtcMsg352.Blinker = x;
+	o->can_0x61f_DME_EtcMsg352_rx = 1;
+	o->can_0x61f_DME_EtcMsg352_time_stamp_rx = time_stamp;
+	return 0;
+}
+
+int decode_can_0x61f_Blinker(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x61f_DME_EtcMsg352.Blinker);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x61f_Blinker(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x61f_DME_EtcMsg352.Blinker = in;
+	return 0;
+}
+
+int print_can_0x61f_DME_EtcMsg352(const can_obj_e46_h_t *o, FILE *output) {
+	assert(o);
+	assert(output);
+	int r = 0;
+	r = print_helper(r, fprintf(output, "Blinker = (wire: %.0f)\n", (double)(o->can_0x61f_DME_EtcMsg352.Blinker)));
+	return r;
+}
+
 int unpack_message(can_obj_e46_h_t *o, const unsigned long id, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp) {
 	assert(o);
 	assert(id < (1ul << 29)); /* 29-bit CAN ID is largest possible */
@@ -1671,6 +1765,7 @@ int unpack_message(can_obj_e46_h_t *o, const unsigned long id, uint64_t data, ui
 	case 0x613: return unpack_can_0x613_Instrument_Cluster(o, data, dlc, time_stamp);
 	case 0x615: return unpack_can_0x615_IKE(o, data, dlc, time_stamp);
 	case 0x618: return unpack_can_0x618_IDK3(o, data, dlc, time_stamp);
+	case 0x61f: return unpack_can_0x61f_DME_EtcMsg352(o, data, dlc, time_stamp);
 	default: break; 
 	}
 	return -1; 
@@ -1692,6 +1787,7 @@ int pack_message(can_obj_e46_h_t *o, const unsigned long id, uint64_t *data) {
 	case 0x613: return pack_can_0x613_Instrument_Cluster(o, data);
 	case 0x615: return pack_can_0x615_IKE(o, data);
 	case 0x618: return pack_can_0x618_IDK3(o, data);
+	case 0x61f: return pack_can_0x61f_DME_EtcMsg352(o, data);
 	default: break; 
 	}
 	return -1; 
@@ -1714,6 +1810,7 @@ int print_message(const can_obj_e46_h_t *o, const unsigned long id, FILE *output
 	case 0x613: return print_can_0x613_Instrument_Cluster(o, output);
 	case 0x615: return print_can_0x615_IKE(o, output);
 	case 0x618: return print_can_0x618_IDK3(o, output);
+	case 0x61f: return print_can_0x61f_DME_EtcMsg352(o, output);
 	default: break; 
 	}
 	return -1; 

@@ -10,6 +10,7 @@ static lv_meter_indicator_t * rpm_normal;
 // lv_meter_indicator_t * rpm_normal2;
 static lv_meter_indicator_t * rpm_red;
 static bool animation_active = false;
+static lv_obj_t * rpm_label;
 
 static void redline_anim_toggle(void * indic, int32_t v) {
     lv_opa_t last = rpm_normal->opa;
@@ -67,15 +68,19 @@ static void stop_redline_anim(void) {
 
 void tach3_update() {
     if (get_dash()->rpm > REDLINE) {
-        if (!animation_active) {
-            start_redline_anim();
-        }
+        // if (!animation_active) {
+        //     start_redline_anim();
+        // }
+
+        rpm_normal->type_data.arc.color = RED_ON;
     } else {
-        if (animation_active) {
-            stop_redline_anim();
-        }
+        // if (animation_active) {
+        //     stop_redline_anim();
+        // }
+        rpm_normal->type_data.arc.color = AMBER_ON;
     }
     lv_meter_set_indicator_end_value(meter, rpm_normal, get_dash()->rpm);
+    lv_label_set_text_fmt(rpm_label, "%0.0f", get_dash()->rpm);
 }
 
 lv_obj_t * tach3_create(lv_obj_t * canvas) {
@@ -139,11 +144,25 @@ lv_obj_t * tach3_create(lv_obj_t * canvas) {
 
     lv_meter_indicator_t * bottom = lv_meter_add_arc(meter, scale, 1, AMBER_HALF, -1);
     lv_meter_set_indicator_start_value(meter, bottom, 0);
-    lv_meter_set_indicator_end_value(meter, bottom, 8000);
+    lv_meter_set_indicator_end_value(meter, bottom, 0);
 
     rpm_normal = lv_meter_add_arc(meter, scale, 20, AMBER_ON, -5);
     lv_meter_set_indicator_start_value(meter, rpm_normal, 0);
     lv_meter_set_indicator_end_value(meter, rpm_normal, 8000);
+
+    rpm_label = lv_label_create(meter);
+    lv_label_set_text(rpm_label, "-");
+    lv_obj_align(rpm_label, LV_ALIGN_BOTTOM_MID, 0, -50);
+
+    DASH_FONT(RAJDHANI_SEMIBOLD, 20);
+
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_text_opa(&style, LV_OPA_100);
+    lv_style_set_text_color(&style, AMBER_ON);
+    lv_style_set_text_font(&style, RAJDHANI_SEMIBOLD_20);
+
+    lv_obj_add_style(rpm_label, &style, 0);
 
 
     // effect

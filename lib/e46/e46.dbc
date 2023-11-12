@@ -68,11 +68,11 @@ BO_ 1555 Instrument_Cluster: 8 DME_Etc
    SG_ Running_Clock : 24|16@1+ (1,0) [0|0] "Seconds" DME_Etc
 
 BO_ 496 ABS_1: 8 DME_Etc
-   SG_ Wheel_1_Left_Front_Speed : 0|12@1+ (0.0625,0) [0|0] "" DME_Etc
+   SG_ Wheel_1_Left_Front_Speed : 0|12@1+ (0.0625,0) [0|0] "" Vector__XXX
    SG_ Wheel_2_Right_Front_Speed : 16|12@1+ (0.0625,0) [0|0] "" DME_Etc
    SG_ Wheel_3_Left_Rear_Speed : 32|12@1+ (0.0625,0) [0|0] "" DME_Etc
    SG_ Wheel_4_Right_Rear_Speed : 48|12@1+ (0.0625,0) [0|0] "" Vector__XXX
-   
+
 BO_ 501 Steering_Angle_Sensor: 8 DME_Etc
    SG_ Steering_Angle : 0|15@1+ (0.045,0) [0|0] "" DME_Etc
    SG_ Steering_Angle_Velocity : 16|15@1+ (0.045,0) [0|0] "" DME_Etc
@@ -81,9 +81,10 @@ BO_ 501 Steering_Angle_Sensor: 8 DME_Etc
    SG_ Steering_Counter : 44|4@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 339 ASC_1: 8 DME_Etc
-   SG_ Speed : 11|13@1+ (1,9.94) [0|0] "" DME_Etc
+   SG_ Speed : 11|13@1+ (0.0625,0) [0|0] "" DME_Etc
    SG_ Brake_Pedal_Pressed : 4|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Tyre_Pressure_Set : 0|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ Unk4 : 40|8@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 824 DME3: 8 DME_Etc
    SG_ Throttle_Position : 40|8@1+ (1,0) [0|0] "" DME_Etc
@@ -115,9 +116,14 @@ BO_ 1560 IDK3: 8 Vector__XXX
    SG_ IDK3unk3 : 19|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK3unk4 : 23|1@1+ (1,0) [0|1] "" Vector__XXX
 
+BO_ 1567 DME_EtcMsg352: 0 DME_Etc
+   SG_ Blinker : 18|1@0+ (1,0) [0|1] "" Vector__XXX
+
 BA_DEF_ BO_ "GenMsgBackgroundColor" STRING ;
 BA_DEF_ BO_ "GenMsgForegroundColor" STRING ;
 BA_DEF_ BO_ "isj1939dbc" INT 0 0;
+BA_DEF_ BO_ "matchingcriteria" INT 0 0;
+BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_ "GenMsgBackgroundColor" BO_ 790 "#ffffff";
 BA_ "GenMsgForegroundColor" BO_ 790 "#000000";
 BA_ "GenMsgBackgroundColor" BO_ 809 "#ffffff";
@@ -131,6 +137,8 @@ BA_ "GenMsgBackgroundColor" BO_ 824 "#ffffff";
 BA_DEF_DEF_ "GenMsgBackgroundColor" "#ffffff";
 BA_DEF_DEF_ "GenMsgForegroundColor" "#000000";
 BA_DEF_DEF_ "isj1939dbc" 0;
+BA_DEF_DEF_ "matchingcriteria" 0;
+BA_DEF_DEF_ "filterlabeling" 1;
 VAL_ 790 Ignition_on_DME_ready 1 "On" 0 "Off";
 VAL_ 790 Key 0 "Off" 1 "On";
 VAL_ 790 Starter 0 "Off" 1 "On";
@@ -145,4 +153,3 @@ VAL_ 339 Brake_Pedal_Pressed 0 "Not_pressed" 1 "Pressed";
 VAL_ 824 Clutch 0 "Not_pressed" 1 "Pressed";
 VAL_ 824 Engine_Running 0 "Not_running" 1 "Running";
 VAL_ 824 Brake_Switch 0 "Not_pressed" 1 "Pressed";
-

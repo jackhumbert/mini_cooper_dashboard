@@ -4,7 +4,7 @@
 lv_obj_t * temp_label;
 
 void temp_update() {
-    lv_label_set_text_fmt(temp_label, "%d°F", get_dash()->outside_temp);
+    lv_label_set_text_fmt(temp_label, "%d°F", get_dash()->outside_temp * 9/5 + 32);
 }
 
 lv_obj_t * temp_create(lv_obj_t * parent) {

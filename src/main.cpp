@@ -72,7 +72,7 @@ void my_touchpad_read_new( lv_indev_drv_t * indev_driver, lv_indev_data_t * data
     }
 }
 
-#include "Serial_CAN_Module.h"
+#include "serial_can.h"
 
 Serial_CAN can;
 
@@ -83,7 +83,7 @@ void setup() {
     gfx.init();
 
     gfx.setRotation(0);
-    gfx.setBrightness(128);
+    gfx.setBrightness(255);
     gfx.setColorDepth(16); 
 
     gfx.begin();
@@ -145,14 +145,23 @@ void setup() {
 #include "can.h"
 extern File * sd_card_get_log_file(void);
 
+uint32_t timer = 0;
+
 void loop() {
     // lv_refr_now();
     lv_timer_handler();
 
+    if (xTaskGetTickCount() - timer > 10000) {
+        add_message_fmt("%d bytes free", esp_get_free_heap_size());
+        timer = xTaskGetTickCount();
+    }
+
     dash_loop();
+    int8_t messages = Serial.available() / 12;
+    while (messages-- && Serial.available()) {
     // while (Serial.available()) {
-        static unsigned long id = 0;
-        static uchar buf[13] = {0};
+        unsigned long id = 0;
+        uchar buf[13] = {0};
         if (can.recv(&id, buf)) {
             // add_message_fmt("Message from %X", id);
             unsigned long can_id = id & 0xFFFF;
@@ -168,15 +177,15 @@ void loop() {
             //     file.write((uint8_t*)log, 35);
             //     file.close();
             // }
+
             File * file = sd_card_get_log_file();
-            if (*file) {
-                uint32_t ticks = xTaskGetTickCount();
-                file->printf("[%08X] ", ticks);
-                file->printf("%08X ", id);
+            if (file && *file) {
+                file->printf("%08.3f R11 %08X ", xTaskGetTickCount() / 1000.0, id);
                 for (int i = 0; i < 8; i++) {
                     file->printf("%02X ", buf[i]);
                 }
                 file->print('\n');
+                file->flush();
             }
 
             // add_message(sbuf);
@@ -187,18 +196,20 @@ void loop() {
                 }
             }
         } else {
-            if (buf[12]) {
-                File * file = sd_card_get_log_file();
-                if (*file) {
-                    uint32_t ticks = xTaskGetTickCount();
-                    file->printf("[%08X] ", ticks);
-                    for (int i = 0; i < buf[12]; i++) {
-                        file->printf("%02X ", buf[i]);
-                    }
-                    file->print('\n');
-                }
-            }
+            // if (buf[12]) {
+            //     File * file = sd_card_get_log_file();
+            //     if (file && *file) {
+            //         uint32_t ticks = xTaskGetTickCount();
+            //         file->printf("[%08X] ", ticks);
+            //         for (int i = 0; i < buf[12]; i++) {
+            //             file->printf("%02X ", buf[i]);
+            //         }
+            //         file->print('\n');
+            //         file->flush();
+            //     }
+            // }
         }
+    }
     // }
     // delay(5);
 }

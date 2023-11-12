@@ -73,8 +73,8 @@
     #define LV_MEM_ADR 0     /*0: unused*/
     /*Instead of an address give a memory allocator that will be called to get a memory pool for LVGL. E.g. my_malloc*/
     #if LV_MEM_ADR == 0
-        #define LV_MEM_POOL_INCLUDE <esp32-hal-psram.h>
-        #define LV_MEM_POOL_ALLOC ps_malloc
+        // #define LV_MEM_POOL_INCLUDE <esp32-hal-psram.h>
+        // #define LV_MEM_POOL_ALLOC ps_malloc
     #endif
 
 #else       /*LV_MEM_CUSTOM*/
@@ -106,10 +106,10 @@
  *====================*/
 
 /*Default display refresh period. LVG will redraw changed areas with this period time*/
-#define LV_DISP_DEF_REFR_PERIOD 25      /*[ms]*/
+#define LV_DISP_DEF_REFR_PERIOD 30      /*[ms]*/
 
 /*Input device read period in milliseconds*/
-#define LV_INDEV_DEF_READ_PERIOD 25     /*[ms]*/
+#define LV_INDEV_DEF_READ_PERIOD 60     /*[ms]*/
 
 /*Use a custom tick source that tells the elapsed time in milliseconds.
  *It removes the need to manually update the tick with `lv_tick_inc()`)*/
@@ -294,9 +294,9 @@
 
 /*1: Show the used memory and the memory fragmentation
  * Requires LV_MEM_CUSTOM = 0*/
-#define LV_USE_MEM_MONITOR 0
+#define LV_USE_MEM_MONITOR 1
 #if LV_USE_MEM_MONITOR
-    #define LV_USE_MEM_MONITOR_POS LV_ALIGN_TOP_LEFT
+    #define LV_USE_MEM_MONITOR_POS LV_ALIGN_BOTTOM_RIGHT
 #endif
 
 /*1: Draw random colored rectangles over the redrawn areas*/

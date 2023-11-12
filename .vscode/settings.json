@@ -44,6 +44,7 @@
         "tuple": "c",
         "type_traits": "c",
         "chrono": "c",
-        "cmath": "c"
+        "cmath": "c",
+        "lv_draw_arc.h": "c"
     }
 }

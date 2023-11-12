@@ -49,9 +49,11 @@ typedef enum {
 #define CAN_ID_INSTRUMENT_CLUSTER (1555) /* 0x613 */
 #define CAN_ID_IKE (1557) /* 0x615 */
 #define CAN_ID_IDK3 (1560) /* 0x618 */
+#define CAN_ID_DME_ETCMSG352 (1567) /* 0x61f */
 
 typedef PREPACK struct {
-	uint16_t Speed; /* scaling 1.0, offset 9.9, units none  */
+	uint16_t Speed; /* scaling 0.1, offset 0.0, units none  */
+	uint8_t Unk4; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Tyre_Pressure_Set; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Brake_Pedal_Pressed; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x153_ASC_1_t;
@@ -81,6 +83,7 @@ typedef PREPACK struct {
 typedef PREPACK struct {
 	uint16_t Steering_Angle; /* scaling 0.0, offset 0.0, units none  */
 	uint16_t Steering_Angle_Velocity; /* scaling 0.0, offset 0.0, units none  */
+	uint8_t Steering_Counter; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Steering_Angle_Direction; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Steering_Angle_Velocity_Direction; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x1f5_Steering_Angle_Sensor_t;
@@ -214,6 +217,10 @@ typedef PREPACK struct {
 } POSTPACK can_0x618_IDK3_t;
 
 typedef PREPACK struct {
+	uint8_t Blinker; /* scaling 1.0, offset 0.0, units none  */
+} POSTPACK can_0x61f_DME_EtcMsg352_t;
+
+typedef PREPACK struct {
 	dbcc_time_stamp_t can_0x153_ASC_1_time_stamp_rx;
 	dbcc_time_stamp_t can_0x1f0_ABS_1_time_stamp_rx;
 	dbcc_time_stamp_t can_0x1f3_IDK1_time_stamp_rx;
@@ -226,6 +233,7 @@ typedef PREPACK struct {
 	dbcc_time_stamp_t can_0x613_Instrument_Cluster_time_stamp_rx;
 	dbcc_time_stamp_t can_0x615_IKE_time_stamp_rx;
 	dbcc_time_stamp_t can_0x618_IDK3_time_stamp_rx;
+	dbcc_time_stamp_t can_0x61f_DME_EtcMsg352_time_stamp_rx;
 	unsigned can_0x153_ASC_1_status : 2;
 	unsigned can_0x153_ASC_1_tx : 1;
 	unsigned can_0x153_ASC_1_rx : 1;
@@ -262,6 +270,9 @@ typedef PREPACK struct {
 	unsigned can_0x618_IDK3_status : 2;
 	unsigned can_0x618_IDK3_tx : 1;
 	unsigned can_0x618_IDK3_rx : 1;
+	unsigned can_0x61f_DME_EtcMsg352_status : 2;
+	unsigned can_0x61f_DME_EtcMsg352_tx : 1;
+	unsigned can_0x61f_DME_EtcMsg352_rx : 1;
 	can_0x153_ASC_1_t can_0x153_ASC_1;
 	can_0x1f0_ABS_1_t can_0x1f0_ABS_1;
 	can_0x1f3_IDK1_t can_0x1f3_IDK1;
@@ -274,6 +285,7 @@ typedef PREPACK struct {
 	can_0x613_Instrument_Cluster_t can_0x613_Instrument_Cluster;
 	can_0x615_IKE_t can_0x615_IKE;
 	can_0x618_IDK3_t can_0x618_IDK3;
+	can_0x61f_DME_EtcMsg352_t can_0x61f_DME_EtcMsg352;
 } POSTPACK can_obj_e46_h_t;
 
 int unpack_message(can_obj_e46_h_t *o, const unsigned long id, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp);
@@ -282,6 +294,8 @@ int print_message(const can_obj_e46_h_t *o, const unsigned long id, FILE *output
 
 int decode_can_0x153_Speed(const can_obj_e46_h_t *o, double *out);
 int encode_can_0x153_Speed(can_obj_e46_h_t *o, double in);
+int decode_can_0x153_Unk4(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x153_Unk4(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x153_Tyre_Pressure_Set(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x153_Tyre_Pressure_Set(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x153_Brake_Pedal_Pressed(const can_obj_e46_h_t *o, uint8_t *out);
@@ -318,6 +332,8 @@ int decode_can_0x1f5_Steering_Angle(const can_obj_e46_h_t *o, double *out);
 int encode_can_0x1f5_Steering_Angle(can_obj_e46_h_t *o, double in);
 int decode_can_0x1f5_Steering_Angle_Velocity(const can_obj_e46_h_t *o, double *out);
 int encode_can_0x1f5_Steering_Angle_Velocity(can_obj_e46_h_t *o, double in);
+int decode_can_0x1f5_Steering_Counter(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x1f5_Steering_Counter(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x1f5_Steering_Angle_Direction(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x1f5_Steering_Angle_Direction(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x1f5_Steering_Angle_Velocity_Direction(const can_obj_e46_h_t *o, uint8_t *out);
@@ -416,6 +432,10 @@ int decode_can_0x618_IDK3unk3(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x618_IDK3unk3(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x618_IDK3unk4(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x618_IDK3unk4(can_obj_e46_h_t *o, uint8_t in);
+
+
+int decode_can_0x61f_Blinker(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61f_Blinker(can_obj_e46_h_t *o, uint8_t in);
 
 
 #ifdef __cplusplus
