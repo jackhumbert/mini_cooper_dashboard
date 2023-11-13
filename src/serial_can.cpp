@@ -3,9 +3,8 @@
 #include "serial_can.h"
 // #include <SoftwareSerial.h>
 #include <HardwareSerial.h>
-#include <SD.h>
-
-extern File * sd_card_get_log_file(void);
+#include "sd_card.h"
+#include "activity.h"
 
 #define TIMEOUT 20
 
@@ -23,13 +22,11 @@ extern File * sd_card_get_log_file(void);
 //     canSerial = &serial;
 // }
 
-void Serial_CAN::begin(HardwareSerial &serial, unsigned long baud, void (*log2)(const char *), void (*log_fmt2)(const char *, ...))
+void Serial_CAN::begin(HardwareSerial &serial, unsigned long baud)
 {
     serial.begin(baud);
     hardwareSerial = &serial;
     canSerial = &serial;
-    log = log2;
-    log_fmt = log_fmt2;
 }
 
 unsigned char Serial_CAN::send(unsigned long id, uchar ext, uchar rtrBit, uchar len, const uchar *buf)
@@ -58,7 +55,7 @@ unsigned char Serial_CAN::send(unsigned long id, uchar ext, uchar rtrBit, uchar 
 uint16_t last_ts = 0xFFFF;
 
 bool validate_id(uint32_t id) {
-    return (id >= 0x153 && id <= 0x630);
+    return (id >= 0x153 && id <= 0x9FF);
 }
 
 bool filter_id(uint32_t id) {
@@ -93,11 +90,8 @@ bool filter_id(uint32_t id) {
 // 0: no data
 // 1: get data
 unsigned char Serial_CAN::recv(unsigned long *id, uchar *buf) {
-
     if (canSerial->available()) {
         unsigned long timer_s = millis();
-        
-        int len = 0;
         uchar dta[13] = { 0 };
 
         if (canSerial->available() >= 12) {
@@ -109,33 +103,26 @@ unsigned char Serial_CAN::recv(unsigned long *id, uchar *buf) {
                 __id <<= 8;
                 __id += dta[i];
             }
-            len = 12;
+            // len = 12;
             bool skipped = false;
-            while (!validate_id(__id) && len) {
+            while (!validate_id(__id)) {
                 if (!skipped) {
-                    File * file = sd_card_get_log_file();
-                    if (file && *file) {
-                        file->printf("%08.3f CXX DISCARDING ", xTaskGetTickCount() / 1000.0);
-                    }
+                    activity_update(false);
+                    sd_card_logf("%08.3f CXX DISCARDING ", xTaskGetTickCount() / 1000.0);
                 }
                 skipped = true;
                 unsigned long timeout = millis();
                 while (!canSerial->available()) {
                     if((millis()-timeout) > 2) {
-                        File * file = sd_card_get_log_file();
-                        if (file && *file) {
-                            for (int i = 0; i < 12; i++) {
-                                file->printf("%02X ", dta[i]);
-                            }
-                            file->printf("\n");
+                        activity_update(false);
+                        for (int i = 0; i < 12; i++) {
+                            sd_card_logf("%02X ", dta[i]);
                         }
+                        sd_card_logf("\n");
                         return 0;
                     }
                 }
-                File * file = sd_card_get_log_file();
-                if (file && *file) {
-                        file->printf("%02X ", dta[0]);
-                }
+                sd_card_logf("%02X ", dta[0]);
                 dta[0] = dta[1];
                 dta[1] = dta[2];
                 dta[2] = dta[3];
@@ -155,22 +142,20 @@ unsigned char Serial_CAN::recv(unsigned long *id, uchar *buf) {
                 }
             }
             if (skipped) {
-                File * file = sd_card_get_log_file();
-                if (file && *file) {
-                        file->printf("\n");
-                }
+                sd_card_logf("\n");
             }
 
-            if (len == 0) {
-                File * file = sd_card_get_log_file();
-                if (file && *file) {
-                    for (int i = 0; i < 12; i++) {
-                        file->printf("%02X ", dta[i]);
-                    }
-                    file->printf("\n");
-                }
-                return 0;
-            }
+            // if (len == 0) {
+            //     File * file = sd_card_get_log_file();
+            //     if (file && *file) {
+            //         for (int i = 0; i < 12; i++) {
+            //             sd_card_logf("%02X ", dta[i]);
+            //         }
+            //         sd_card_logf("\n");
+            //         file->flush();
+            //     }
+            //     return 0;
+            // }
             
             *id = __id;
             
@@ -181,71 +166,6 @@ unsigned char Serial_CAN::recv(unsigned long *id, uchar *buf) {
             return 1;
         }
         return 0;
-        
-        while(1)
-        {
-            while(canSerial->available())
-            {
-                dta[len++] = canSerial->read();
-
-                if(len > 4) {
-                    // make sure timestamp is 0
-                    if ((dta[0] != 0 || dta[1] != 0 || dta[2] == 0 || dta[3] == 0) && len) {
-                        dta[0] = dta[1];
-                        dta[1] = dta[2];
-                        dta[2] = dta[3];
-                        dta[3] = dta[4];
-                        len--;
-                        continue;
-                    }
-                }
-
-                if(len == 12)
-                    break;
- 
-            	if((millis()-timer_s) > TIMEOUT) {
-                    for(int i=0; i<len; i++) // Store the message in the buffer
-                    {
-                        buf[i] = dta[i];
-                    }
-                    buf[12] = len;
-                    
-                    // canSerial->flush();
-                    return 0; // Reading 12 bytes should be faster than 10ms, abort if it takes longer, we loose the partial message in this case
-                }
-            }
-            
-            if(len == 12) // Just to be sure, must be 12 here
-            {
-                unsigned long __id = 0;
-                
-                for(int i=0; i<4; i++) // Store the id of the sender
-                {
-                    __id <<= 8;
-                    __id += dta[i];
-                }
-                
-                *id = __id;
-                
-                for(int i=0; i<8; i++) // Store the message in the buffer
-                {
-                    buf[i] = dta[i+4];
-                }
-                return 1;
-            }
-            
-            if((millis()-timer_s) > TIMEOUT)
-            {
-                for(int i=0; i<len; i++) // Store the message in the buffer
-                {
-                    buf[i] = dta[i];
-                }
-                buf[12] = len;
-                // canSerial->flush();
-                return 0; // Reading 12 bytes should be faster than 10ms, abort if it takes longer, we loose the partial message in this case
-            }
-            
-        }
     }
 // {
 //     if(canSerial->available())
@@ -392,8 +312,8 @@ unsigned char Serial_CAN::baudRate(unsigned char rate)
         
         if(cmdOk("AT\r\n"))
         {
-            log("SERIAL BAUD RATE IS: ");
-            log_fmt("%d", baud[i]);
+            sd_card_logf("SERIAL BAUD RATE IS: ");
+            sd_card_logf("%d", baud[i]);
             baudNow = i;
             break;     
         }
@@ -408,8 +328,8 @@ unsigned char Serial_CAN::baudRate(unsigned char rate)
     
     if(ret)
     {
-        log("Serial baudrate set to ");
-        log_fmt("%d", baud[rate]);
+        sd_card_logf("Serial baudrate set to ");
+        sd_card_logf("%d", baud[rate]);
     }
     
     exitSettingMode();
@@ -502,8 +422,7 @@ unsigned char Serial_CAN::setMask(unsigned long *dta)
         
         if(!cmdOk(str_tmp))
         {
-            log("mask fail - ");
-            log_fmt("%d", i);
+            sd_card_logf("mask fail - %d", i);
             exitSettingMode();
             return 0;
         }
@@ -571,10 +490,9 @@ unsigned char Serial_CAN::factorySetting()
         
         if(cmdOk("AT\r\n"))
         {
-            log("SERIAL BAUD RATE IS: ");
-            log_fmt("%d", baud[i]);
+            sd_card_logf("SERIAL BAUD RATE IS: %d", baud[i]);
             baudRate(0);                // set serial baudrate to 9600
-            log("SET SERIAL BAUD RATE TO: 9600 OK");
+            sd_card_logf("SET SERIAL BAUD RATE TO: 9600 OK");
             selfBaudRate(9600);
             break;            
         }
@@ -582,11 +500,11 @@ unsigned char Serial_CAN::factorySetting()
     
     if(canRate(CAN_RATE_500))
     {
-        log("SET CAN BUS BAUD RATE TO 500Kb/s OK");
+        sd_card_logf("SET CAN BUS BAUD RATE TO 500Kb/s OK");
     }
     else
     {
-        log("SET CAN BUS BAUD RATE TO 500Kb/s FAIL");
+        sd_card_logf("SET CAN BUS BAUD RATE TO 500Kb/s FAIL");
         return 0;
     }
     
@@ -595,21 +513,21 @@ unsigned char Serial_CAN::factorySetting()
     
     if(setFilt(filt))
     {
-        log("FACTORY SETTING FILTS OK");
+        sd_card_logf("FACTORY SETTING FILTS OK");
     }
     else 
     {
-        log("FACTORY SETTING FILTS FAIL");
+        sd_card_logf("FACTORY SETTING FILTS FAIL");
         return 0;        
     }
     
     if(setMask(mask))
     {
-        log("FACTORY SETTING MASKS OK");
+        sd_card_logf("FACTORY SETTING MASKS OK");
     }
     else
     {
-        log("FACTORY SETTING MASKS FAIL");
+        sd_card_logf("FACTORY SETTING MASKS FAIL");
         return 0;
     }
     

@@ -1,6 +1,11 @@
 #include "car_view.h"
 
 static lv_obj_t * car_view_cont;
+static lv_obj_t * left_door;
+
+void car_view_update(void) {
+    lv_obj_set_style_img_recolor(left_door, get_dash()->left_door ? RED_ON : RED_OFF, 0);
+}
 
 lv_obj_t * car_view_create(lv_obj_t * parent) {
 
@@ -20,13 +25,9 @@ lv_obj_t * car_view_create(lv_obj_t * parent) {
     lv_obj_t * icon = lv_img_create(car_view_cont);
     lv_img_set_src(icon, &car_view);
     lv_obj_center(icon);
+    lv_obj_set_style_img_recolor(icon, AMBER_OFF, 0);
+    lv_obj_set_style_img_recolor_opa(icon, LV_OPA_100, 0);
     // lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
-
-    static lv_style_t style;
-    lv_style_init(&style);
-    lv_style_set_img_recolor(&style, AMBER_OFF);
-    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
-    lv_obj_add_style(icon, &style, 0);
 }
 
 {
@@ -91,24 +92,16 @@ lv_obj_t * car_view_create(lv_obj_t * parent) {
     lv_obj_add_style(icon, &style, 0);
 }
 
-
-
 {
     LV_IMG_DECLARE(door_left);
     
-    lv_obj_t * icon = lv_img_create(car_view_cont);
-    lv_img_set_src(icon, &door_left);
-    lv_obj_center(icon);
+    left_door = lv_img_create(car_view_cont);
+    lv_img_set_src(left_door, &door_left);
+    lv_obj_center(left_door);
+    lv_obj_set_style_img_recolor(left_door, RED_OFF, 0);
+    lv_obj_set_style_img_recolor_opa(left_door, LV_OPA_100, 0);
     // lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
-
-    static lv_style_t style;
-    lv_style_init(&style);
-    lv_style_set_img_recolor(&style, RED_OFF);
-    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
-    lv_obj_add_style(icon, &style, 0);
 }
-
-
 
 {
     LV_IMG_DECLARE(door_right);
@@ -125,8 +118,6 @@ lv_obj_t * car_view_create(lv_obj_t * parent) {
     lv_obj_add_style(icon, &style, 0);
 }
 
-
-
 {
     LV_IMG_DECLARE(gas_cap);
     
@@ -141,8 +132,6 @@ lv_obj_t * car_view_create(lv_obj_t * parent) {
     lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
     lv_obj_add_style(icon, &style, 0);
 }
-
-
 
 {
     LV_IMG_DECLARE(foglights);

@@ -41,14 +41,19 @@ typedef enum {
 #define CAN_ID_ABS_1 (496) /* 0x1f0 */
 #define CAN_ID_IDK1 (499) /* 0x1f3 */
 #define CAN_ID_STEERING_ANGLE_SENSOR (501) /* 0x1f5 */
+#define CAN_ID_X1F8 (504) /* 0x1f8 */
 #define CAN_ID_DME1 (790) /* 0x316 */
 #define CAN_ID_DME2 (809) /* 0x329 */
+#define CAN_ID_X336 (822) /* 0x336 */
 #define CAN_ID_DME3 (824) /* 0x338 */
+#define CAN_ID_X501 (1281) /* 0x501 */
 #define CAN_ID_DME4 (1349) /* 0x545 */
 #define CAN_ID_IDK2 (1381) /* 0x565 */
+#define CAN_ID_X610 (1552) /* 0x610 */
 #define CAN_ID_INSTRUMENT_CLUSTER (1555) /* 0x613 */
 #define CAN_ID_IKE (1557) /* 0x615 */
 #define CAN_ID_IDK3 (1560) /* 0x618 */
+#define CAN_ID_LIGHTS (1562) /* 0x61a */
 #define CAN_ID_DME_ETCMSG352 (1567) /* 0x61f */
 
 typedef PREPACK struct {
@@ -87,6 +92,10 @@ typedef PREPACK struct {
 	uint8_t Steering_Angle_Direction; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Steering_Angle_Velocity_Direction; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x1f5_Steering_Angle_Sensor_t;
+
+typedef PREPACK struct {
+	uint64_t x1F8Sig352; /* scaling 1.0, offset 0.0, units none  */
+} POSTPACK can_0x1f8_x1F8_t;
 
 typedef PREPACK struct {
 	uint16_t RPM; /* scaling 0.2, offset 0.0, units none  */
@@ -152,6 +161,10 @@ typedef enum {
 } can_0x329_DME2_Brake_Light_Switch_e;
 
 typedef PREPACK struct {
+	uint64_t x336Sig347; /* scaling 1.0, offset 0.0, units none  */
+} POSTPACK can_0x336_x336_t;
+
+typedef PREPACK struct {
 	uint8_t Throttle_Position; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Clutch; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Engine_Running; /* scaling 1.0, offset 0.0, units none  */
@@ -172,6 +185,10 @@ typedef enum {
 	CAN_0X338_DME3_BRAKE_SWITCH_NOT_PRESSED = 0,
 	CAN_0X338_DME3_BRAKE_SWITCH_PRESSED = 1,
 } can_0x338_DME3_Brake_Switch_e;
+
+typedef PREPACK struct {
+	uint64_t x501Sig34; /* scaling 1.0, offset 0.0, units none  */
+} POSTPACK can_0x501_x501_t;
 
 typedef PREPACK struct {
 	uint16_t Fuel_Consumption; /* scaling 1.0, offset 0.0, units mpg  */
@@ -200,6 +217,10 @@ typedef PREPACK struct {
 } POSTPACK can_0x565_IDK2_t;
 
 typedef PREPACK struct {
+	uint64_t x610Sig39; /* scaling 1.0, offset 0.0, units none  */
+} POSTPACK can_0x610_x610_t;
+
+typedef PREPACK struct {
 	uint16_t Odometer; /* scaling 10.0, offset 0.0, units none  */
 	uint16_t Running_Clock; /* scaling 1.0, offset 0.0, units Seconds  */
 	uint8_t Fuel_Level; /* scaling 1.0, offset 0.0, units none  */
@@ -217,7 +238,13 @@ typedef PREPACK struct {
 } POSTPACK can_0x618_IDK3_t;
 
 typedef PREPACK struct {
+	uint8_t LeftTurnSignal; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t RightTurnSignal; /* scaling 1.0, offset 0.0, units none  */
+} POSTPACK can_0x61a_Lights_t;
+
+typedef PREPACK struct {
 	uint8_t Blinker; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t Door; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x61f_DME_EtcMsg352_t;
 
 typedef PREPACK struct {
@@ -225,14 +252,19 @@ typedef PREPACK struct {
 	dbcc_time_stamp_t can_0x1f0_ABS_1_time_stamp_rx;
 	dbcc_time_stamp_t can_0x1f3_IDK1_time_stamp_rx;
 	dbcc_time_stamp_t can_0x1f5_Steering_Angle_Sensor_time_stamp_rx;
+	dbcc_time_stamp_t can_0x1f8_x1F8_time_stamp_rx;
 	dbcc_time_stamp_t can_0x316_DME1_time_stamp_rx;
 	dbcc_time_stamp_t can_0x329_DME2_time_stamp_rx;
+	dbcc_time_stamp_t can_0x336_x336_time_stamp_rx;
 	dbcc_time_stamp_t can_0x338_DME3_time_stamp_rx;
+	dbcc_time_stamp_t can_0x501_x501_time_stamp_rx;
 	dbcc_time_stamp_t can_0x545_DME4_time_stamp_rx;
 	dbcc_time_stamp_t can_0x565_IDK2_time_stamp_rx;
+	dbcc_time_stamp_t can_0x610_x610_time_stamp_rx;
 	dbcc_time_stamp_t can_0x613_Instrument_Cluster_time_stamp_rx;
 	dbcc_time_stamp_t can_0x615_IKE_time_stamp_rx;
 	dbcc_time_stamp_t can_0x618_IDK3_time_stamp_rx;
+	dbcc_time_stamp_t can_0x61a_Lights_time_stamp_rx;
 	dbcc_time_stamp_t can_0x61f_DME_EtcMsg352_time_stamp_rx;
 	unsigned can_0x153_ASC_1_status : 2;
 	unsigned can_0x153_ASC_1_tx : 1;
@@ -246,21 +278,33 @@ typedef PREPACK struct {
 	unsigned can_0x1f5_Steering_Angle_Sensor_status : 2;
 	unsigned can_0x1f5_Steering_Angle_Sensor_tx : 1;
 	unsigned can_0x1f5_Steering_Angle_Sensor_rx : 1;
+	unsigned can_0x1f8_x1F8_status : 2;
+	unsigned can_0x1f8_x1F8_tx : 1;
+	unsigned can_0x1f8_x1F8_rx : 1;
 	unsigned can_0x316_DME1_status : 2;
 	unsigned can_0x316_DME1_tx : 1;
 	unsigned can_0x316_DME1_rx : 1;
 	unsigned can_0x329_DME2_status : 2;
 	unsigned can_0x329_DME2_tx : 1;
 	unsigned can_0x329_DME2_rx : 1;
+	unsigned can_0x336_x336_status : 2;
+	unsigned can_0x336_x336_tx : 1;
+	unsigned can_0x336_x336_rx : 1;
 	unsigned can_0x338_DME3_status : 2;
 	unsigned can_0x338_DME3_tx : 1;
 	unsigned can_0x338_DME3_rx : 1;
+	unsigned can_0x501_x501_status : 2;
+	unsigned can_0x501_x501_tx : 1;
+	unsigned can_0x501_x501_rx : 1;
 	unsigned can_0x545_DME4_status : 2;
 	unsigned can_0x545_DME4_tx : 1;
 	unsigned can_0x545_DME4_rx : 1;
 	unsigned can_0x565_IDK2_status : 2;
 	unsigned can_0x565_IDK2_tx : 1;
 	unsigned can_0x565_IDK2_rx : 1;
+	unsigned can_0x610_x610_status : 2;
+	unsigned can_0x610_x610_tx : 1;
+	unsigned can_0x610_x610_rx : 1;
 	unsigned can_0x613_Instrument_Cluster_status : 2;
 	unsigned can_0x613_Instrument_Cluster_tx : 1;
 	unsigned can_0x613_Instrument_Cluster_rx : 1;
@@ -270,6 +314,9 @@ typedef PREPACK struct {
 	unsigned can_0x618_IDK3_status : 2;
 	unsigned can_0x618_IDK3_tx : 1;
 	unsigned can_0x618_IDK3_rx : 1;
+	unsigned can_0x61a_Lights_status : 2;
+	unsigned can_0x61a_Lights_tx : 1;
+	unsigned can_0x61a_Lights_rx : 1;
 	unsigned can_0x61f_DME_EtcMsg352_status : 2;
 	unsigned can_0x61f_DME_EtcMsg352_tx : 1;
 	unsigned can_0x61f_DME_EtcMsg352_rx : 1;
@@ -277,14 +324,19 @@ typedef PREPACK struct {
 	can_0x1f0_ABS_1_t can_0x1f0_ABS_1;
 	can_0x1f3_IDK1_t can_0x1f3_IDK1;
 	can_0x1f5_Steering_Angle_Sensor_t can_0x1f5_Steering_Angle_Sensor;
+	can_0x1f8_x1F8_t can_0x1f8_x1F8;
 	can_0x316_DME1_t can_0x316_DME1;
 	can_0x329_DME2_t can_0x329_DME2;
+	can_0x336_x336_t can_0x336_x336;
 	can_0x338_DME3_t can_0x338_DME3;
+	can_0x501_x501_t can_0x501_x501;
 	can_0x545_DME4_t can_0x545_DME4;
 	can_0x565_IDK2_t can_0x565_IDK2;
+	can_0x610_x610_t can_0x610_x610;
 	can_0x613_Instrument_Cluster_t can_0x613_Instrument_Cluster;
 	can_0x615_IKE_t can_0x615_IKE;
 	can_0x618_IDK3_t can_0x618_IDK3;
+	can_0x61a_Lights_t can_0x61a_Lights;
 	can_0x61f_DME_EtcMsg352_t can_0x61f_DME_EtcMsg352;
 } POSTPACK can_obj_e46_h_t;
 
@@ -340,6 +392,10 @@ int decode_can_0x1f5_Steering_Angle_Velocity_Direction(const can_obj_e46_h_t *o,
 int encode_can_0x1f5_Steering_Angle_Velocity_Direction(can_obj_e46_h_t *o, uint8_t in);
 
 
+int decode_can_0x1f8_x1F8Sig352(const can_obj_e46_h_t *o, uint64_t *out);
+int encode_can_0x1f8_x1F8Sig352(can_obj_e46_h_t *o, uint64_t in);
+
+
 int decode_can_0x316_RPM(const can_obj_e46_h_t *o, double *out);
 int encode_can_0x316_RPM(can_obj_e46_h_t *o, double in);
 int decode_can_0x316_Torque_loss_of_consumers(const can_obj_e46_h_t *o, uint8_t *out);
@@ -378,6 +434,10 @@ int decode_can_0x329_Brake_Light_Switch(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x329_Brake_Light_Switch(can_obj_e46_h_t *o, uint8_t in);
 
 
+int decode_can_0x336_x336Sig347(const can_obj_e46_h_t *o, uint64_t *out);
+int encode_can_0x336_x336Sig347(can_obj_e46_h_t *o, uint64_t in);
+
+
 int decode_can_0x338_Throttle_Position(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x338_Throttle_Position(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x338_Clutch(const can_obj_e46_h_t *o, uint8_t *out);
@@ -386,6 +446,10 @@ int decode_can_0x338_Engine_Running(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x338_Engine_Running(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x338_Brake_Switch(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x338_Brake_Switch(can_obj_e46_h_t *o, uint8_t in);
+
+
+int decode_can_0x501_x501Sig34(const can_obj_e46_h_t *o, uint64_t *out);
+int encode_can_0x501_x501Sig34(can_obj_e46_h_t *o, uint64_t in);
 
 
 int decode_can_0x545_Fuel_Consumption(const can_obj_e46_h_t *o, uint16_t *out);
@@ -412,6 +476,10 @@ int decode_can_0x565_IDK2_unk6(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x565_IDK2_unk6(can_obj_e46_h_t *o, uint8_t in);
 
 
+int decode_can_0x610_x610Sig39(const can_obj_e46_h_t *o, uint64_t *out);
+int encode_can_0x610_x610Sig39(can_obj_e46_h_t *o, uint64_t in);
+
+
 int decode_can_0x613_Odometer(const can_obj_e46_h_t *o, double *out);
 int encode_can_0x613_Odometer(can_obj_e46_h_t *o, double in);
 int decode_can_0x613_Running_Clock(const can_obj_e46_h_t *o, uint16_t *out);
@@ -434,8 +502,16 @@ int decode_can_0x618_IDK3unk4(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x618_IDK3unk4(can_obj_e46_h_t *o, uint8_t in);
 
 
+int decode_can_0x61a_LeftTurnSignal(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61a_LeftTurnSignal(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x61a_RightTurnSignal(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61a_RightTurnSignal(can_obj_e46_h_t *o, uint8_t in);
+
+
 int decode_can_0x61f_Blinker(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x61f_Blinker(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x61f_Door(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61f_Door(can_obj_e46_h_t *o, uint8_t in);
 
 
 #ifdef __cplusplus

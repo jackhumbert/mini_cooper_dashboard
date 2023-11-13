@@ -1,0 +1,13 @@
+!
+
+
+Backtrace: 0x40377eda:0x3fccd650 0x4037b855:0x3fccd670 0x40377522:0x3fccd690 0x42006e29:0x3fccd6b0 0x42006291:0x3fccd700 0x42007473:0x3fccd720
+
+
+
+
+ELF file SHA256: d28e42e635178ff9
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2

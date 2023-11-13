@@ -45,6 +45,10 @@
         "type_traits": "c",
         "chrono": "c",
         "cmath": "c",
-        "lv_draw_arc.h": "c"
+        "lv_draw_arc.h": "c",
+        "random": "c",
+        "can.h": "c",
+        "cstdio": "c",
+        "fstream": "cpp"
     }
 }

@@ -14,12 +14,18 @@
 #include "effect.h"
 #include "theme.h"
 #include "sd_card.h"
+#include "activity.h"
 
 static dashboard_t dashboard;
+static dashboard_changed_t dashboard_changed;
 static lv_obj_t * canvas;
 
 dashboard_t * get_dash(void) {
     return &dashboard;
+}
+
+dashboard_changed_t * get_changed(void) {
+    return &dashboard_changed;
 }
 
 static void dump_messages(lv_event_t * e) {
@@ -154,10 +160,60 @@ lv_obj_t * dash(void) {
     lv_label_set_text(label, "Close Log File");
 }
 
+{
+    lv_obj_t * msg_clea = lv_btn_create(canvas);
+    // lv_obj_add_event_cb(msg_clea, clear_messages, LV_EVENT_ALL, NULL);
+    lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -10, 150);
+
+    lv_obj_t * label = lv_label_create(msg_clea);
+    lv_label_set_text(label, "Dummy Button");
+}
+
+    activity_create(canvas);
+
 
     // setup_effect(canvas);
     return canvas;
 }
 
 void dash_loop(void) {
+    pthread_mutex_lock(&get_dash()->mutex);
+    if (get_changed()->speed) {
+        speed_update();
+        get_changed()->speed = 0;
+    }
+    if (get_changed()->engine_temp) {
+        coolant_update();
+        get_changed()->engine_temp = 0;
+    }
+    if (get_changed()->rpm) {
+        tach3_update();
+        get_changed()->rpm = 0;
+    }
+    if (get_changed()->fuel_level) {
+        gas_update();
+        get_changed()->fuel_level = 0;
+    }
+    if (get_changed()->running_clock) {
+        clock_update();
+        get_changed()->running_clock = 0;
+    }
+    if (get_changed()->outside_temp) {
+        temp_update();
+        get_changed()->outside_temp = 0;
+    }
+    if (get_changed()->left_turn_signal) {
+        turn_signal_update();
+        get_changed()->left_turn_signal = 0;
+    }
+    if (get_changed()->right_turn_signal) {
+        turn_signal_update();
+        get_changed()->right_turn_signal = 0;
+    }
+    if (get_changed()->left_door) {
+        car_view_update();
+        get_changed()->left_door = 0;
+    }
+	pthread_mutex_unlock(&get_dash()->mutex);
+    sd_card_flush();
 }

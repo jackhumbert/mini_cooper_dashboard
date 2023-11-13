@@ -1,4 +1,5 @@
 #include "clock.h"
+#include "time.h"
 #include <sys/time.h>
 
 #define SEC_PER_DAY   86400
@@ -6,6 +7,8 @@
 #define SEC_PER_MIN   60
 
 static lv_obj_t * time_label;
+static bool overflow;
+long offset = -18000;
 
 void clock_update() {
     // Tear apart hms into h:m:s
@@ -68,16 +71,43 @@ lv_obj_t * clock_create(lv_obj_t * parent) {
     time_label = lv_label_create(parent);
     lv_obj_add_style(time_label, &style, 0);
 
-    struct timeval tv;
-    struct timezone tz;
-    gettimeofday(&tv, &tz);
+    // struct timeval tv;
+    // struct timezone tz;
+    // gettimeofday(&tv, &tz);
+
+    struct tm timeinfo;
+    time_t now;
+    time(&now);
+    localtime_r(&now, &timeinfo);
+    time_t tt = mktime (&timeinfo);
+      
+    if (overflow){
+      tt += 63071999;
+    }
+    if (offset > 0){
+      tt += (unsigned long) offset;
+    } else {
+      tt -= (unsigned long) (offset * -1);
+    }
+    struct tm * tn = localtime(&tt);
+    if (overflow){
+      tn->tm_year += 64;
+    }
 
     // Form the seconds of the day
-    long hms = tv.tv_sec % SEC_PER_DAY;
-    hms += tz.tz_dsttime * SEC_PER_HOUR;
-    hms -= tz.tz_minuteswest * SEC_PER_MIN;
+    long hms = timeinfo.tm_sec % SEC_PER_DAY;
+    hms += timeinfo.tm_hour * SEC_PER_HOUR;
+    hms += timeinfo.tm_min * SEC_PER_MIN;
     // mod `hms` to insure in positive range of [0...SEC_PER_DAY)
     hms = (hms + SEC_PER_DAY) % SEC_PER_DAY;
+
+
+    // // Form the seconds of the day
+    // long hms = tv.tv_sec % SEC_PER_DAY;
+    // hms += tz.tz_dsttime * SEC_PER_HOUR;
+    // hms -= tz.tz_minuteswest * SEC_PER_MIN;
+    // // mod `hms` to insure in positive range of [0...SEC_PER_DAY)
+    // hms = (hms + SEC_PER_DAY) % SEC_PER_DAY;
 
     get_dash()->running_clock = hms;
     clock_update();

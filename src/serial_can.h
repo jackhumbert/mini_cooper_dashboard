@@ -45,14 +45,12 @@ private:
     SoftwareSerial *softwareSerial = NULL;
     HardwareSerial *hardwareSerial = NULL;
     Stream *canSerial = NULL;
-    void (*log)(const char *);
-    void (*log_fmt)(const char *, ...);
 
 public:
     
     void begin(int can_tx, int can_rx, unsigned long baud);
     void begin(SoftwareSerial &serial, unsigned long baud);
-    void begin(HardwareSerial &serial, unsigned long baud, void (*log)(const char *), void (*log_fmt)(const char *, ...));
+    void begin(HardwareSerial &serial, unsigned long baud);
     unsigned char send(unsigned long id, uchar ext, uchar rtrBit, uchar len, const uchar *buf);
     unsigned char recv(unsigned long *id, uchar *buf);
     

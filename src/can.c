@@ -8,6 +8,7 @@
 #include "clock.h"
 #include "coolant.h"
 #include "turn_signal.h"
+#include "car_view.h"
 
 static can_obj_e46_h_t can_data;
 
@@ -29,29 +30,34 @@ static void u64_to_can_msg(const uint64_t u, uint8_t m[8]) {
 
 
 int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * data) {
+    if (id >= 0x900) {
+        return dev_process(id, data);
+    }
     if (unpack_message(&can_data, id, u64_from_can_msg(data), 8, timestamp) < 0) {
         return -1;
     } else {
         switch (id) {
             case 0x153:
                 decode_can_0x153_Speed(&can_data, &get_dash()->speed);
-                speed_update();
+                get_changed()->speed = 1;
                 return 0;
             case 0x1F0: 
-            case 0x1F3: return 0;
+            case 0x1F3: return 0; // unk4 something that counts down
             case 0x1F5: return 0; // same as 0x610
             case 0x1F8: return 0; // never changes?
             case 0x329:
                 decode_can_0x329_Engine_Temp(&can_data, &get_dash()->engine_temp);
-                coolant_update();
+                get_changed()->engine_temp = 1;
                 decode_can_0x329_Clutch_Switch(&can_data, &get_dash()->clutch_switch);
                 decode_can_0x329_Throttle_Position(&can_data, &get_dash()->throttle_position);
                 return 0;
             case 0x316:
                 decode_can_0x316_RPM(&can_data, &get_dash()->rpm);
-                tach3_update();
+                get_changed()->rpm = 1;
                 decode_can_0x316_Key(&can_data, &get_dash()->key);
+                get_changed()->key = 1;
                 decode_can_0x316_Starter(&can_data, &get_dash()->starter);
+                get_changed()->starter = 1;
                 return 0;
             case 0x336: return 0;
             case 0x338:
@@ -63,19 +69,24 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
             case 0x610: return 0;
             case 0x613:
                 decode_can_0x613_Fuel_Level(&can_data, &get_dash()->fuel_level);
-                gas_update();
+                get_changed()->fuel_level = 1;
                 decode_can_0x613_Running_Clock(&can_data, &get_dash()->running_clock);
-                clock_update();
+                get_changed()->running_clock = 1;
                 return 0;
             case 0x615:
                 decode_can_0x615_OutsideTemp(&can_data, &get_dash()->outside_temp);
-                temp_update();
+                get_changed()->outside_temp = 1;
                 return 0;
             case 0x618: return 0;
             case 0x61A: return 0;
+                decode_can_0x61a_LeftTurnSignal(&can_data, &get_dash()->left_turn_signal);
+                decode_can_0x61a_RightTurnSignal(&can_data, &get_dash()->right_turn_signal);
+                get_changed()->left_turn_signal = 1;
+                get_changed()->right_turn_signal = 1;
             case 0x61F: 
-                decode_can_0x61f_Blinker(&can_data, &get_dash()->blinker);
-                turn_signal_update();
+                decode_can_0x61f_Door(&can_data, &get_dash()->left_door);
+                get_changed()->left_door = 1;
+                // decode_can_0x61f_Blinker(&can_data, &get_dash()->blinker);
                 return 0;
         }
         return -1;

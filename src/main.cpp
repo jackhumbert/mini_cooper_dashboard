@@ -21,6 +21,12 @@ static lv_color_t * disp_draw_buf2 = NULL;
 #include <FS.h>
 #include "touch.h"
 #include "sd_card.h"
+#include "sd_card.hpp"
+#include "can.h"
+#include "serial_can.h"
+#include "activity.h"
+
+Serial_CAN can;
 
 // const float pixel_pitch_x = 0.0641 * 3;
 // const float pixel_pitch_y = 0.1784;
@@ -51,7 +57,8 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
 }
 
 void my_log_cb(const char * buf) {
-  Serial.print(buf);
+    // add_message(buf);
+    sd_card_logf("%08.3f CXX %s\n", xTaskGetTickCount() / 1000.0, buf);
 }
 
 
@@ -72,21 +79,122 @@ void my_touchpad_read_new( lv_indev_drv_t * indev_driver, lv_indev_data_t * data
     }
 }
 
-#include "serial_can.h"
+int sd_card_log_printf(const char* format, va_list args) {
+    char buffer[256];
+    vsnprintf(buffer, 255, format, args);
 
-Serial_CAN can;
+    // add_message(buffer);
+    sd_card_logf("%08.3f CXX %s\n", xTaskGetTickCount() / 1000.0, buffer);
+
+    va_end(args);
+
+    return 0;
+}
+
+TaskHandle_t CAN_Task;
+
+void CAN_Task_loop(void * parameter) {
+    while (true) {
+        int8_t messages = Serial.available() / 12;
+        while (messages-- && Serial.available()) {
+        // while (Serial.available()) {
+            unsigned long id = 0;
+            uchar buf[13] = {0};
+            if (can.recv(&id, buf)) {
+                // add_message_fmt("Message from %X", id);
+                unsigned long can_id = id & 0xFFFF;
+                dbcc_time_stamp_t ts = (id >> 16) & 0xFFFF;
+
+                // static char sbuf[35];
+                // sprintf(sbuf, "%04X %04X: %02X %02X %02X %02X %02X %02X %02X %02X\0", ts, can_id, buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
+
+                // static char log[35];
+                // sprintf(log, "%04X %04X: %02X %02X %02X %02X %02X %02X %02X %02X\n", ts, can_id, buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
+                // File file = SD.open("/messages.log", FILE_APPEND);
+                // if (file) {
+                //     file.write((uint8_t*)log, 35);
+                //     file.close();
+                // }
+
+                sd_card_logf("%08.3f R11 %08X ", xTaskGetTickCount() / 1000.0, id);
+                for (int i = 0; i < 8; i++) {
+                    sd_card_logf("%02X ", buf[i]);
+                }
+                sd_card_logf("\n");
+
+                // add_message(sbuf);
+
+	            pthread_mutex_lock(&get_dash()->mutex);
+                if (decode_can_message(ts, can_id, (uint8_t*)buf) < 0) {
+                    activity_update(false);
+                    // if (id == 0x78300D0A) {
+                    //     add_message((char*)buf);
+                    // }
+
+                    sd_card_logf("%08.3f CXX Could not decode latest message\n", xTaskGetTickCount() / 1000.0);
+
+                } else {
+                    activity_update(true);
+                }
+	            pthread_mutex_unlock(&get_dash()->mutex);
+            } else {
+                // if (buf[12]) {
+                //     File * file = sd_card_get_log_file();
+                //     if (file && *file) {
+                //         uint32_t ticks = xTaskGetTickCount();
+                //         sd_card_logf("[%08X] ", ticks);
+                //         for (int i = 0; i < buf[12]; i++) {
+                //             sd_card_logf("%02X ", buf[i]);
+                //         }
+                //         file->print('\n');
+                //         file->flush();
+                //     }
+                // }
+            }
+        }
+        // }
+        // delay(5);
+    }
+}
+
+#include <Wifi.h>
+const char* ssid     = "Samuel";
+const char* password = "8zciwf256cb6";
+
+const char* ntpServer = "pool.ntp.org";
+const long  gmtOffset_sec = 0;
+const int   daylightOffset_sec = 3600;
+
+
+static void screen_fade_cb(void * indic, int32_t v) {
+    gfx.setBrightness(v);
+};
 
 void setup() {
+    // Connect to Wi-Fi
+    // WiFi.begin(ssid, password);
+    // while (WiFi.status() != WL_CONNECTED) {
+    //     delay(100);
+    // }
+    
+    // // Init and get the time
+    // configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+
+    // //disconnect WiFi as it's no longer needed
+    // WiFi.disconnect(true);
+    // WiFi.mode(WIFI_OFF);
+
+    esp_log_set_vprintf(sd_card_log_printf);
+
     Serial.setRxBufferSize(4096);
     Serial.begin(115200); 
 
     gfx.init();
-
     gfx.setRotation(0);
-    gfx.setBrightness(255);
+    gfx.setBrightness(0);
     gfx.setColorDepth(16); 
-
-    gfx.begin();
+    gfx.clearDisplay();
+    // gfx.begin();
 
     lv_init();
     lv_log_register_print_cb(my_log_cb);
@@ -133,83 +241,47 @@ void setup() {
     lv_indev_drv_register(&indev_drv);
 
     dash();
+	pthread_mutex_init(&get_dash()->mutex, NULL);
     sd_card_init();
 
     // delay(500);
 
-    can.begin(Serial, 115200, add_message, add_message_fmt);
+    can.begin(Serial, 115200);
     // really only need once - it's store in the eeprom
     // can.baudRate(SERIAL_RATE_115200);
+
+    xTaskCreatePinnedToCore(
+      CAN_Task_loop, /* Function to implement the task */
+      "CAN Task", /* Name of the task */
+      10000,  /* Stack size in words */
+      NULL,  /* Task input parameter */
+      0,  /* Priority of the task */
+      &CAN_Task,  /* Task handle. */
+      0); /* Core where the task should run */
 }
 
-#include "can.h"
-extern File * sd_card_get_log_file(void);
+// uint32_t timer = 0;
 
-uint32_t timer = 0;
+static bool screen_on = false;
 
 void loop() {
+    if (!screen_on) {
+        static lv_anim_t screen_fade;
+        lv_anim_init(&screen_fade);
+        lv_anim_set_exec_cb(&screen_fade, screen_fade_cb);
+        lv_anim_set_values(&screen_fade, 0, 255);
+        lv_anim_set_time(&screen_fade, 2000);
+        lv_anim_start(&screen_fade);
+        screen_on = true;
+    }
+
     // lv_refr_now();
     lv_timer_handler();
 
-    if (xTaskGetTickCount() - timer > 10000) {
-        add_message_fmt("%d bytes free", esp_get_free_heap_size());
-        timer = xTaskGetTickCount();
-    }
+    // if (xTaskGetTickCount() - timer > 10000) {
+    //     add_message_fmt("%d bytes free", esp_get_free_heap_size());
+    //     timer = xTaskGetTickCount();
+    // }
 
     dash_loop();
-    int8_t messages = Serial.available() / 12;
-    while (messages-- && Serial.available()) {
-    // while (Serial.available()) {
-        unsigned long id = 0;
-        uchar buf[13] = {0};
-        if (can.recv(&id, buf)) {
-            // add_message_fmt("Message from %X", id);
-            unsigned long can_id = id & 0xFFFF;
-            dbcc_time_stamp_t ts = (id >> 16) & 0xFFFF;
-
-            // static char sbuf[35];
-            // sprintf(sbuf, "%04X %04X: %02X %02X %02X %02X %02X %02X %02X %02X\0", ts, can_id, buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
-
-            // static char log[35];
-            // sprintf(log, "%04X %04X: %02X %02X %02X %02X %02X %02X %02X %02X\n", ts, can_id, buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
-            // File file = SD.open("/messages.log", FILE_APPEND);
-            // if (file) {
-            //     file.write((uint8_t*)log, 35);
-            //     file.close();
-            // }
-
-            File * file = sd_card_get_log_file();
-            if (file && *file) {
-                file->printf("%08.3f R11 %08X ", xTaskGetTickCount() / 1000.0, id);
-                for (int i = 0; i < 8; i++) {
-                    file->printf("%02X ", buf[i]);
-                }
-                file->print('\n');
-                file->flush();
-            }
-
-            // add_message(sbuf);
-
-            if (decode_can_message(ts, can_id, (uint8_t*)buf) < 0) {
-                if (id == 0x78300D0A) {
-                    add_message((char*)buf);
-                }
-            }
-        } else {
-            // if (buf[12]) {
-            //     File * file = sd_card_get_log_file();
-            //     if (file && *file) {
-            //         uint32_t ticks = xTaskGetTickCount();
-            //         file->printf("[%08X] ", ticks);
-            //         for (int i = 0; i < buf[12]; i++) {
-            //             file->printf("%02X ", buf[i]);
-            //         }
-            //         file->print('\n');
-            //         file->flush();
-            //     }
-            // }
-        }
-    }
-    // }
-    // delay(5);
 }

@@ -583,6 +583,64 @@ int print_can_0x1f5_Steering_Angle_Sensor(const can_obj_e46_h_t *o, FILE *output
 	return r;
 }
 
+static int pack_can_0x1f8_x1F8(can_obj_e46_h_t *o, uint64_t *data) {
+	assert(o);
+	assert(data);
+	register uint64_t x;
+	register uint64_t i = 0;
+	/* x1F8Sig352: start-bit 0, length 64, endianess intel, scaling 1, offset 0 */
+	x = ((uint64_t)(o->can_0x1f8_x1F8.x1F8Sig352)) & 0xffffffffffffffff;
+	i |= x;
+	*data = (i);
+	o->can_0x1f8_x1F8_tx = 1;
+	return 8;
+}
+
+static int unpack_can_0x1f8_x1F8(can_obj_e46_h_t *o, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp) {
+	assert(o);
+	assert(dlc <= 8);
+	register uint64_t x;
+	register uint64_t i = (data);
+	if (dlc < 8)
+		return -1;
+	/* x1F8Sig352: start-bit 0, length 64, endianess intel, scaling 1, offset 0 */
+	x = i & 0xffffffffffffffff;
+	o->can_0x1f8_x1F8.x1F8Sig352 = x;
+	o->can_0x1f8_x1F8_rx = 1;
+	o->can_0x1f8_x1F8_time_stamp_rx = time_stamp;
+	return 8;
+}
+
+int decode_can_0x1f8_x1F8Sig352(const can_obj_e46_h_t *o, uint64_t *out) {
+	assert(o);
+	assert(out);
+	uint64_t rval = (uint64_t)(o->can_0x1f8_x1F8.x1F8Sig352);
+	if (rval <= 1) {
+		*out = rval;
+		return 0;
+	} else {
+		*out = (uint64_t)0;
+		return -1;
+	}
+}
+
+int encode_can_0x1f8_x1F8Sig352(can_obj_e46_h_t *o, uint64_t in) {
+	assert(o);
+	o->can_0x1f8_x1F8.x1F8Sig352 = 0;
+	if (in > 1)
+		return -1;
+	o->can_0x1f8_x1F8.x1F8Sig352 = in;
+	return 0;
+}
+
+int print_can_0x1f8_x1F8(const can_obj_e46_h_t *o, FILE *output) {
+	assert(o);
+	assert(output);
+	int r = 0;
+	r = print_helper(r, fprintf(output, "x1F8Sig352 = (wire: %.0f)\n", (double)(o->can_0x1f8_x1F8.x1F8Sig352)));
+	return r;
+}
+
 static int pack_can_0x316_DME1(can_obj_e46_h_t *o, uint64_t *data) {
 	assert(o);
 	assert(data);
@@ -1023,6 +1081,64 @@ int print_can_0x329_DME2(const can_obj_e46_h_t *o, FILE *output) {
 	return r;
 }
 
+static int pack_can_0x336_x336(can_obj_e46_h_t *o, uint64_t *data) {
+	assert(o);
+	assert(data);
+	register uint64_t x;
+	register uint64_t i = 0;
+	/* x336Sig347: start-bit 0, length 64, endianess intel, scaling 1, offset 0 */
+	x = ((uint64_t)(o->can_0x336_x336.x336Sig347)) & 0xffffffffffffffff;
+	i |= x;
+	*data = (i);
+	o->can_0x336_x336_tx = 1;
+	return 8;
+}
+
+static int unpack_can_0x336_x336(can_obj_e46_h_t *o, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp) {
+	assert(o);
+	assert(dlc <= 8);
+	register uint64_t x;
+	register uint64_t i = (data);
+	if (dlc < 8)
+		return -1;
+	/* x336Sig347: start-bit 0, length 64, endianess intel, scaling 1, offset 0 */
+	x = i & 0xffffffffffffffff;
+	o->can_0x336_x336.x336Sig347 = x;
+	o->can_0x336_x336_rx = 1;
+	o->can_0x336_x336_time_stamp_rx = time_stamp;
+	return 8;
+}
+
+int decode_can_0x336_x336Sig347(const can_obj_e46_h_t *o, uint64_t *out) {
+	assert(o);
+	assert(out);
+	uint64_t rval = (uint64_t)(o->can_0x336_x336.x336Sig347);
+	if (rval <= 1) {
+		*out = rval;
+		return 0;
+	} else {
+		*out = (uint64_t)0;
+		return -1;
+	}
+}
+
+int encode_can_0x336_x336Sig347(can_obj_e46_h_t *o, uint64_t in) {
+	assert(o);
+	o->can_0x336_x336.x336Sig347 = 0;
+	if (in > 1)
+		return -1;
+	o->can_0x336_x336.x336Sig347 = in;
+	return 0;
+}
+
+int print_can_0x336_x336(const can_obj_e46_h_t *o, FILE *output) {
+	assert(o);
+	assert(output);
+	int r = 0;
+	r = print_helper(r, fprintf(output, "x336Sig347 = (wire: %.0f)\n", (double)(o->can_0x336_x336.x336Sig347)));
+	return r;
+}
+
 static int pack_can_0x338_DME3(can_obj_e46_h_t *o, uint64_t *data) {
 	assert(o);
 	assert(data);
@@ -1137,6 +1253,64 @@ int print_can_0x338_DME3(const can_obj_e46_h_t *o, FILE *output) {
 	r = print_helper(r, fprintf(output, "Clutch = (wire: %.0f)\n", (double)(o->can_0x338_DME3.Clutch)));
 	r = print_helper(r, fprintf(output, "Engine_Running = (wire: %.0f)\n", (double)(o->can_0x338_DME3.Engine_Running)));
 	r = print_helper(r, fprintf(output, "Brake_Switch = (wire: %.0f)\n", (double)(o->can_0x338_DME3.Brake_Switch)));
+	return r;
+}
+
+static int pack_can_0x501_x501(can_obj_e46_h_t *o, uint64_t *data) {
+	assert(o);
+	assert(data);
+	register uint64_t x;
+	register uint64_t i = 0;
+	/* x501Sig34: start-bit 0, length 64, endianess intel, scaling 1, offset 0 */
+	x = ((uint64_t)(o->can_0x501_x501.x501Sig34)) & 0xffffffffffffffff;
+	i |= x;
+	*data = (i);
+	o->can_0x501_x501_tx = 1;
+	return 8;
+}
+
+static int unpack_can_0x501_x501(can_obj_e46_h_t *o, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp) {
+	assert(o);
+	assert(dlc <= 8);
+	register uint64_t x;
+	register uint64_t i = (data);
+	if (dlc < 8)
+		return -1;
+	/* x501Sig34: start-bit 0, length 64, endianess intel, scaling 1, offset 0 */
+	x = i & 0xffffffffffffffff;
+	o->can_0x501_x501.x501Sig34 = x;
+	o->can_0x501_x501_rx = 1;
+	o->can_0x501_x501_time_stamp_rx = time_stamp;
+	return 8;
+}
+
+int decode_can_0x501_x501Sig34(const can_obj_e46_h_t *o, uint64_t *out) {
+	assert(o);
+	assert(out);
+	uint64_t rval = (uint64_t)(o->can_0x501_x501.x501Sig34);
+	if (rval <= 1) {
+		*out = rval;
+		return 0;
+	} else {
+		*out = (uint64_t)0;
+		return -1;
+	}
+}
+
+int encode_can_0x501_x501Sig34(can_obj_e46_h_t *o, uint64_t in) {
+	assert(o);
+	o->can_0x501_x501.x501Sig34 = 0;
+	if (in > 1)
+		return -1;
+	o->can_0x501_x501.x501Sig34 = in;
+	return 0;
+}
+
+int print_can_0x501_x501(const can_obj_e46_h_t *o, FILE *output) {
+	assert(o);
+	assert(output);
+	int r = 0;
+	r = print_helper(r, fprintf(output, "x501Sig34 = (wire: %.0f)\n", (double)(o->can_0x501_x501.x501Sig34)));
 	return r;
 }
 
@@ -1434,6 +1608,64 @@ int print_can_0x565_IDK2(const can_obj_e46_h_t *o, FILE *output) {
 	return r;
 }
 
+static int pack_can_0x610_x610(can_obj_e46_h_t *o, uint64_t *data) {
+	assert(o);
+	assert(data);
+	register uint64_t x;
+	register uint64_t i = 0;
+	/* x610Sig39: start-bit 0, length 64, endianess intel, scaling 1, offset 0 */
+	x = ((uint64_t)(o->can_0x610_x610.x610Sig39)) & 0xffffffffffffffff;
+	i |= x;
+	*data = (i);
+	o->can_0x610_x610_tx = 1;
+	return 8;
+}
+
+static int unpack_can_0x610_x610(can_obj_e46_h_t *o, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp) {
+	assert(o);
+	assert(dlc <= 8);
+	register uint64_t x;
+	register uint64_t i = (data);
+	if (dlc < 8)
+		return -1;
+	/* x610Sig39: start-bit 0, length 64, endianess intel, scaling 1, offset 0 */
+	x = i & 0xffffffffffffffff;
+	o->can_0x610_x610.x610Sig39 = x;
+	o->can_0x610_x610_rx = 1;
+	o->can_0x610_x610_time_stamp_rx = time_stamp;
+	return 8;
+}
+
+int decode_can_0x610_x610Sig39(const can_obj_e46_h_t *o, uint64_t *out) {
+	assert(o);
+	assert(out);
+	uint64_t rval = (uint64_t)(o->can_0x610_x610.x610Sig39);
+	if (rval <= 1) {
+		*out = rval;
+		return 0;
+	} else {
+		*out = (uint64_t)0;
+		return -1;
+	}
+}
+
+int encode_can_0x610_x610Sig39(can_obj_e46_h_t *o, uint64_t in) {
+	assert(o);
+	o->can_0x610_x610.x610Sig39 = 0;
+	if (in > 1)
+		return -1;
+	o->can_0x610_x610.x610Sig39 = in;
+	return 0;
+}
+
+int print_can_0x610_x610(const can_obj_e46_h_t *o, FILE *output) {
+	assert(o);
+	assert(output);
+	int r = 0;
+	r = print_helper(r, fprintf(output, "x610Sig39 = (wire: %.0f)\n", (double)(o->can_0x610_x610.x610Sig39)));
+	return r;
+}
+
 static int pack_can_0x613_Instrument_Cluster(can_obj_e46_h_t *o, uint64_t *data) {
 	assert(o);
 	assert(data);
@@ -1698,6 +1930,79 @@ int print_can_0x618_IDK3(const can_obj_e46_h_t *o, FILE *output) {
 	return r;
 }
 
+static int pack_can_0x61a_Lights(can_obj_e46_h_t *o, uint64_t *data) {
+	assert(o);
+	assert(data);
+	register uint64_t x;
+	register uint64_t m = 0;
+	/* LeftTurnSignal: start-bit 9, length 1, endianess motorola, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x61a_Lights.LeftTurnSignal)) & 0x1;
+	x <<= 49; 
+	m |= x;
+	/* RightTurnSignal: start-bit 31, length 1, endianess motorola, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x61a_Lights.RightTurnSignal)) & 0x1;
+	x <<= 39; 
+	m |= x;
+	*data = reverse_byte_order(m);
+	o->can_0x61a_Lights_tx = 1;
+	return 8;
+}
+
+static int unpack_can_0x61a_Lights(can_obj_e46_h_t *o, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp) {
+	assert(o);
+	assert(dlc <= 8);
+	register uint64_t x;
+	register uint64_t m = reverse_byte_order(data);
+	if (dlc < 8)
+		return -1;
+	/* LeftTurnSignal: start-bit 9, length 1, endianess motorola, scaling 1, offset 0 */
+	x = (m >> 49) & 0x1;
+	o->can_0x61a_Lights.LeftTurnSignal = x;
+	/* RightTurnSignal: start-bit 31, length 1, endianess motorola, scaling 1, offset 0 */
+	x = (m >> 39) & 0x1;
+	o->can_0x61a_Lights.RightTurnSignal = x;
+	o->can_0x61a_Lights_rx = 1;
+	o->can_0x61a_Lights_time_stamp_rx = time_stamp;
+	return 8;
+}
+
+int decode_can_0x61a_LeftTurnSignal(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x61a_Lights.LeftTurnSignal);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x61a_LeftTurnSignal(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x61a_Lights.LeftTurnSignal = in;
+	return 0;
+}
+
+int decode_can_0x61a_RightTurnSignal(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x61a_Lights.RightTurnSignal);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x61a_RightTurnSignal(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x61a_Lights.RightTurnSignal = in;
+	return 0;
+}
+
+int print_can_0x61a_Lights(const can_obj_e46_h_t *o, FILE *output) {
+	assert(o);
+	assert(output);
+	int r = 0;
+	r = print_helper(r, fprintf(output, "LeftTurnSignal = (wire: %.0f)\n", (double)(o->can_0x61a_Lights.LeftTurnSignal)));
+	r = print_helper(r, fprintf(output, "RightTurnSignal = (wire: %.0f)\n", (double)(o->can_0x61a_Lights.RightTurnSignal)));
+	return r;
+}
+
 static int pack_can_0x61f_DME_EtcMsg352(can_obj_e46_h_t *o, uint64_t *data) {
 	assert(o);
 	assert(data);
@@ -1707,9 +2012,13 @@ static int pack_can_0x61f_DME_EtcMsg352(can_obj_e46_h_t *o, uint64_t *data) {
 	x = ((uint8_t)(o->can_0x61f_DME_EtcMsg352.Blinker)) & 0x1;
 	x <<= 42; 
 	m |= x;
+	/* Door: start-bit 24, length 1, endianess motorola, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x61f_DME_EtcMsg352.Door)) & 0x1;
+	x <<= 32; 
+	m |= x;
 	*data = reverse_byte_order(m);
 	o->can_0x61f_DME_EtcMsg352_tx = 1;
-	return 0;
+	return 8;
 }
 
 static int unpack_can_0x61f_DME_EtcMsg352(can_obj_e46_h_t *o, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp) {
@@ -1717,13 +2026,17 @@ static int unpack_can_0x61f_DME_EtcMsg352(can_obj_e46_h_t *o, uint64_t data, uin
 	assert(dlc <= 8);
 	register uint64_t x;
 	register uint64_t m = reverse_byte_order(data);
-	UNUSED(dlc);
+	if (dlc < 8)
+		return -1;
 	/* Blinker: start-bit 18, length 1, endianess motorola, scaling 1, offset 0 */
 	x = (m >> 42) & 0x1;
 	o->can_0x61f_DME_EtcMsg352.Blinker = x;
+	/* Door: start-bit 24, length 1, endianess motorola, scaling 1, offset 0 */
+	x = (m >> 32) & 0x1;
+	o->can_0x61f_DME_EtcMsg352.Door = x;
 	o->can_0x61f_DME_EtcMsg352_rx = 1;
 	o->can_0x61f_DME_EtcMsg352_time_stamp_rx = time_stamp;
-	return 0;
+	return 8;
 }
 
 int decode_can_0x61f_Blinker(const can_obj_e46_h_t *o, uint8_t *out) {
@@ -1740,11 +2053,26 @@ int encode_can_0x61f_Blinker(can_obj_e46_h_t *o, uint8_t in) {
 	return 0;
 }
 
+int decode_can_0x61f_Door(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x61f_DME_EtcMsg352.Door);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x61f_Door(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x61f_DME_EtcMsg352.Door = in;
+	return 0;
+}
+
 int print_can_0x61f_DME_EtcMsg352(const can_obj_e46_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
 	r = print_helper(r, fprintf(output, "Blinker = (wire: %.0f)\n", (double)(o->can_0x61f_DME_EtcMsg352.Blinker)));
+	r = print_helper(r, fprintf(output, "Door = (wire: %.0f)\n", (double)(o->can_0x61f_DME_EtcMsg352.Door)));
 	return r;
 }
 
@@ -1757,14 +2085,19 @@ int unpack_message(can_obj_e46_h_t *o, const unsigned long id, uint64_t data, ui
 	case 0x1f0: return unpack_can_0x1f0_ABS_1(o, data, dlc, time_stamp);
 	case 0x1f3: return unpack_can_0x1f3_IDK1(o, data, dlc, time_stamp);
 	case 0x1f5: return unpack_can_0x1f5_Steering_Angle_Sensor(o, data, dlc, time_stamp);
+	case 0x1f8: return unpack_can_0x1f8_x1F8(o, data, dlc, time_stamp);
 	case 0x316: return unpack_can_0x316_DME1(o, data, dlc, time_stamp);
 	case 0x329: return unpack_can_0x329_DME2(o, data, dlc, time_stamp);
+	case 0x336: return unpack_can_0x336_x336(o, data, dlc, time_stamp);
 	case 0x338: return unpack_can_0x338_DME3(o, data, dlc, time_stamp);
+	case 0x501: return unpack_can_0x501_x501(o, data, dlc, time_stamp);
 	case 0x545: return unpack_can_0x545_DME4(o, data, dlc, time_stamp);
 	case 0x565: return unpack_can_0x565_IDK2(o, data, dlc, time_stamp);
+	case 0x610: return unpack_can_0x610_x610(o, data, dlc, time_stamp);
 	case 0x613: return unpack_can_0x613_Instrument_Cluster(o, data, dlc, time_stamp);
 	case 0x615: return unpack_can_0x615_IKE(o, data, dlc, time_stamp);
 	case 0x618: return unpack_can_0x618_IDK3(o, data, dlc, time_stamp);
+	case 0x61a: return unpack_can_0x61a_Lights(o, data, dlc, time_stamp);
 	case 0x61f: return unpack_can_0x61f_DME_EtcMsg352(o, data, dlc, time_stamp);
 	default: break; 
 	}
@@ -1779,14 +2112,19 @@ int pack_message(can_obj_e46_h_t *o, const unsigned long id, uint64_t *data) {
 	case 0x1f0: return pack_can_0x1f0_ABS_1(o, data);
 	case 0x1f3: return pack_can_0x1f3_IDK1(o, data);
 	case 0x1f5: return pack_can_0x1f5_Steering_Angle_Sensor(o, data);
+	case 0x1f8: return pack_can_0x1f8_x1F8(o, data);
 	case 0x316: return pack_can_0x316_DME1(o, data);
 	case 0x329: return pack_can_0x329_DME2(o, data);
+	case 0x336: return pack_can_0x336_x336(o, data);
 	case 0x338: return pack_can_0x338_DME3(o, data);
+	case 0x501: return pack_can_0x501_x501(o, data);
 	case 0x545: return pack_can_0x545_DME4(o, data);
 	case 0x565: return pack_can_0x565_IDK2(o, data);
+	case 0x610: return pack_can_0x610_x610(o, data);
 	case 0x613: return pack_can_0x613_Instrument_Cluster(o, data);
 	case 0x615: return pack_can_0x615_IKE(o, data);
 	case 0x618: return pack_can_0x618_IDK3(o, data);
+	case 0x61a: return pack_can_0x61a_Lights(o, data);
 	case 0x61f: return pack_can_0x61f_DME_EtcMsg352(o, data);
 	default: break; 
 	}
@@ -1802,14 +2140,19 @@ int print_message(const can_obj_e46_h_t *o, const unsigned long id, FILE *output
 	case 0x1f0: return print_can_0x1f0_ABS_1(o, output);
 	case 0x1f3: return print_can_0x1f3_IDK1(o, output);
 	case 0x1f5: return print_can_0x1f5_Steering_Angle_Sensor(o, output);
+	case 0x1f8: return print_can_0x1f8_x1F8(o, output);
 	case 0x316: return print_can_0x316_DME1(o, output);
 	case 0x329: return print_can_0x329_DME2(o, output);
+	case 0x336: return print_can_0x336_x336(o, output);
 	case 0x338: return print_can_0x338_DME3(o, output);
+	case 0x501: return print_can_0x501_x501(o, output);
 	case 0x545: return print_can_0x545_DME4(o, output);
 	case 0x565: return print_can_0x565_IDK2(o, output);
+	case 0x610: return print_can_0x610_x610(o, output);
 	case 0x613: return print_can_0x613_Instrument_Cluster(o, output);
 	case 0x615: return print_can_0x615_IKE(o, output);
 	case 0x618: return print_can_0x618_IDK3(o, output);
+	case 0x61a: return print_can_0x61a_Lights(o, output);
 	case 0x61f: return print_can_0x61f_DME_EtcMsg352(o, output);
 	default: break; 
 	}

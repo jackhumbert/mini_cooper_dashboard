@@ -13,7 +13,41 @@
 #include <stdint.h>
 #include <termios.h>
 #include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/time.h>
+#include "ini.h"
 
+struct timeval __millis_start;
+
+void delay(int milliseconds)
+{
+    long pause;
+    clock_t now,then;
+
+    pause = milliseconds*(CLOCKS_PER_SEC/1000);
+    now = then = clock();
+    while( (now-then) < pause )
+        now = clock();
+}
+
+
+void init_millis() {
+    gettimeofday(&__millis_start, NULL);
+};
+
+unsigned long int millis() {
+    long mtime, seconds, useconds; 
+    struct timeval end;
+    gettimeofday(&end, NULL);
+    seconds  = end.tv_sec  - __millis_start.tv_sec;
+    useconds = end.tv_usec - __millis_start.tv_usec;
+
+    mtime = ((seconds) * 1000 + useconds/1000.0) + 0.5;
+    return mtime;
+};
  
 // Opens the specified serial port, sets it up for binary communication,
 // configures its read timeouts, and sets its baud rate.
@@ -120,51 +154,162 @@ ssize_t read_port(int fd, uint8_t * buffer, size_t size)
   }
   return received;
 }
- 
-void delay(int milliseconds)
-{
-    long pause;
-    clock_t now,then;
 
-    pause = milliseconds*(CLOCKS_PER_SEC/1000);
-    now = then = clock();
-    while( (now-then) < pause )
-        now = clock();
+typedef struct {
+    const char* monitor_port;
+    uint32_t monitor_speed;
+} configuration;
+
+static int handler(void* user, const char* section, const char* name,
+                   const char* value) {
+    configuration* pconfig = (configuration*)user;
+
+    #define MATCH(s, n) strcmp(section, s) == 0 && strcmp(name, n) == 0
+    if (MATCH("env:esp32-s3-devkitc-1-myboard", "monitor_speed")) {
+        pconfig->monitor_speed = atoi(value);
+    } else if (MATCH("env:esp32-s3-devkitc-1-myboard", "monitor_port")) {
+        pconfig->monitor_port = strdup(value);
+    } else {
+        return 0;  /* unknown section/name, error */
+    }
+    return 1;
 }
 
-int main()
-{
-  // Choose the serial port name.  If the Jrk is connected directly via USB,
-  // you can run "jrk2cmd --cmd-port" to get the right name to use here.
-  // Linux USB example:          "/dev/ttyACM0"  (see also: /dev/serial/by-id)
-  // macOS USB example:          "/dev/cu.usbmodem001234562"
-  // Cygwin example:             "/dev/ttyS7"
-  const char * device = "/dev/cu.usbserial-2340";
- 
-  // Choose the baud rate (bits per second).  This does not matter if you are
-  // connecting to the Jrk over USB.  If you are connecting via the TX and RX
-  // lines, this should match the baud rate in the Jrk's serial settings.
-  uint32_t baud_rate = 115200;
- 
-  int fd = open_serial_port(device, baud_rate);
-  if (fd < 0) { return 1; }
- 
-  uint8_t command[12] = {0};
-  FILE * fptr = fopen("log_5.bin", "r");
-  fseek(fptr, 12 * 3000, SEEK_SET);
-  while(fread(&command, sizeof(uint8_t), 12, fptr)) {
-    write_port(fd, command, 12);
-    printf("%02X", command[0]);
-    printf("%02X", command[1]);
-    printf("%02X", command[2]);
-    printf("%02X", command[3]);
-    for (int i = 4; i < 12; i++) {
-      printf(" %02X", command[i]);
+void get_logs(int fd) {
+  uint8_t command[12] = {0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+  write_port(fd, command, 12);
+  delay(1000);
+  char buf[9];
+  ssize_t bytes = read_port(fd, (uint8_t*)buf, 9);
+  if (bytes != 9) {
+    printf("Could not read log count: %s, %lu bytes\n", buf, bytes);
+    return;
+  }
+  uint64_t num_logs = strtol(buf, NULL, 16);
+  printf("Number of logs: %llu\n", num_logs);
+  for (uint64_t i = 0; i < num_logs - 1; i++) {
+    char log_name[256];
+    sprintf(log_name, "logs/log_%08llu.crtd", i);
+    // only get logs we haven't transferred yet
+    if (access(log_name, F_OK) != 0) {
+      command[3] = 0x01;
+      *(uint64_t*)(command + 4) = i;
+      write_port(fd, command, 12);
+      delay(1000);
+      if (read_port(fd, (uint8_t*)buf, 9) != 9) {
+        perror("Could not read log length");
+        return;
+      }
+      uint64_t log_length = strtol(buf, NULL, 16);
+      printf("%s: %llu bytes\n", log_name, log_length);
+      if (log_length > 0) {
+        uint8_t * file_buffer = malloc(log_length);
+        if (read_port(fd, file_buffer, log_length) != log_length) { 
+          perror("Could not read log");
+          return;
+        }
+        FILE * file = fopen(log_name, "w");
+        if (file == NULL) {
+          perror("Could not open log file");
+          return;
+        }
+        if (fwrite(file_buffer, 1, log_length, file) != log_length) {
+          perror("Could not write to log file");
+          return;
+        }
+        fclose(file);
+      }
     }
-    printf("\n");
-    delay(10);
+  }
+}
+
+void send_log(int fd, const char * log_name) {
+  uint8_t command[30] = {0};
+  FILE * file = fopen(log_name, "r");
+  char * line = NULL;
+  size_t len = 0;
+  ssize_t read;
+
+  if (file == NULL) {
+    perror("Could not open log file");
+    return;
+  }
+
+  while((read = getline(&line, &len, file)) != -1) {
+    int cursor = 0;
+    uint64_t seconds = strtol(&line[cursor], NULL, 10);
+    while (line[cursor] != '.')
+      cursor++;
+    cursor++;
+    uint64_t miliseconds = strtol(&line[cursor], NULL, 10) + seconds * 1000;
+    // printf("Waiting %lld miliseconds - now %lld\n", miliseconds, millis());
+    while (line[cursor] != ' ')
+      cursor++;
+    if (line[cursor+1] == 'R' && line[cursor+2] == '1' && line[cursor+3] == '1') {
+      cursor += 4;
+      uint8_t index = 0;
+      while(line[cursor+1] != 0xA) {
+        if (line[cursor] == ' ')
+          cursor++; // skip spaces
+        char b_s[3] = { 0 };
+        b_s[0] = line[cursor++];
+        b_s[1] = line[cursor++];
+        command[index++] = strtol(b_s, NULL, 16);
+      } 
+      if (miliseconds > millis())
+        delay(miliseconds - millis());
+      write_port(fd, command, index);
+      printf("%08.3f R11 ", miliseconds / 1000.0);
+      if (index == 12) {
+        printf("%02X", command[0]);
+        printf("%02X", command[1]);
+        printf("%02X", command[2]);
+        printf("%02X", command[3]);
+        for (int i = 4; i < 12; i++) {
+          printf(" %02X", command[i]);
+        }
+      } else {
+        for (int i = 0; i < index; i++) {
+          printf("%02X ", command[i]);
+        }
+      }
+      printf("\n");
+      // delay(10);
+    } else {
+      printf("%s", line);
+    }
+  }
+  fclose(file);
+}
+
+int set_time(int fd) {
+  uint8_t command[12] = {0x00, 0x00, 0x09, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+  *((time_t*)(command + 4)) = time(NULL);
+  write_port(fd, command, 12);
+  return 0;
+}
+
+int main(int argc, char* argv[]) {
+  configuration config;
+
+  if (ini_parse("../platformio.ini", handler, &config) < 0) {
+      perror("Couldn't load '../platformio.ini'\n");
+      return 1;
   }
  
+  int fd = open_serial_port(config.monitor_port, config.monitor_speed);
+  if (fd < 0) { return 1; }
+
+  init_millis();
+
+  if (strcmp(argv[1], "send_log") == 0) {
+    send_log(fd, argv[2]);
+  } else if (strcmp(argv[1], "get_logs") == 0) {
+    get_logs(fd);
+  } else if (strcmp(argv[1], "set_time") == 0) {
+    set_time(fd);
+  }
+
   close(fd);
   return 0;
 }

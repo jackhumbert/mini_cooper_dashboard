@@ -92,7 +92,7 @@ BO_ 824 DME3: 8 DME_Etc
    SG_ Engine_Running : 28|1@1+ (1,0) [0|0] "" DME_Etc
    SG_ Brake_Switch : 48|1@1+ (1,0) [0|0] "" Vector__XXX
 
-BO_ 499 IDK1: 8 Vector__XXX
+BO_ 499 IDK1: 8 DME_Etc
    SG_ IDK1_unk1 : 7|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK1_unk2 : 8|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK1_unk3 : 15|1@1+ (1,0) [0|1] "" Vector__XXX
@@ -101,7 +101,7 @@ BO_ 499 IDK1: 8 Vector__XXX
    SG_ IDK1_unk6 : 38|2@1+ (1,0) [0|4] "" Vector__XXX
    SG_ IDK1_unk7 : 59|1@1+ (1,0) [0|0] "" Vector__XXX
 
-BO_ 1381 IDK2: 8 Vector__XXX
+BO_ 1381 IDK2: 8 DME_Etc
    SG_ IDK2_unk1 : 4|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK2_unk2 : 6|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK2_unk3 : 13|1@1+ (1,0) [0|1] "" Vector__XXX
@@ -110,18 +110,39 @@ BO_ 1381 IDK2: 8 Vector__XXX
    SG_ IDK2_unk6 : 41|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK2_unk7 : 56|8@1+ (1,0) [0|1] "" Vector__XXX
 
-BO_ 1560 IDK3: 8 Vector__XXX
+BO_ 1560 IDK3: 8 DME_Etc
    SG_ IDK3unk1 : 16|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK3unk2 : 17|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK3unk3 : 19|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK3unk4 : 23|1@1+ (1,0) [0|1] "" Vector__XXX
 
-BO_ 1567 DME_EtcMsg352: 0 DME_Etc
+BO_ 1567 DME_EtcMsg352: 8 DME_Etc
    SG_ Blinker : 18|1@0+ (1,0) [0|1] "" Vector__XXX
+   SG_ Door : 24|1@0+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 2147485210 Lights: 8 DME_Etc
+   SG_ LeftTurnSignal : 9|1@0+ (1,0) [0|1] "" DME_Etc
+   SG_ RightTurnSignal : 31|1@0+ (1,0) [0|1] "" DME_Etc
+
+BO_ 822 x336: 8 DME_Etc
+   SG_ x336Sig347 : 0|64@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 504 x1F8: 8 DME_Etc
+   SG_ x1F8Sig352 : 0|64@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 1552 x610: 8 DME_Etc
+   SG_ x610Sig39 : 0|64@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 1281 x501: 8 DME_Etc
+   SG_ x501Sig34 : 0|64@1+ (1,0) [0|1] "" Vector__XXX
 
 BA_DEF_ BO_ "GenMsgBackgroundColor" STRING ;
 BA_DEF_ BO_ "GenMsgForegroundColor" STRING ;
 BA_DEF_ BO_ "isj1939dbc" INT 0 0;
+BA_DEF_ BO_ "matchingcriteria" INT 0 0;
+BA_DEF_ BO_ "filterlabeling" INT 0 0;
+BA_DEF_ BO_ "matchingcriteria" INT 0 0;
+BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_DEF_ BO_ "matchingcriteria" INT 0 0;
 BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_ "GenMsgBackgroundColor" BO_ 790 "#ffffff";
@@ -134,11 +155,15 @@ BA_ "GenMsgBackgroundColor" BO_ 496 "#ffffff";
 BA_ "GenMsgBackgroundColor" BO_ 501 "#ffffff";
 BA_ "GenMsgBackgroundColor" BO_ 339 "#ffffff";
 BA_ "GenMsgBackgroundColor" BO_ 824 "#ffffff";
+BA_ "GenMsgForegroundColor" BO_ 2147485210 "#000000";
+BA_ "GenMsgForegroundColor" BO_ 504 "#000000";
 BA_DEF_DEF_ "GenMsgBackgroundColor" "#ffffff";
 BA_DEF_DEF_ "GenMsgForegroundColor" "#000000";
 BA_DEF_DEF_ "isj1939dbc" 0;
 BA_DEF_DEF_ "matchingcriteria" 0;
-BA_DEF_DEF_ "filterlabeling" 1;
+BA_DEF_DEF_ "filterlabeling" 0;
+BA_DEF_DEF_ "matchingcriteria" 0;
+BA_DEF_DEF_ "filterlabeling" true;
 VAL_ 790 Ignition_on_DME_ready 1 "On" 0 "Off";
 VAL_ 790 Key 0 "Off" 1 "On";
 VAL_ 790 Starter 0 "Off" 1 "On";

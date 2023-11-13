@@ -1,6 +1,6 @@
 #include "sd_card.h"
 #include <SPI.h>
-#include <SD.h>
+#include "sd_card.hpp"
 #include "messages.h"
 
 // SD CARD
@@ -11,13 +11,15 @@
 #define SD_CS 10
 
 static char log_filename[20];
-static File log_file;
 
-static int get_file_count() {
+static File log_file;
+static pthread_mutex_t log_file_mutex;
+
+unsigned long sd_card_get_file_count() {
 	File d = SD.open("/");
     if (!d)
         return 0;
-	int count_files = 0;
+	unsigned long count_files = 0;
 	while (true) {
  		File entry =  d.openNextFile();
 		if(!entry) {
@@ -46,11 +48,36 @@ void sd_card_init() {
     uint64_t cardSize = SD.cardSize() / (1024 * 1024);
     add_message_fmt("SD Card Size: %lluMB", cardSize);
 
-    sprintf(log_filename, "/log_%08X.crtd", get_file_count());
+    sprintf(log_filename, "/log_%08d.crtd", sd_card_get_file_count());
     add_message_fmt("Log file: %s", log_filename);
     log_file = SD.open(log_filename, FILE_APPEND);
+    log_file.setBufferSize(1024 * 8);
     log_file.printf("%08.3f CXX R53 Custom Dash by Jack Humbert\n", xTaskGetTickCount() / 1000.0);
     log_file.flush();
+	pthread_mutex_init(&log_file_mutex, NULL);
+}
+
+void sd_card_logf(const char * format, ...) {
+    if (log_file) {
+        char buffer[256];
+        va_list args;
+        va_start(args, format);
+        int length = vsnprintf(buffer, 255, format, args);
+
+        pthread_mutex_lock(&log_file_mutex);
+        log_file.print(buffer);
+        pthread_mutex_unlock(&log_file_mutex);
+
+        va_end (args);
+    }
+}
+
+void sd_card_flush() {
+    if (log_file) {
+        pthread_mutex_lock(&log_file_mutex);
+        log_file.flush();
+        pthread_mutex_unlock(&log_file_mutex);
+    }
 }
 
 File * sd_card_get_log_file(void) {
