@@ -100,6 +100,8 @@ typedef struct dashboard_t {
 
 
 typedef struct dashboard_changed_t {
+    uint8_t activity;
+
     uint8_t speed : 1;
     uint8_t tire_pressure_set : 1;
     uint8_t brake_pedal_pressed : 1;
@@ -158,7 +160,7 @@ typedef struct dashboard_changed_t {
 dashboard_t * get_dash(void);
 dashboard_changed_t * get_changed(void);
 
-lv_obj_t * dash(void);
+lv_obj_t * dash_create(lv_disp_t *);
 void dash_loop(void);
 
 #ifdef __cplusplus

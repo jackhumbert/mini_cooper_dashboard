@@ -14,3 +14,5 @@ unsigned long sd_card_get_file_count();
 #ifdef __cplusplus
 } // extern "C"
 #endif
+
+int sd_card_get_log(unsigned char * data);

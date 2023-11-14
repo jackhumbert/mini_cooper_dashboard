@@ -54,7 +54,7 @@ BO_ 809 DME2: 8 DME_Etc
    SG_ Clutch_Switch : 24|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Engine_Running : 28|1@1+ (1,0) [0|0] "" Vector__XXX
 
-BO_ 1557 IKE: 8 DME_Etc
+BO_ 1557 x615: 8 DME_Etc
    SG_ OutsideTemp : 24|8@1+ (1,0) [0|0] "deg_c" DME_Etc
 
 BO_ 1349 DME4: 8 DME_Etc
@@ -92,7 +92,7 @@ BO_ 824 DME3: 8 DME_Etc
    SG_ Engine_Running : 28|1@1+ (1,0) [0|0] "" DME_Etc
    SG_ Brake_Switch : 48|1@1+ (1,0) [0|0] "" Vector__XXX
 
-BO_ 499 IDK1: 8 DME_Etc
+BO_ 499 x1F3: 8 DME_Etc
    SG_ IDK1_unk1 : 7|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK1_unk2 : 8|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK1_unk3 : 15|1@1+ (1,0) [0|1] "" Vector__XXX
@@ -101,7 +101,7 @@ BO_ 499 IDK1: 8 DME_Etc
    SG_ IDK1_unk6 : 38|2@1+ (1,0) [0|4] "" Vector__XXX
    SG_ IDK1_unk7 : 59|1@1+ (1,0) [0|0] "" Vector__XXX
 
-BO_ 1381 IDK2: 8 DME_Etc
+BO_ 1381 x565: 8 DME_Etc
    SG_ IDK2_unk1 : 4|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK2_unk2 : 6|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK2_unk3 : 13|1@1+ (1,0) [0|1] "" Vector__XXX
@@ -110,17 +110,17 @@ BO_ 1381 IDK2: 8 DME_Etc
    SG_ IDK2_unk6 : 41|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK2_unk7 : 56|8@1+ (1,0) [0|1] "" Vector__XXX
 
-BO_ 1560 IDK3: 8 DME_Etc
+BO_ 1560 x618: 8 DME_Etc
    SG_ IDK3unk1 : 16|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK3unk2 : 17|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK3unk3 : 19|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK3unk4 : 23|1@1+ (1,0) [0|1] "" Vector__XXX
 
-BO_ 1567 DME_EtcMsg352: 8 DME_Etc
+BO_ 1567 x61F: 8 DME_Etc
    SG_ Blinker : 18|1@0+ (1,0) [0|1] "" Vector__XXX
    SG_ Door : 24|1@0+ (1,0) [0|1] "" Vector__XXX
 
-BO_ 2147485210 Lights: 8 DME_Etc
+BO_ 1562 x61A: 8 DME_Etc
    SG_ LeftTurnSignal : 9|1@0+ (1,0) [0|1] "" DME_Etc
    SG_ RightTurnSignal : 31|1@0+ (1,0) [0|1] "" DME_Etc
 
@@ -155,7 +155,8 @@ BA_ "GenMsgBackgroundColor" BO_ 496 "#ffffff";
 BA_ "GenMsgBackgroundColor" BO_ 501 "#ffffff";
 BA_ "GenMsgBackgroundColor" BO_ 339 "#ffffff";
 BA_ "GenMsgBackgroundColor" BO_ 824 "#ffffff";
-BA_ "GenMsgForegroundColor" BO_ 2147485210 "#000000";
+BA_ "GenMsgForegroundColor" BO_ 1381 "#000000";
+BA_ "GenMsgForegroundColor" BO_ 1562 "#000000";
 BA_ "GenMsgForegroundColor" BO_ 504 "#000000";
 BA_DEF_DEF_ "GenMsgBackgroundColor" "#ffffff";
 BA_DEF_DEF_ "GenMsgForegroundColor" "#000000";

@@ -127,7 +127,7 @@ lv_obj_t * oil_temp_create(lv_obj_t * parent) {
 
     oil_temp_indic = lv_meter_add_arc(oil_temp_meter, scale, 13, AMBER_ON, -1);
     lv_meter_set_indicator_start_value(oil_temp_meter, oil_temp_indic, 100);
-    lv_meter_set_indicator_end_value(oil_temp_meter, oil_temp_indic, 210);
+    lv_meter_set_indicator_end_value(oil_temp_meter, oil_temp_indic, 100);
 
     {
 
@@ -191,7 +191,7 @@ lv_obj_t * oil_pressure_create(lv_obj_t * parent) {
 
     oil_pressure_indic = lv_meter_add_arc(oil_pressure_meter, scale, 13, AMBER_ON, -1);
     lv_meter_set_indicator_start_value(oil_pressure_meter, oil_pressure_indic, 0);
-    lv_meter_set_indicator_end_value(oil_pressure_meter, oil_pressure_indic, 35);
+    lv_meter_set_indicator_end_value(oil_pressure_meter, oil_pressure_indic, 0);
 
     {
 

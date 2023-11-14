@@ -39,7 +39,7 @@ typedef enum {
 
 #define CAN_ID_ASC_1 (339) /* 0x153 */
 #define CAN_ID_ABS_1 (496) /* 0x1f0 */
-#define CAN_ID_IDK1 (499) /* 0x1f3 */
+#define CAN_ID_X1F3 (499) /* 0x1f3 */
 #define CAN_ID_STEERING_ANGLE_SENSOR (501) /* 0x1f5 */
 #define CAN_ID_X1F8 (504) /* 0x1f8 */
 #define CAN_ID_DME1 (790) /* 0x316 */
@@ -48,13 +48,13 @@ typedef enum {
 #define CAN_ID_DME3 (824) /* 0x338 */
 #define CAN_ID_X501 (1281) /* 0x501 */
 #define CAN_ID_DME4 (1349) /* 0x545 */
-#define CAN_ID_IDK2 (1381) /* 0x565 */
+#define CAN_ID_X565 (1381) /* 0x565 */
 #define CAN_ID_X610 (1552) /* 0x610 */
 #define CAN_ID_INSTRUMENT_CLUSTER (1555) /* 0x613 */
-#define CAN_ID_IKE (1557) /* 0x615 */
-#define CAN_ID_IDK3 (1560) /* 0x618 */
-#define CAN_ID_LIGHTS (1562) /* 0x61a */
-#define CAN_ID_DME_ETCMSG352 (1567) /* 0x61f */
+#define CAN_ID_X615 (1557) /* 0x615 */
+#define CAN_ID_X618 (1560) /* 0x618 */
+#define CAN_ID_X61A (1562) /* 0x61a */
+#define CAN_ID_X61F (1567) /* 0x61f */
 
 typedef PREPACK struct {
 	uint16_t Speed; /* scaling 0.1, offset 0.0, units none  */
@@ -83,7 +83,7 @@ typedef PREPACK struct {
 	uint8_t IDK1_unk3; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK1_unk5; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK1_unk7; /* scaling 1.0, offset 0.0, units none  */
-} POSTPACK can_0x1f3_IDK1_t;
+} POSTPACK can_0x1f3_x1F3_t;
 
 typedef PREPACK struct {
 	uint16_t Steering_Angle; /* scaling 0.0, offset 0.0, units none  */
@@ -214,7 +214,7 @@ typedef PREPACK struct {
 	uint8_t IDK2_unk3; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK2_unk5; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK2_unk6; /* scaling 1.0, offset 0.0, units none  */
-} POSTPACK can_0x565_IDK2_t;
+} POSTPACK can_0x565_x565_t;
 
 typedef PREPACK struct {
 	uint64_t x610Sig39; /* scaling 1.0, offset 0.0, units none  */
@@ -228,29 +228,29 @@ typedef PREPACK struct {
 
 typedef PREPACK struct {
 	uint8_t OutsideTemp; /* scaling 1.0, offset 0.0, units deg_c  */
-} POSTPACK can_0x615_IKE_t;
+} POSTPACK can_0x615_x615_t;
 
 typedef PREPACK struct {
 	uint8_t IDK3unk1; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK3unk2; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK3unk3; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK3unk4; /* scaling 1.0, offset 0.0, units none  */
-} POSTPACK can_0x618_IDK3_t;
+} POSTPACK can_0x618_x618_t;
 
 typedef PREPACK struct {
 	uint8_t LeftTurnSignal; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t RightTurnSignal; /* scaling 1.0, offset 0.0, units none  */
-} POSTPACK can_0x61a_Lights_t;
+} POSTPACK can_0x61a_x61A_t;
 
 typedef PREPACK struct {
 	uint8_t Blinker; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Door; /* scaling 1.0, offset 0.0, units none  */
-} POSTPACK can_0x61f_DME_EtcMsg352_t;
+} POSTPACK can_0x61f_x61F_t;
 
 typedef PREPACK struct {
 	dbcc_time_stamp_t can_0x153_ASC_1_time_stamp_rx;
 	dbcc_time_stamp_t can_0x1f0_ABS_1_time_stamp_rx;
-	dbcc_time_stamp_t can_0x1f3_IDK1_time_stamp_rx;
+	dbcc_time_stamp_t can_0x1f3_x1F3_time_stamp_rx;
 	dbcc_time_stamp_t can_0x1f5_Steering_Angle_Sensor_time_stamp_rx;
 	dbcc_time_stamp_t can_0x1f8_x1F8_time_stamp_rx;
 	dbcc_time_stamp_t can_0x316_DME1_time_stamp_rx;
@@ -259,22 +259,22 @@ typedef PREPACK struct {
 	dbcc_time_stamp_t can_0x338_DME3_time_stamp_rx;
 	dbcc_time_stamp_t can_0x501_x501_time_stamp_rx;
 	dbcc_time_stamp_t can_0x545_DME4_time_stamp_rx;
-	dbcc_time_stamp_t can_0x565_IDK2_time_stamp_rx;
+	dbcc_time_stamp_t can_0x565_x565_time_stamp_rx;
 	dbcc_time_stamp_t can_0x610_x610_time_stamp_rx;
 	dbcc_time_stamp_t can_0x613_Instrument_Cluster_time_stamp_rx;
-	dbcc_time_stamp_t can_0x615_IKE_time_stamp_rx;
-	dbcc_time_stamp_t can_0x618_IDK3_time_stamp_rx;
-	dbcc_time_stamp_t can_0x61a_Lights_time_stamp_rx;
-	dbcc_time_stamp_t can_0x61f_DME_EtcMsg352_time_stamp_rx;
+	dbcc_time_stamp_t can_0x615_x615_time_stamp_rx;
+	dbcc_time_stamp_t can_0x618_x618_time_stamp_rx;
+	dbcc_time_stamp_t can_0x61a_x61A_time_stamp_rx;
+	dbcc_time_stamp_t can_0x61f_x61F_time_stamp_rx;
 	unsigned can_0x153_ASC_1_status : 2;
 	unsigned can_0x153_ASC_1_tx : 1;
 	unsigned can_0x153_ASC_1_rx : 1;
 	unsigned can_0x1f0_ABS_1_status : 2;
 	unsigned can_0x1f0_ABS_1_tx : 1;
 	unsigned can_0x1f0_ABS_1_rx : 1;
-	unsigned can_0x1f3_IDK1_status : 2;
-	unsigned can_0x1f3_IDK1_tx : 1;
-	unsigned can_0x1f3_IDK1_rx : 1;
+	unsigned can_0x1f3_x1F3_status : 2;
+	unsigned can_0x1f3_x1F3_tx : 1;
+	unsigned can_0x1f3_x1F3_rx : 1;
 	unsigned can_0x1f5_Steering_Angle_Sensor_status : 2;
 	unsigned can_0x1f5_Steering_Angle_Sensor_tx : 1;
 	unsigned can_0x1f5_Steering_Angle_Sensor_rx : 1;
@@ -299,30 +299,30 @@ typedef PREPACK struct {
 	unsigned can_0x545_DME4_status : 2;
 	unsigned can_0x545_DME4_tx : 1;
 	unsigned can_0x545_DME4_rx : 1;
-	unsigned can_0x565_IDK2_status : 2;
-	unsigned can_0x565_IDK2_tx : 1;
-	unsigned can_0x565_IDK2_rx : 1;
+	unsigned can_0x565_x565_status : 2;
+	unsigned can_0x565_x565_tx : 1;
+	unsigned can_0x565_x565_rx : 1;
 	unsigned can_0x610_x610_status : 2;
 	unsigned can_0x610_x610_tx : 1;
 	unsigned can_0x610_x610_rx : 1;
 	unsigned can_0x613_Instrument_Cluster_status : 2;
 	unsigned can_0x613_Instrument_Cluster_tx : 1;
 	unsigned can_0x613_Instrument_Cluster_rx : 1;
-	unsigned can_0x615_IKE_status : 2;
-	unsigned can_0x615_IKE_tx : 1;
-	unsigned can_0x615_IKE_rx : 1;
-	unsigned can_0x618_IDK3_status : 2;
-	unsigned can_0x618_IDK3_tx : 1;
-	unsigned can_0x618_IDK3_rx : 1;
-	unsigned can_0x61a_Lights_status : 2;
-	unsigned can_0x61a_Lights_tx : 1;
-	unsigned can_0x61a_Lights_rx : 1;
-	unsigned can_0x61f_DME_EtcMsg352_status : 2;
-	unsigned can_0x61f_DME_EtcMsg352_tx : 1;
-	unsigned can_0x61f_DME_EtcMsg352_rx : 1;
+	unsigned can_0x615_x615_status : 2;
+	unsigned can_0x615_x615_tx : 1;
+	unsigned can_0x615_x615_rx : 1;
+	unsigned can_0x618_x618_status : 2;
+	unsigned can_0x618_x618_tx : 1;
+	unsigned can_0x618_x618_rx : 1;
+	unsigned can_0x61a_x61A_status : 2;
+	unsigned can_0x61a_x61A_tx : 1;
+	unsigned can_0x61a_x61A_rx : 1;
+	unsigned can_0x61f_x61F_status : 2;
+	unsigned can_0x61f_x61F_tx : 1;
+	unsigned can_0x61f_x61F_rx : 1;
 	can_0x153_ASC_1_t can_0x153_ASC_1;
 	can_0x1f0_ABS_1_t can_0x1f0_ABS_1;
-	can_0x1f3_IDK1_t can_0x1f3_IDK1;
+	can_0x1f3_x1F3_t can_0x1f3_x1F3;
 	can_0x1f5_Steering_Angle_Sensor_t can_0x1f5_Steering_Angle_Sensor;
 	can_0x1f8_x1F8_t can_0x1f8_x1F8;
 	can_0x316_DME1_t can_0x316_DME1;
@@ -331,13 +331,13 @@ typedef PREPACK struct {
 	can_0x338_DME3_t can_0x338_DME3;
 	can_0x501_x501_t can_0x501_x501;
 	can_0x545_DME4_t can_0x545_DME4;
-	can_0x565_IDK2_t can_0x565_IDK2;
+	can_0x565_x565_t can_0x565_x565;
 	can_0x610_x610_t can_0x610_x610;
 	can_0x613_Instrument_Cluster_t can_0x613_Instrument_Cluster;
-	can_0x615_IKE_t can_0x615_IKE;
-	can_0x618_IDK3_t can_0x618_IDK3;
-	can_0x61a_Lights_t can_0x61a_Lights;
-	can_0x61f_DME_EtcMsg352_t can_0x61f_DME_EtcMsg352;
+	can_0x615_x615_t can_0x615_x615;
+	can_0x618_x618_t can_0x618_x618;
+	can_0x61a_x61A_t can_0x61a_x61A;
+	can_0x61f_x61F_t can_0x61f_x61F;
 } POSTPACK can_obj_e46_h_t;
 
 int unpack_message(can_obj_e46_h_t *o, const unsigned long id, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp);

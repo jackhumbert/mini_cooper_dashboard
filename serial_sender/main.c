@@ -175,10 +175,46 @@ static int handler(void* user, const char* section, const char* name,
     return 1;
 }
 
+void get_log(int fd, uint64_t id, uint8_t force) {
+  uint8_t command[12] = {0x00, 0x00, 0x09, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+  char log_name[256];
+  char buf[9];
+  sprintf(log_name, "logs/log_%08llu.crtd", id);
+  // only get logs we haven't transferred yet
+  if (access(log_name, F_OK) != 0 || force) {
+    *(uint64_t*)(command + 4) = id;
+    write_port(fd, command, 12);
+    delay(1000);
+    if (read_port(fd, (uint8_t*)buf, 9) != 9) {
+      perror("Could not read log length");
+      return;
+    }
+    uint64_t log_length = strtol(buf, NULL, 16);
+    printf("%s: %llu bytes\n", log_name, log_length);
+    if (log_length > 0) {
+      uint8_t * file_buffer = malloc(log_length);
+      if (read_port(fd, file_buffer, log_length) != log_length) { 
+        perror("Could not read log");
+        return;
+      }
+      FILE * file = fopen(log_name, "w");
+      if (file == NULL) {
+        perror("Could not open log file");
+        return;
+      }
+      if (fwrite(file_buffer, 1, log_length, file) != log_length) {
+        perror("Could not write to log file");
+        return;
+      }
+      fclose(file);
+    }
+  }
+}
+
 void get_logs(int fd) {
   uint8_t command[12] = {0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
   write_port(fd, command, 12);
-  delay(1000);
+  delay(5000);
   char buf[9];
   ssize_t bytes = read_port(fd, (uint8_t*)buf, 9);
   if (bytes != 9) {
@@ -188,38 +224,7 @@ void get_logs(int fd) {
   uint64_t num_logs = strtol(buf, NULL, 16);
   printf("Number of logs: %llu\n", num_logs);
   for (uint64_t i = 0; i < num_logs - 1; i++) {
-    char log_name[256];
-    sprintf(log_name, "logs/log_%08llu.crtd", i);
-    // only get logs we haven't transferred yet
-    if (access(log_name, F_OK) != 0) {
-      command[3] = 0x01;
-      *(uint64_t*)(command + 4) = i;
-      write_port(fd, command, 12);
-      delay(1000);
-      if (read_port(fd, (uint8_t*)buf, 9) != 9) {
-        perror("Could not read log length");
-        return;
-      }
-      uint64_t log_length = strtol(buf, NULL, 16);
-      printf("%s: %llu bytes\n", log_name, log_length);
-      if (log_length > 0) {
-        uint8_t * file_buffer = malloc(log_length);
-        if (read_port(fd, file_buffer, log_length) != log_length) { 
-          perror("Could not read log");
-          return;
-        }
-        FILE * file = fopen(log_name, "w");
-        if (file == NULL) {
-          perror("Could not open log file");
-          return;
-        }
-        if (fwrite(file_buffer, 1, log_length, file) != log_length) {
-          perror("Could not write to log file");
-          return;
-        }
-        fclose(file);
-      }
-    }
+    get_log(fd, i, 0);
   }
 }
 
@@ -304,6 +309,8 @@ int main(int argc, char* argv[]) {
 
   if (strcmp(argv[1], "send_log") == 0) {
     send_log(fd, argv[2]);
+  } else if (strcmp(argv[1], "get_log") == 0) {
+    get_log(fd, strtol(argv[2], NULL, 10), 1);
   } else if (strcmp(argv[1], "get_logs") == 0) {
     get_logs(fd);
   } else if (strcmp(argv[1], "set_time") == 0) {

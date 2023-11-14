@@ -1,8 +1,6 @@
 #include "dev.h"
 #include <Arduino.h>
 #include "sd_card.h"
-#include <SD.h>
-#include <FS.h>
 #include <ESP32Time.h>
 #include "messages.h"
 #include "dash.h"
@@ -15,23 +13,6 @@ static int list_logs() {
     return 0;
 }
 
-static int get_log(uint8_t * data) {
-    char filename[20];
-    sprintf(filename, "/log_%08llu.crtd", *(uint64_t*)data);
-    File file = SD.open(filename, FILE_READ);
-    if (file) {
-        Serial.printf("%08lX\n", file.size());
-        // could get file info too
-        // file.getLastWrite();
-        while (file.available()) {
-            Serial.write(file.read());
-        }
-        file.close();
-        return 0;
-    } else {
-        return -1;
-    }
-}
 
 static int set_time(uint8_t * data) {
     rtc.setTime(*(time_t*)data);
@@ -46,7 +27,7 @@ int dev_process(uint16_t id, uint8_t * data) {
         case 0x900:
             return list_logs();
         case 0x901:
-            return get_log(data);
+            return sd_card_get_log(data);
         case 0x902:
             return set_time(data);
     }

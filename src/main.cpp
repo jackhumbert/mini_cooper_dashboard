@@ -18,13 +18,10 @@ static lv_color_t * disp_draw_buf2 = NULL;
 #include <Wire.h>
 #include <SPI.h>
 #include <SD.h>
-#include <FS.h>
-#include "touch.h"
 #include "sd_card.h"
 #include "sd_card.hpp"
 #include "can.h"
 #include "serial_can.h"
-#include "activity.h"
 
 Serial_CAN can;
 
@@ -61,9 +58,6 @@ void my_log_cb(const char * buf) {
     sd_card_logf("%08.3f CXX %s\n", xTaskGetTickCount() / 1000.0, buf);
 }
 
-
-// extern void my_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data);
-
 void my_touchpad_read_new( lv_indev_drv_t * indev_driver, lv_indev_data_t * data ) {
     uint16_t touchX, touchY;
 
@@ -92,68 +86,48 @@ int sd_card_log_printf(const char* format, va_list args) {
 }
 
 TaskHandle_t CAN_Task;
+static uchar buffer[12];
 
 void CAN_Task_loop(void * parameter) {
     while (true) {
-        int8_t messages = Serial.available() / 12;
-        while (messages-- && Serial.available()) {
-        // while (Serial.available()) {
-            unsigned long id = 0;
-            uchar buf[13] = {0};
-            if (can.recv(&id, buf)) {
-                // add_message_fmt("Message from %X", id);
-                unsigned long can_id = id & 0xFFFF;
-                dbcc_time_stamp_t ts = (id >> 16) & 0xFFFF;
+        unsigned long id = 0;
+        if (can.recv(&id, buffer)) {
+            unsigned long can_id = id & 0xFFFF;
+            dbcc_time_stamp_t ts = (id >> 16) & 0xFFFF;
 
-                // static char sbuf[35];
-                // sprintf(sbuf, "%04X %04X: %02X %02X %02X %02X %02X %02X %02X %02X\0", ts, can_id, buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
+            // sd_card_logf("%08.3f R11 %08X ", xTaskGetTickCount() / 1000.0, id);
+            // for (int i = 0; i < 8; i++) {
+            //     sd_card_logf("%02X ", buf[i]);
+            // }
+            sd_card_logf("%08.3f R11 %08X %02X %02X %02X %02X %02X %02X %02X %02X\n", 
+                xTaskGetTickCount() / 1000.0, id,
+                buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
 
-                // static char log[35];
-                // sprintf(log, "%04X %04X: %02X %02X %02X %02X %02X %02X %02X %02X\n", ts, can_id, buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
-                // File file = SD.open("/messages.log", FILE_APPEND);
-                // if (file) {
-                //     file.write((uint8_t*)log, 35);
-                //     file.close();
-                // }
+            // sd_card_logf("\n");
 
-                sd_card_logf("%08.3f R11 %08X ", xTaskGetTickCount() / 1000.0, id);
-                for (int i = 0; i < 8; i++) {
-                    sd_card_logf("%02X ", buf[i]);
-                }
-                sd_card_logf("\n");
-
-                // add_message(sbuf);
-
-	            pthread_mutex_lock(&get_dash()->mutex);
-                if (decode_can_message(ts, can_id, (uint8_t*)buf) < 0) {
-                    activity_update(false);
-                    // if (id == 0x78300D0A) {
-                    //     add_message((char*)buf);
-                    // }
-
-                    sd_card_logf("%08.3f CXX Could not decode latest message\n", xTaskGetTickCount() / 1000.0);
-
-                } else {
-                    activity_update(true);
-                }
-	            pthread_mutex_unlock(&get_dash()->mutex);
+            pthread_mutex_lock(&get_dash()->mutex);
+            if (decode_can_message(ts, can_id, (uint8_t*)buf) < 0) {
+                get_changed()->activity |= 2;
+                sd_card_logf("%08.3f CXX Could not decode latest message\n", xTaskGetTickCount() / 1000.0);
             } else {
-                // if (buf[12]) {
-                //     File * file = sd_card_get_log_file();
-                //     if (file && *file) {
-                //         uint32_t ticks = xTaskGetTickCount();
-                //         sd_card_logf("[%08X] ", ticks);
-                //         for (int i = 0; i < buf[12]; i++) {
-                //             sd_card_logf("%02X ", buf[i]);
-                //         }
-                //         file->print('\n');
-                //         file->flush();
-                //     }
-                // }
+                get_changed()->activity |= 1;
             }
+            pthread_mutex_unlock(&get_dash()->mutex);
+        } else {
+            // if (buf[12]) {
+            //     File * file = sd_card_get_log_file();
+            //     if (file && *file) {
+            //         uint32_t ticks = xTaskGetTickCount();
+            //         sd_card_logf("[%08X] ", ticks);
+            //         for (int i = 0; i < buf[12]; i++) {
+            //             sd_card_logf("%02X ", buf[i]);
+            //         }
+            //         file->print('\n');
+            //         file->flush();
+            //     }
+            // }
         }
-        // }
-        // delay(5);
+        vTaskDelay(1);
     }
 }
 
@@ -165,9 +139,21 @@ const char* ntpServer = "pool.ntp.org";
 const long  gmtOffset_sec = 0;
 const int   daylightOffset_sec = 3600;
 
+#define SCREEN_FADE_TIME 2
 
-static void screen_fade_cb(void * indic, int32_t v) {
-    gfx.setBrightness(v);
+TaskHandle_t screen_fade_task;
+
+void screen_fade_cb(void * parameter) {
+    unsigned long start = millis();
+    while (millis() - start < (SCREEN_FADE_TIME * 1000)) {
+        unsigned long time_diff = millis() - start;
+        uint32_t value = round(pow(time_diff / (SCREEN_FADE_TIME * 1000.0), 2) * 255);
+        // uint32_t value = round(time_diff / (SCREEN_FADE_TIME * 1000.0) * 255);
+        // add_message_fmt("brightness: %d", value);
+        gfx.setBrightness(value);
+    }
+    gfx.setBrightness(255);
+    vTaskDelete(screen_fade_task);
 };
 
 void setup() {
@@ -186,15 +172,24 @@ void setup() {
 
     esp_log_set_vprintf(sd_card_log_printf);
 
-    Serial.setRxBufferSize(4096);
-    Serial.begin(115200); 
+    // Serial.setRxBufferSize(SOC_UART_FIFO_LEN * 64);
+    // Serial.begin(115200); 
 
-    gfx.init();
+    gfx.init_without_reset();
+    // gfx.init();
     gfx.setRotation(0);
     gfx.setBrightness(0);
     gfx.setColorDepth(16); 
     gfx.clearDisplay();
-    // gfx.begin();
+
+    xTaskCreatePinnedToCore(
+      screen_fade_cb, /* Function to implement the task */
+      "Screen Fade In", /* Name of the task */
+      1000,  /* Stack size in words */
+      NULL,  /* Task input parameter */
+      2,  /* Priority of the task */
+      &screen_fade_task,  /* Task handle. */
+      0); /* Core where the task should run */
 
     lv_init();
     lv_log_register_print_cb(my_log_cb);
@@ -225,13 +220,8 @@ void setup() {
     lv_group_t * g = lv_group_create();
     lv_group_set_default(g);
 
-    // touch_init();
-    // /* Initialize the (dummy) input device driver */
-    // static lv_indev_drv_t indev_drv;
-    // lv_indev_drv_init(&indev_drv);
-    // indev_drv.type = LV_INDEV_TYPE_POINTER;
-    // indev_drv.read_cb = my_touchpad_read;
-    // lv_indev_drv_register(&indev_drv);
+    dash_create(disp);
+    sd_card_init();
 
     /*Initialize the input device driver*/
     static lv_indev_drv_t indev_drv;
@@ -239,10 +229,6 @@ void setup() {
     indev_drv.type = LV_INDEV_TYPE_POINTER;
     indev_drv.read_cb = my_touchpad_read_new;
     lv_indev_drv_register(&indev_drv);
-
-    dash();
-	pthread_mutex_init(&get_dash()->mutex, NULL);
-    sd_card_init();
 
     // delay(500);
 
@@ -255,33 +241,13 @@ void setup() {
       "CAN Task", /* Name of the task */
       10000,  /* Stack size in words */
       NULL,  /* Task input parameter */
-      0,  /* Priority of the task */
+      2,  /* Priority of the task */
       &CAN_Task,  /* Task handle. */
       0); /* Core where the task should run */
+
 }
 
-// uint32_t timer = 0;
-
-static bool screen_on = false;
-
 void loop() {
-    if (!screen_on) {
-        static lv_anim_t screen_fade;
-        lv_anim_init(&screen_fade);
-        lv_anim_set_exec_cb(&screen_fade, screen_fade_cb);
-        lv_anim_set_values(&screen_fade, 0, 255);
-        lv_anim_set_time(&screen_fade, 2000);
-        lv_anim_start(&screen_fade);
-        screen_on = true;
-    }
-
-    // lv_refr_now();
     lv_timer_handler();
-
-    // if (xTaskGetTickCount() - timer > 10000) {
-    //     add_message_fmt("%d bytes free", esp_get_free_heap_size());
-    //     timer = xTaskGetTickCount();
-    // }
-
     dash_loop();
 }

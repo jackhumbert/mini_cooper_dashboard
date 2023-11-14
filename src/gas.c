@@ -53,11 +53,10 @@ lv_obj_t * gas_create(lv_obj_t * parent) {
     gas_label = lv_label_create(meter);
     // lv_obj_align(gas_label, LV_ALIGN_RIGHT_MID, 0, 133);
     lv_obj_set_style_text_font(gas_label, RAJDHANI_REGULAR_24, 0);
+    lv_label_set_text(gas_label, "-");
     lv_obj_align(gas_label, LV_ALIGN_CENTER, 0, -4);
     lv_obj_set_style_text_color(gas_label, AMBER_ON, 0);
 }
-
-    gas_update();
 
 {
     DASH_FONT(RAJDHANI_SEMIBOLD, 14);

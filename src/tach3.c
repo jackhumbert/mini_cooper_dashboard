@@ -11,6 +11,8 @@ static lv_meter_indicator_t * rpm_normal;
 static lv_meter_indicator_t * rpm_red;
 static bool animation_active = false;
 static lv_obj_t * rpm_label;
+// static lv_meter_indicator_t * tach_line;
+// static lv_meter_indicator_t * tach_line_bo;
 
 static void redline_anim_toggle(void * indic, int32_t v) {
     lv_opa_t last = rpm_normal->opa;
@@ -80,6 +82,8 @@ void tach3_update() {
         rpm_normal->type_data.arc.color = AMBER_ON;
     }
     lv_meter_set_indicator_end_value(meter, rpm_normal, get_dash()->rpm);
+    // lv_meter_set_indicator_value(meter, tach_line, get_dash()->rpm);
+    // lv_meter_set_indicator_value(meter, tach_line_bo, get_dash()->rpm);
     lv_label_set_text_fmt(rpm_label, "%0.0f", get_dash()->rpm);
 }
 
@@ -149,6 +153,9 @@ lv_obj_t * tach3_create(lv_obj_t * canvas) {
     rpm_normal = lv_meter_add_arc(meter, scale, 20, AMBER_ON, -5);
     lv_meter_set_indicator_start_value(meter, rpm_normal, 0);
     lv_meter_set_indicator_end_value(meter, rpm_normal, 8000);
+
+    // tach_line = lv_meter_add_needle_line(meter, scale, 5, AMBER_ON, 0);
+    // lv_meter_set_indicator_value(meter, tach_line, 0);
 
     rpm_label = lv_label_create(meter);
     lv_label_set_text(rpm_label, "-");

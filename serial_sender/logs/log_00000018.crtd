@@ -1,13 +1,11 @@
-!
-
-
-Backtrace: 0x40377eda:0x3fccd650 0x4037b855:0x3fccd670 0x40377522:0x3fccd690 0x42006e1d:0x3fccd6b0 0x42006285:0x3fccd700 0x4200747b:0x3fccd720
-
-
-
-
-ELF file SHA256: d1f63251092c6df1
-
-Rebooting...
-ESP-ROM:esp32s3-20210327
-Build:Mar 27 2
+0000.224 CXX R53 Custom Dash by Jack Humbert
+ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ0037.227 R11 00000901 08 00 00 00 00 00 00 00
+0037.236 CXX Could not decode latest message
+0039.692 R11 00000901 06 00 00 00 00 00 00 00
+0039.701 CXX Could not decode latest message
+0043.986 R11 00000901 05 00 00 00 00 00 00 00
+0043.995 CXX Could not decode latest message
+0046.852 R11 00000901 69 00 00 00 00 00 00 00
+0046.861 CXX Could not decode latest message
+0054.085 R11 00000901 01 00 00 00 00 00 00 00
+0054.094 CXX Could not decode latest message

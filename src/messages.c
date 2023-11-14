@@ -9,6 +9,7 @@
 
 
 static lv_obj_t * messages;
+static char ** pending_messages;
 
 lv_obj_t * messages_create(lv_obj_t * parent) {
 
@@ -60,9 +61,11 @@ lv_obj_t * messages_create(lv_obj_t * parent) {
 void add_message(const char * message) {
     // LV_LOG_USER(message);
 
-    if (!messages)
+    if (!messages) {
+
         return;
-        
+    }
+
     DASH_FONT(FIRACODE_REGULAR, 12);
 
     lv_obj_t * messages_label = lv_label_create(messages);

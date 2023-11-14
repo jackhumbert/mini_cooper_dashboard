@@ -45,7 +45,7 @@ lv_obj_t * coolant_create(lv_obj_t * parent) {
 
     coolant_temp_indic = lv_meter_add_arc(meter, scale, 13, AMBER_ON, -1);
     lv_meter_set_indicator_start_value(meter, coolant_temp_indic, 30);
-    lv_meter_set_indicator_end_value(meter, coolant_temp_indic, 140);
+    lv_meter_set_indicator_end_value(meter, coolant_temp_indic, 30);
 
 {
     DASH_FONT(RAJDHANI_REGULAR, 24);
@@ -54,7 +54,7 @@ lv_obj_t * coolant_create(lv_obj_t * parent) {
     // lv_obj_align(coolant_temp_label, LV_ALIGN_RIGHT_MID, 0, 133);
     lv_obj_set_style_text_font(coolant_temp_label, RAJDHANI_REGULAR_24, 0);
     lv_obj_align(coolant_temp_label, LV_ALIGN_CENTER, 0, -4);
-    lv_label_set_text_fmt(coolant_temp_label, "%d°F", 140);
+    lv_label_set_text(coolant_temp_label, "-°F");
     lv_obj_set_style_text_color(coolant_temp_label, AMBER_ON, 0);
 }
 

@@ -4,7 +4,7 @@
 // #include <SoftwareSerial.h>
 #include <HardwareSerial.h>
 #include "sd_card.h"
-#include "activity.h"
+#include "dash.h"
 
 #define TIMEOUT 20
 
@@ -55,7 +55,7 @@ unsigned char Serial_CAN::send(unsigned long id, uchar ext, uchar rtrBit, uchar 
 uint16_t last_ts = 0xFFFF;
 
 bool validate_id(uint32_t id) {
-    return (id >= 0x153 && id <= 0x9FF);
+    return (id >= 0x153 && id <= 0xA00);
 }
 
 bool filter_id(uint32_t id) {
@@ -86,16 +86,22 @@ bool filter_id(uint32_t id) {
     return false;
 }
 
+#define SERIAL_BUFFER_SIZE 12 * 16
+
+static int hangers = 0;
 
 // 0: no data
 // 1: get data
 unsigned char Serial_CAN::recv(unsigned long *id, uchar *buf) {
-    if (canSerial->available()) {
+    int avail = MIN(canSerial->available(), SERIAL_BUFFER_SIZE);
+    if (avail >= 12) {
+        hangers = 0;
         unsigned long timer_s = millis();
-        uchar dta[13] = { 0 };
-
-        if (canSerial->available() >= 12) {
-            canSerial->readBytes(dta, 12);
+        uchar buffer[SERIAL_BUFFER_SIZE] = { 0 };
+        uint32_t bytes_processed = 0;
+        canSerial->readBytes(buffer, avail);
+        while (bytes_processed < avail) {
+            uchar * dta = &buffer[bytes_processed];
             unsigned int __id = 0;
             
             for(int i=0; i<4; i++) // Store the id of the sender
@@ -105,36 +111,25 @@ unsigned char Serial_CAN::recv(unsigned long *id, uchar *buf) {
             }
             // len = 12;
             bool skipped = false;
-            while (!validate_id(__id)) {
+            while (!validate_id(__id) && (bytes_processed + 12) < avail) {
                 if (!skipped) {
-                    activity_update(false);
-                    sd_card_logf("%08.3f CXX DISCARDING ", xTaskGetTickCount() / 1000.0);
+                    get_changed()->activity |= 2;
+                    sd_card_logf("%08.3f CER DISCARD: ", xTaskGetTickCount() / 1000.0);
                 }
                 skipped = true;
-                unsigned long timeout = millis();
-                while (!canSerial->available()) {
-                    if((millis()-timeout) > 2) {
-                        activity_update(false);
-                        for (int i = 0; i < 12; i++) {
-                            sd_card_logf("%02X ", dta[i]);
-                        }
-                        sd_card_logf("\n");
-                        return 0;
-                    }
-                }
+                // unsigned long timeout = millis();
+                // while (!canSerial->available()) {
+                //     if((millis()-timeout) > 2) {
+                //         get_changed()->activity |= 2;
+                //         for (int i = 0; i < (avail - bytes_processed); i++) {
+                //             sd_card_logf("%02X ", dta[i]);
+                //         }
+                //         sd_card_logf("\n");
+                //         return 0;
+                //     }
+                // }
                 sd_card_logf("%02X ", dta[0]);
-                dta[0] = dta[1];
-                dta[1] = dta[2];
-                dta[2] = dta[3];
-                dta[3] = dta[4];
-                dta[4] = dta[5];
-                dta[5] = dta[6];
-                dta[6] = dta[7];
-                dta[7] = dta[8];
-                dta[8] = dta[9];
-                dta[9] = dta[10];
-                dta[10] = dta[11];
-                dta[11] = canSerial->read();
+                dta = &buffer[++bytes_processed];
 
                 for(int i=0; i<4; i++) {
                     __id <<= 8;
@@ -166,6 +161,11 @@ unsigned char Serial_CAN::recv(unsigned long *id, uchar *buf) {
             return 1;
         }
         return 0;
+    } else {
+        if (hangers == avail & avail != 0) {
+            canSerial->flush();
+        }
+        hangers = avail;
     }
 // {
 //     if(canSerial->available())

@@ -30,6 +30,10 @@ static void u64_to_can_msg(const uint64_t u, uint8_t m[8]) {
 
 
 int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * data) {
+    if (id == 0xA00) {
+        add_message_fmt("Custom event received: %llu", (uint64_t*)data);
+        return 0;
+    }
     if (id >= 0x900) {
         return dev_process(id, data);
     }
@@ -50,6 +54,7 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 get_changed()->engine_temp = 1;
                 decode_can_0x329_Clutch_Switch(&can_data, &get_dash()->clutch_switch);
                 decode_can_0x329_Throttle_Position(&can_data, &get_dash()->throttle_position);
+                get_changed()->throttle_position = 1;
                 return 0;
             case 0x316:
                 decode_can_0x316_RPM(&can_data, &get_dash()->rpm);

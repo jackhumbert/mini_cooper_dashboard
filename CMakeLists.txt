@@ -78,3 +78,4 @@ add_custom_target(e46 COMMAND ../dbcc/dbcc e46.dbc WORKING_DIRECTORY ${PROJECT_S
 
 # add_subdirectory(simulation)
 # add_subdirectory(device)
+add_subdirectory(serial_sender)
