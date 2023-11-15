@@ -8,9 +8,10 @@ static lv_obj_t * oil_temp_label;
 static lv_font_t * font_big;
 static lv_font_t * font_small;
 
-void oil_temp_set(int32_t temp) {
-    lv_label_set_text_fmt(oil_temp_label, "%d°F", temp);
-    lv_meter_set_indicator_end_value(oil_temp_meter, oil_temp_indic, temp);
+void oil_temp_update() {
+    uint16_t temp = round(get_dash()->oil_temp * 9 / 5.0 + 32);
+    lv_label_set_text_fmt(oil_temp_label, "%d°F",temp);
+    lv_meter_set_indicator_end_value(oil_temp_meter, oil_temp_indic,temp);
     lv_color_t old_color = oil_temp_indic->type_data.arc.color;
     if (temp > 260) {
         oil_temp_indic->type_data.arc.color = RED_ON;

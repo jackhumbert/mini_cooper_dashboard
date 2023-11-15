@@ -6,7 +6,13 @@ static lv_obj_t * headlights_indic;
 
 void car_view_update(void) {
     lv_obj_set_style_img_recolor(left_door, get_dash()->left_door ? RED_ON : RED_OFF, 0);
-    lv_obj_set_style_img_recolor(headlights_indic, get_dash()->headlights ? WHITE_ON : WHITE_OFF, 0);
+    if (get_dash()->brights) {
+        lv_obj_set_style_img_recolor(headlights_indic, BLUE_ON, 0);
+    } else if (get_dash()->running_lights) {
+        lv_obj_set_style_img_recolor(headlights_indic, WHITE_ON, 0);
+    } else {
+        lv_obj_set_style_img_recolor(headlights_indic, WHITE_OFF, 0);
+    }
 }
 
 lv_obj_t * car_view_create(lv_obj_t * parent) {

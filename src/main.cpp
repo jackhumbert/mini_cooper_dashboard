@@ -54,7 +54,8 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
 
 void my_log_cb(const char * buf) {
     // add_message(buf);
-    sd_card_logf("%08.3f CXX %s\n", xTaskGetTickCount() / 1000.0, buf);
+    // sd_card_logf("%08.3f CXX %s\n", xTaskGetTickCount() / 1000.0, buf);
+    Serial.println(buf);
 }
 
 void my_touchpad_read_new( lv_indev_drv_t * indev_driver, lv_indev_data_t * data ) {
@@ -219,7 +220,7 @@ void screen_fade_cb(void * parameter) {
     fade_active = true;
     unsigned long start = millis();
     uint8_t start_value = gfx.getBrightness();
-    uint8_t end_value = get_dash()->lights ? 64 : 255;
+    uint8_t end_value = get_dash()->running_lights ? 64 : 255;
     while (millis() - start < (SCREEN_FADE_TIME * 1000)) {
         unsigned long time_diff = millis() - start;
         uint32_t value = round(pow(time_diff / (SCREEN_FADE_TIME * 1000.0), 2) * (end_value - start_value) + start_value);
@@ -245,6 +246,86 @@ extern "C" void start_screen_fade(void) {
       0); /* Core where the task should run */
 }
 
+// void timer_handler(void * _) {
+//     while (true) {
+//         lv_timer_handler_run_in_period(5);
+//         vTaskDelay(1);
+//     }
+// }
+
+void setup_can() {
+    can.begin(Serial, 115200);
+
+    xTaskCreatePinnedToCore(
+      CAN_Task_loop, /* Function to implement the task */
+      "CAN Task", /* Name of the task */
+      16000,  /* Stack size in words */
+      NULL,  /* Task input parameter */
+      3,  /* Priority of the task */
+      &CAN_Task,  /* Task handle. */
+      0); /* Core where the task should run */
+}
+
+void process_standard() {
+    char c_id[4];
+    char c_length[2];
+    char c_data[17];
+    dbcc_time_stamp_t ts;
+
+    while (!Serial.available());
+
+    Serial.readBytes(c_id, 3);
+    uint32_t id = strtoul(c_id, NULL, 16);
+
+    while (!Serial.available());
+
+    Serial.readBytes(c_length, 1);
+    uint8_t length = strtoul(c_length, NULL, 10);
+
+    while (!Serial.available());
+
+    Serial.readBytes(c_data, length);
+    uint64_t data = strtoull(c_data, NULL, 16);
+    uint8_t * p_data = (uint8_t*)&data;
+
+    Serial.printf("%04X %02X %02X %02X %02X %02X %02X %02X %02X\n", id, p_data[0], p_data[1], p_data[2], p_data[3], p_data[4], p_data[5], p_data[6], p_data[7]);
+
+    if (decode_can_message(ts, id, p_data) < 0) {
+        get_changed()->activity |= ACTIVITY_ERROR;
+    } else {
+        get_changed()->activity |= ACTIVITY_SUCCESS;
+    }
+}
+
+TaskHandle_t CAN232_Task;
+
+void can_232_task(void * parameter) {
+    for (;;) {
+        if (Serial.available()) {
+            char cmd = Serial.read();
+            switch (cmd) {
+                case 't':
+                    process_standard();
+
+            }
+        }
+        vTaskDelay(1);
+    }
+}
+
+void setup_can232() {
+    Serial.begin(115200);
+
+    xTaskCreatePinnedToCore(
+      can_232_task, /* Function to implement the task */
+      "CAN232 Task", /* Name of the task */
+      16000,  /* Stack size in words */
+      NULL,  /* Task input parameter */
+      3,  /* Priority of the task */
+      &CAN232_Task,  /* Task handle. */
+      0); /* Core where the task should run */
+}
+
 void setup() {
     // Connect to Wi-Fi
     // WiFi.begin(ssid, password);
@@ -263,6 +344,8 @@ void setup() {
 
     // Serial.setRxBufferSize(SOC_UART_FIFO_LEN * 64);
     // Serial.begin(115200); 
+    setup_can();
+    // setup_can232();
 
     gfx.init_without_reset();
     // gfx.init();
@@ -314,22 +397,21 @@ void setup() {
 
     // delay(500);
 
-    can.begin(Serial, 115200);
     // really only need once - it's store in the eeprom
     // can.baudRate(SERIAL_RATE_115200);
 
-    xTaskCreatePinnedToCore(
-      CAN_Task_loop, /* Function to implement the task */
-      "CAN Task", /* Name of the task */
-      10000,  /* Stack size in words */
-      NULL,  /* Task input parameter */
-      2,  /* Priority of the task */
-      &CAN_Task,  /* Task handle. */
-      0); /* Core where the task should run */
+    // xTaskCreatePinnedToCore(
+    //   timer_handler, /* Function to implement the task */
+    //   "LVGL Timer Handler", /* Name of the task */
+    //   12000,  /* Stack size in words */
+    //   NULL,  /* Task input parameter */
+    //   0,  /* Priority of the task */
+    //   NULL,  /* Task handle. */
+    //   1); /* Core where the task should run */
 
 }
 
 void loop() {
-    lv_timer_handler();
+    lv_timer_handler_run_in_period(5);
     dash_loop();
 }

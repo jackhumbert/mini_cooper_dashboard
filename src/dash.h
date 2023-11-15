@@ -44,8 +44,27 @@ extern "C"
 {
 #endif
 
+enum light_state {
+    turning_off = 127,
+    turning_on = 160,
+
+};
+
 typedef struct dashboard_t {
 	pthread_mutex_t	mutex;
+
+    uint64_t x1F3;
+    uint64_t x316;
+    uint64_t x329;
+    uint64_t x501;
+    uint64_t x545;
+    uint64_t x565;
+    uint64_t x610;
+    uint64_t x613;
+    uint64_t x615;
+    uint64_t x618;
+    uint64_t x61A;
+    uint64_t x61F;
 
     double speed;
     uint8_t tire_pressure_set;
@@ -85,20 +104,26 @@ typedef struct dashboard_t {
     uint8_t engine_running2;
     uint8_t brake_switch;
 
+    // 0x545
     uint16_t fuel_consumption;
     uint8_t charge_light;
     uint8_t oil_pressure_light;
+    double oil_temp;
+    uint8_t unk7;
 
+    // 0x613
     double odometer;
     uint16_t running_clock;
     uint8_t fuel_level;
 
     uint8_t outside_temp;
 
-    uint8_t lights;
-    uint8_t headlights;
+    uint8_t brights;
+    uint8_t running_lights;
     uint8_t left_turn_signal;
     uint8_t right_turn_signal;
+    uint8_t handbrake;
+    uint8_t cruise;
 
     uint8_t left_door;
     uint8_t right_door;
@@ -111,65 +136,94 @@ typedef struct dashboard_t {
 typedef struct dashboard_changed_t {
     uint8_t activity;
 
-    uint8_t speed : 1;
-    uint8_t tire_pressure_set : 1;
-    uint8_t brake_pedal_pressed : 1;
+    uint8_t x1F3;
+    uint8_t x316;
+    uint8_t x329;
+    uint8_t x501;
+    uint8_t x545;
+    uint8_t x565;
+    uint8_t x610;
+    uint8_t x613;
+    uint8_t x615;
+    uint8_t x618;
+    uint8_t x61A;
+    uint8_t x61F;
 
-    uint8_t wheel_lf_speed : 1;
-    uint8_t wheel_rf_speed : 1;
-    uint8_t wheel_lr_speed : 1;
-    uint8_t wheel_rr_speed : 1;
+    // 0x153
+    uint8_t speed;
+    uint8_t tire_pressure_set;
+    uint8_t brake_pedal_pressed;
 
-    uint8_t steering_angle : 1;
-    uint8_t steering_velocity : 1;
-    uint8_t steering_angle_direction : 1;
-    uint8_t steering_velocity_direction : 1;
+    // 0x1F0
+    uint8_t wheel_lf_speed;
+    uint8_t wheel_rf_speed;
+    uint8_t wheel_lr_speed;
+    uint8_t wheel_rr_speed;
 
-    uint8_t rpm : 1;
-    uint8_t torque_loss_of_consumers : 1;
-    uint8_t torque_after_interventions : 1;
-    uint8_t torque_before_interventions : 1;
-    uint8_t key : 1;
-    uint8_t ignition_on_dme_ready : 1;
-    uint8_t starter : 1;
-    uint8_t ac_clutch : 1;
+    // 0x1F5
+    uint8_t steering_angle;
+    uint8_t steering_velocity;
+    uint8_t steering_angle_direction;
+    uint8_t steering_velocity_direction;
 
-    uint8_t driver_desired_torque : 1;
-    uint8_t throttle_position : 1;
-    uint8_t engine_temp : 1;
-    uint8_t cycling_number : 1;
-    uint8_t atmospheric_pressure : 1;
-    uint8_t brake_light_switch_error : 1;
-    uint8_t clutch_switch : 1;
-    uint8_t engine_running : 1;
-    uint8_t brake_light_switch : 1;
+    // 0x316
+    uint8_t rpm;
+    uint8_t torque_loss_of_consumers;
+    uint8_t torque_after_interventions;
+    uint8_t torque_before_interventions;
+    uint8_t key;
+    uint8_t ignition_on_dme_ready;
+    uint8_t starter;
+    uint8_t ac_clutch;
 
-    uint8_t throttle_position2 : 1;
-    uint8_t clutch : 1;
-    uint8_t engine_running2 : 1;
-    uint8_t brake_switch : 1;
+    // 0x329
+    uint8_t driver_desired_torque;
+    uint8_t throttle_position;
+    uint8_t engine_temp;
+    uint8_t cycling_number;
+    uint8_t atmospheric_pressure;
+    uint8_t brake_light_switch_error;
+    uint8_t clutch_switch;
+    uint8_t engine_running;
+    uint8_t brake_light_switch;
 
-    uint8_t fuel_consumption : 1;
-    uint8_t charge_light : 1;
-    uint8_t oil_pressure_light : 1;
+    uint8_t throttle_position2;
+    uint8_t clutch;
+    uint8_t engine_running2;
+    uint8_t brake_switch;
 
-    uint8_t odometer : 1;
-    uint8_t running_clock : 1;
-    uint8_t fuel_level : 1;
+    // 0x545
+    uint8_t fuel_consumption;
+    uint8_t charge_light;
+    uint8_t oil_pressure_light;
+    uint8_t oil_temp;
+    uint8_t unk7;
 
-    uint8_t outside_temp : 1;
+    uint8_t odometer;
+    uint8_t running_clock;
+    uint8_t fuel_level;
 
-    uint8_t lights : 1;
-    uint8_t headlights : 1;
-    uint8_t left_turn_signal : 1;
-    uint8_t right_turn_signal : 1;
+    uint8_t outside_temp;
 
-    uint8_t left_door : 1;
-    uint8_t right_door : 1;
+    uint8_t brights;
+    uint8_t running_lights;
+    uint8_t left_turn_signal;
+    uint8_t right_turn_signal;
+    uint8_t handbrake;
+    uint8_t cruise;
+
+    uint8_t left_door;
+    uint8_t right_door;
 } dashboard_changed_t;
 
 dashboard_t * get_dash(void);
+dashboard_t * get_cache(void);
+
+#define has_changed(t) (get_dash()->##t != get_cache()->##t)
+
 dashboard_changed_t * get_changed(void);
+
+#define update_changed(t) if (has_changed(t)) get_changed()->##t = 1
 
 lv_obj_t * dash_create(lv_disp_t *);
 void dash_loop(void);

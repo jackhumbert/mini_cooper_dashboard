@@ -19,8 +19,8 @@ static pthread_mutex_t log_file_mutex;
 
 SdFat sd;
 
-#define NUM_BUFFERS 8
-#define FILE_BUFFER_LENGTH 512 * 16
+#define NUM_BUFFERS 4
+#define FILE_BUFFER_LENGTH 512
 #if FILE_BUFFER_LENGTH > 256
 #define buffer_length_t uint16_t
 #else
@@ -29,26 +29,43 @@ SdFat sd;
 static uint8_t file_buffer[NUM_BUFFERS][FILE_BUFFER_LENGTH] = {{0}};
 static buffer_length_t file_buffer_length[NUM_BUFFERS] = {0};
 static pthread_mutex_t buffer_mutex[NUM_BUFFERS];
+static uint8_t active_buffer = 0;
 
 static void buffer_write(uint8_t * buffer, buffer_length_t length) {
-    for (int i = 0; i < NUM_BUFFERS; i = (i + 1) % NUM_BUFFERS) {
-        if (FILE_BUFFER_LENGTH > (file_buffer_length[i] + length) && pthread_mutex_trylock(&buffer_mutex[i]) == 0) {
-            memcpy(&file_buffer[i][file_buffer_length[i]], buffer, length);
-            file_buffer_length[i] += length;
+    uint8_t * pos = buffer;
+    buffer_length_t bytes_left = length;
+    for (int i = active_buffer; i < NUM_BUFFERS; i = (i + 1) % NUM_BUFFERS) {
+        if (FILE_BUFFER_LENGTH > file_buffer_length[i]) {
+            pthread_mutex_lock(&buffer_mutex[i]);
+            buffer_length_t bytes_to_write = bytes_left;
+            if (file_buffer_length[i] + bytes_left > FILE_BUFFER_LENGTH) {
+                bytes_to_write = FILE_BUFFER_LENGTH - file_buffer_length[i];
+            }
+            bytes_left -= bytes_to_write;
+            memcpy(&file_buffer[i][file_buffer_length[i]], pos, bytes_to_write);
+            pos += bytes_to_write;
+            file_buffer_length[i] += bytes_to_write;
             pthread_mutex_unlock(&buffer_mutex[i]);
-            return;
+            if (!bytes_left) {
+                if (file_buffer_length[i] < FILE_BUFFER_LENGTH) {
+                    active_buffer = i;
+                } else {
+                    active_buffer = (i + 1) % NUM_BUFFERS;
+                }
+                return;
+            }
         }
         vTaskDelay(1);
     }
     // Serial.println("Buffers are full or busy");
-    get_changed()->activity |= ACTIVITY_ERROR;
+    // get_changed()->activity |= ACTIVITY_ERROR;
 }
 
 static void rb_flusher(void * parameter) {
     while (true) {
         for (int i = 0; i < NUM_BUFFERS; i++) {
             // if (file_buffer_length[i] && pthread_mutex_trylock(&buffer_mutex[i]) == 0) {
-            if (file_buffer_length[i]) {
+            if (file_buffer_length[i] == FILE_BUFFER_LENGTH) {
                 pthread_mutex_lock(&buffer_mutex[i]);
                 if (log_file.write(file_buffer[i], file_buffer_length[i]) == file_buffer_length[i]) {
                     log_file.flush();
@@ -114,7 +131,7 @@ void sd_card_init() {
         "writeTask", // String with name of task.
         5000, // Stack size in bytes. This seems enough for it not to crash.
         NULL, // Parameter passed as input of the task.
-        2, // Priority of the task.
+        1, // Priority of the task.
         NULL, // Task handle.
         1);
 

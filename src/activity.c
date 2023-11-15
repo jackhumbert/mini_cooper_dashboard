@@ -6,6 +6,8 @@ static lv_obj_t * success_led;
 static lv_obj_t * failure_led;
 static lv_anim_t s_a;
 static lv_anim_t f_a;
+static uint8_t success_brightness = 0;
+static uint8_t failure_brightness = 0;
 
 static void activity_success_callback(void * indic, int32_t v) {
     lv_led_set_brightness(success_led, v / 2.0 * 255);
@@ -16,8 +18,18 @@ static void activity_failure_callback(void * indic, int32_t v) {
 }
 
 void activity_update(uint8_t activity) {
-    lv_led_set_brightness(success_led, (activity & ACTIVITY_SUCCESS != 0) * 255);
-    lv_led_set_brightness(failure_led, (activity & ACTIVITY_ERROR != 0) * 255);
+    if (activity & ACTIVITY_SUCCESS) {
+        success_brightness = 255;
+    } else {
+        success_brightness /= 2;
+    }
+    if (activity & ACTIVITY_ERROR) {
+        failure_brightness = 255;
+    } else {
+        failure_brightness /= 2;
+    }
+    lv_led_set_brightness(success_led, success_brightness);
+    lv_led_set_brightness(failure_led, failure_brightness);
 }
 
 void activity_create(lv_obj_t * parent) {

@@ -76,8 +76,8 @@ typedef PREPACK struct {
 } POSTPACK can_0x1f0_ABS_1_t;
 
 typedef PREPACK struct {
+	uint16_t MotionSensing; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK1_unk4; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t IDK1_unk6; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK1_unk1; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK1_unk2; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK1_unk3; /* scaling 1.0, offset 0.0, units none  */
@@ -94,7 +94,7 @@ typedef PREPACK struct {
 } POSTPACK can_0x1f5_Steering_Angle_Sensor_t;
 
 typedef PREPACK struct {
-	uint64_t x1F8Sig352; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t BrakePressure; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x1f8_x1F8_t;
 
 typedef PREPACK struct {
@@ -192,8 +192,19 @@ typedef PREPACK struct {
 
 typedef PREPACK struct {
 	uint16_t Fuel_Consumption; /* scaling 1.0, offset 0.0, units mpg  */
+	uint8_t OilTemp; /* scaling 1.0, offset -48.4, units deg_c  */
+	uint8_t Unk7; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t CheckGasCap; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t OilLevel; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t OverheatLight; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t CheckEngineLight; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t RPM6_5k; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t RPM5_5k; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Charge_Light; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Oil_Pressure_Light; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t RPM7k; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t CruiseLight; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t EML; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x545_DME4_t;
 
 typedef enum {
@@ -208,12 +219,13 @@ typedef enum {
 
 typedef PREPACK struct {
 	uint8_t IDK2_unk4; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t IDK2_unk7; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t Unk6; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t Unk7; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK2_unk1; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t IDK2_unk6; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t IDK2_unk5; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK2_unk2; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK2_unk3; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t IDK2_unk5; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t IDK2_unk6; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x565_x565_t;
 
 typedef PREPACK struct {
@@ -223,11 +235,16 @@ typedef PREPACK struct {
 typedef PREPACK struct {
 	uint16_t Odometer; /* scaling 10.0, offset 0.0, units none  */
 	uint16_t Running_Clock; /* scaling 1.0, offset 0.0, units Seconds  */
+	uint16_t Unk5; /* scaling 1.0, offset 0.0, units none  */
+	uint16_t Unk6; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Fuel_Level; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x613_Instrument_Cluster_t;
 
 typedef PREPACK struct {
 	uint8_t OutsideTemp; /* scaling 1.0, offset 0.0, units deg_c  */
+	uint8_t AC_Status; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t RunningLights2; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t Handbrake2; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x615_x615_t;
 
 typedef PREPACK struct {
@@ -241,11 +258,14 @@ typedef PREPACK struct {
 } POSTPACK can_0x61a_x61A_t;
 
 typedef PREPACK struct {
+	uint8_t InteriorLightLevel; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t AutomaticLights; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t LeftTurnSignal; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t Brights; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t Handbrake; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t RightTurnSignal; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t Headlights; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t Lights; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t Cruise; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t RunningLights; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t LeftTurnSignal; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x61f_x61F_t;
 
 typedef PREPACK struct {
@@ -365,10 +385,10 @@ int decode_can_0x1f0_Wheel_4_Right_Rear_Speed(const can_obj_e46_h_t *o, double *
 int encode_can_0x1f0_Wheel_4_Right_Rear_Speed(can_obj_e46_h_t *o, double in);
 
 
+int decode_can_0x1f3_MotionSensing(const can_obj_e46_h_t *o, uint16_t *out);
+int encode_can_0x1f3_MotionSensing(can_obj_e46_h_t *o, uint16_t in);
 int decode_can_0x1f3_IDK1_unk4(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x1f3_IDK1_unk4(can_obj_e46_h_t *o, uint8_t in);
-int decode_can_0x1f3_IDK1_unk6(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x1f3_IDK1_unk6(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x1f3_IDK1_unk1(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x1f3_IDK1_unk1(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x1f3_IDK1_unk2(const can_obj_e46_h_t *o, uint8_t *out);
@@ -393,8 +413,8 @@ int decode_can_0x1f5_Steering_Angle_Velocity_Direction(const can_obj_e46_h_t *o,
 int encode_can_0x1f5_Steering_Angle_Velocity_Direction(can_obj_e46_h_t *o, uint8_t in);
 
 
-int decode_can_0x1f8_x1F8Sig352(const can_obj_e46_h_t *o, uint64_t *out);
-int encode_can_0x1f8_x1F8Sig352(can_obj_e46_h_t *o, uint64_t in);
+int decode_can_0x1f8_BrakePressure(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x1f8_BrakePressure(can_obj_e46_h_t *o, uint8_t in);
 
 
 int decode_can_0x316_RPM(const can_obj_e46_h_t *o, double *out);
@@ -455,26 +475,50 @@ int encode_can_0x501_x501Sig34(can_obj_e46_h_t *o, uint64_t in);
 
 int decode_can_0x545_Fuel_Consumption(const can_obj_e46_h_t *o, uint16_t *out);
 int encode_can_0x545_Fuel_Consumption(can_obj_e46_h_t *o, uint16_t in);
+int decode_can_0x545_OilTemp(const can_obj_e46_h_t *o, double *out);
+int encode_can_0x545_OilTemp(can_obj_e46_h_t *o, double in);
+int decode_can_0x545_Unk7(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x545_Unk7(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x545_CheckGasCap(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x545_CheckGasCap(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x545_OilLevel(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x545_OilLevel(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x545_OverheatLight(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x545_OverheatLight(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x545_CheckEngineLight(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x545_CheckEngineLight(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x545_RPM6_5k(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x545_RPM6_5k(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x545_RPM5_5k(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x545_RPM5_5k(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x545_Charge_Light(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x545_Charge_Light(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x545_Oil_Pressure_Light(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x545_Oil_Pressure_Light(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x545_RPM7k(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x545_RPM7k(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x545_CruiseLight(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x545_CruiseLight(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x545_EML(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x545_EML(can_obj_e46_h_t *o, uint8_t in);
 
 
 int decode_can_0x565_IDK2_unk4(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x565_IDK2_unk4(can_obj_e46_h_t *o, uint8_t in);
-int decode_can_0x565_IDK2_unk7(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x565_IDK2_unk7(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x565_Unk6(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x565_Unk6(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x565_Unk7(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x565_Unk7(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x565_IDK2_unk1(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x565_IDK2_unk1(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x565_IDK2_unk6(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x565_IDK2_unk6(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x565_IDK2_unk5(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x565_IDK2_unk5(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x565_IDK2_unk2(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x565_IDK2_unk2(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x565_IDK2_unk3(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x565_IDK2_unk3(can_obj_e46_h_t *o, uint8_t in);
-int decode_can_0x565_IDK2_unk5(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x565_IDK2_unk5(can_obj_e46_h_t *o, uint8_t in);
-int decode_can_0x565_IDK2_unk6(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x565_IDK2_unk6(can_obj_e46_h_t *o, uint8_t in);
 
 
 int decode_can_0x610_x610Sig39(const can_obj_e46_h_t *o, uint64_t *out);
@@ -485,12 +529,22 @@ int decode_can_0x613_Odometer(const can_obj_e46_h_t *o, double *out);
 int encode_can_0x613_Odometer(can_obj_e46_h_t *o, double in);
 int decode_can_0x613_Running_Clock(const can_obj_e46_h_t *o, uint16_t *out);
 int encode_can_0x613_Running_Clock(can_obj_e46_h_t *o, uint16_t in);
+int decode_can_0x613_Unk5(const can_obj_e46_h_t *o, uint16_t *out);
+int encode_can_0x613_Unk5(can_obj_e46_h_t *o, uint16_t in);
+int decode_can_0x613_Unk6(const can_obj_e46_h_t *o, uint16_t *out);
+int encode_can_0x613_Unk6(can_obj_e46_h_t *o, uint16_t in);
 int decode_can_0x613_Fuel_Level(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x613_Fuel_Level(can_obj_e46_h_t *o, uint8_t in);
 
 
 int decode_can_0x615_OutsideTemp(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x615_OutsideTemp(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x615_AC_Status(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x615_AC_Status(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x615_RunningLights2(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x615_RunningLights2(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x615_Handbrake2(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x615_Handbrake2(can_obj_e46_h_t *o, uint8_t in);
 
 
 int decode_can_0x618_IDK3unk1(const can_obj_e46_h_t *o, uint8_t *out);
@@ -505,16 +559,22 @@ int encode_can_0x618_IDK3unk4(can_obj_e46_h_t *o, uint8_t in);
 
 
 
+int decode_can_0x61f_InteriorLightLevel(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61f_InteriorLightLevel(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x61f_AutomaticLights(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x61f_AutomaticLights(can_obj_e46_h_t *o, uint8_t in);
-int decode_can_0x61f_LeftTurnSignal(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x61f_LeftTurnSignal(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x61f_Brights(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61f_Brights(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x61f_Handbrake(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61f_Handbrake(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x61f_RightTurnSignal(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x61f_RightTurnSignal(can_obj_e46_h_t *o, uint8_t in);
-int decode_can_0x61f_Headlights(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x61f_Headlights(can_obj_e46_h_t *o, uint8_t in);
-int decode_can_0x61f_Lights(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x61f_Lights(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x61f_Cruise(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61f_Cruise(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x61f_RunningLights(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61f_RunningLights(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x61f_LeftTurnSignal(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61f_LeftTurnSignal(can_obj_e46_h_t *o, uint8_t in);
 
 
 #ifdef __cplusplus

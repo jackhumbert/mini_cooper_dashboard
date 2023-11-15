@@ -43,70 +43,92 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
         switch (id) {
             case 0x153:
                 decode_can_0x153_Speed(&can_data, &get_dash()->speed);
-                get_changed()->speed = 1;
-                // if (can_data.can_0x153_ASC_1.Speed != get_dash()->speed) {
-                //     get_dash()->speed = can_data.can_0x153_ASC_1.Speed;
-                //     get_changed()->speed = 1;
-                // }
+                update_changed(speed);
                 return 0;
             case 0x1F0: 
-            case 0x1F3: return 0; // unk4 something that counts down
+            case 0x1F3:  // unk4 something that counts down
+                get_dash()->x1F3 = *(uint64_t*)data;
+                get_changed()->x1F3 = 1;
+                return 0;
             case 0x1F5: return 0; // same as 0x610
             case 0x1F8: return 0; // never changes?
+            case 0x316:
+                get_dash()->x316 = *(uint64_t*)data;
+                get_changed()->x316 = 1;
+                decode_can_0x316_RPM(&can_data, &get_dash()->rpm);
+                update_changed(rpm);
+                decode_can_0x316_Key(&can_data, &get_dash()->key);
+                update_changed(key);
+                decode_can_0x316_Starter(&can_data, &get_dash()->starter);
+                update_changed(starter);
+                return 0;
             case 0x329:
+                get_dash()->x329 = *(uint64_t*)data;
+                get_changed()->x329 = 1;
                 decode_can_0x329_Engine_Temp(&can_data, &get_dash()->engine_temp);
-                get_changed()->engine_temp = 1;
+                update_changed(engine_temp);
                 decode_can_0x329_Clutch_Switch(&can_data, &get_dash()->clutch_switch);
                 decode_can_0x329_Throttle_Position(&can_data, &get_dash()->throttle_position);
-                get_changed()->throttle_position = 1;
-                return 0;
-            case 0x316:
-                decode_can_0x316_RPM(&can_data, &get_dash()->rpm);
-                // if (can_data.can_0x316_DME1.RPM != get_dash()->rpm) {
-                    // get_dash()->rpm = can_data.can_0x316_DME1.RPM;
-                    get_changed()->rpm = 1;
-                // }
-                if (can_data.can_0x316_DME1.Key != get_dash()->key) {
-                    get_dash()->key = can_data.can_0x316_DME1.Key;
-                    get_changed()->key = 1;
-                }
-                if (can_data.can_0x316_DME1.Starter != get_dash()->starter) {
-                    get_dash()->starter = can_data.can_0x316_DME1.Starter;
-                    get_changed()->starter = 1;
-                }
+                update_changed(throttle_position);
                 return 0;
             case 0x336: return 0;
             case 0x338:
                 decode_can_0x338_Clutch(&can_data, &get_dash()->clutch);
                 return 0;
-            case 0x501: return 0;
-            case 0x545: return 0;
-            case 0x565: return 0;
-            case 0x610: return 0;
+            case 0x501: 
+                get_dash()->x501 = *(uint64_t*)data;
+                get_changed()->x501 = 1;
+                return 0;
+            case 0x545: 
+                decode_can_0x545_OilTemp(&can_data, &get_dash()->oil_temp);
+                update_changed(oil_temp);
+                decode_can_0x545_Unk7(&can_data, &get_dash()->unk7);
+                update_changed(unk7);
+                get_dash()->x545 = *(uint64_t*)data;
+                get_changed()->x545 = 1;
+                return 0;
+            case 0x565: 
+                get_dash()->x565 = *(uint64_t*)data;
+                get_changed()->x565 = 1;
+                return 0;
+            case 0x610: 
+                get_dash()->x610 = *(uint64_t*)data;
+                get_changed()->x610 = 1;
+                return 0;
             case 0x613:
+                get_dash()->x613 = *(uint64_t*)data;
+                get_changed()->x613 = 1;
                 decode_can_0x613_Fuel_Level(&can_data, &get_dash()->fuel_level);
-                get_changed()->fuel_level = 1;
+                update_changed(fuel_level);
                 decode_can_0x613_Running_Clock(&can_data, &get_dash()->running_clock);
-                get_changed()->running_clock = 1;
+                update_changed(running_clock);
                 return 0;
             case 0x615:
+                get_dash()->x615 = *(uint64_t*)data;
+                get_changed()->x615 = 1;
                 decode_can_0x615_OutsideTemp(&can_data, &get_dash()->outside_temp);
-                get_changed()->outside_temp = 1;
+                update_changed(outside_temp);
                 return 0;
             case 0x618: return 0;
+                get_dash()->x618 = *(uint64_t*)data;
+                get_changed()->x618 = 1;
             case 0x61A: return 0;
+                get_dash()->x61A = *(uint64_t*)data;
+                get_changed()->x61A = 1;
             case 0x61F: 
-                if (can_data.can_0x61f_x61F.Lights != get_dash()->lights) {
-                    get_dash()->lights = can_data.can_0x61f_x61F.Lights;
-                    get_changed()->lights = 1;
+                get_dash()->x61F = *(uint64_t*)data;
+                get_changed()->x61F = 1;
+                if (can_data.can_0x61f_x61F.Handbrake != get_dash()->handbrake) {
+                    get_dash()->handbrake = can_data.can_0x61f_x61F.Handbrake;
+                    get_changed()->handbrake = 1;
                 }
-                if (can_data.can_0x61f_x61F.Headlights != get_dash()->headlights) {
-                    get_dash()->headlights = can_data.can_0x61f_x61F.Headlights;
-                    get_changed()->headlights = 1;
+                if (can_data.can_0x61f_x61F.Brights != get_dash()->brights) {
+                    get_dash()->brights = can_data.can_0x61f_x61F.Brights;
+                    get_changed()->brights = 1;
                 }
-                if (can_data.can_0x61f_x61F.Lights != get_dash()->lights) {
-                    get_dash()->lights = can_data.can_0x61f_x61F.Lights;
-                    get_changed()->lights = 1;
+                if (can_data.can_0x61f_x61F.RunningLights != get_dash()->running_lights) {
+                    get_dash()->running_lights = can_data.can_0x61f_x61F.RunningLights;
+                    get_changed()->running_lights = 1;
                 }
                 if (can_data.can_0x61f_x61F.LeftTurnSignal != get_dash()->left_turn_signal) {
                     get_dash()->left_turn_signal = can_data.can_0x61f_x61F.LeftTurnSignal;
@@ -115,6 +137,10 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 if (can_data.can_0x61f_x61F.RightTurnSignal != get_dash()->right_turn_signal) {
                     get_dash()->right_turn_signal = can_data.can_0x61f_x61F.RightTurnSignal;
                     get_changed()->right_turn_signal = 1;
+                }
+                if (can_data.can_0x61f_x61F.Cruise != get_dash()->cruise) {
+                    get_dash()->cruise = can_data.can_0x61f_x61F.Cruise;
+                    get_changed()->cruise = 1;
                 }
                 return 0;
         }

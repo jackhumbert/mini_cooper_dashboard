@@ -96,7 +96,7 @@
 /*Number of the intermediate memory buffer used during rendering and other internal processing mechanisms.
  *You will see an error log message if there wasn't enough buffers. */
 // #define LV_MEM_BUF_MAX_NUM 16
-#define LV_MEM_BUF_MAX_NUM 80
+#define LV_MEM_BUF_MAX_NUM 160
 
 /*Use the standard `memcpy` and `memset` instead of LVGL's own functions. (Might or might not be faster).*/
 #define LV_MEMCPY_MEMSET_STD 0
@@ -398,8 +398,8 @@
 #define LV_FONT_SIMSUN_16_CJK            0  /*1000 most common CJK radicals*/
 
 /*Pixel perfect monospace fonts*/
-#define LV_FONT_UNSCII_8  1
-#define LV_FONT_UNSCII_16 1
+#define LV_FONT_UNSCII_8  0
+#define LV_FONT_UNSCII_16 0
 
 /*Optionally declare custom fonts here.
  *You can use these fonts as default font too and they will be available globally.
@@ -486,11 +486,11 @@
 
 #define LV_USE_BTNMATRIX  1
 
-#define LV_USE_CANVAS     1
+#define LV_USE_CANVAS     0
 
 #define LV_USE_CHECKBOX   1
 
-#define LV_USE_DROPDOWN   1   /*Requires: lv_label*/
+#define LV_USE_DROPDOWN   0   /*Requires: lv_label*/
 
 #define LV_USE_IMG        1   /*Requires: lv_label*/
 
@@ -516,7 +516,7 @@
     #define LV_TEXTAREA_DEF_PWD_SHOW_TIME 1500    /*ms*/
 #endif
 
-#define LV_USE_TABLE      1
+#define LV_USE_TABLE      0
 
 /*==================
  * EXTRA COMPONENTS
@@ -525,7 +525,7 @@
 /*-----------
  * Widgets
  *----------*/
-#define LV_USE_CALENDAR   1
+#define LV_USE_CALENDAR   0
 #if LV_USE_CALENDAR
     #define LV_CALENDAR_WEEK_STARTS_MONDAY 0
     #if LV_CALENDAR_WEEK_STARTS_MONDAY
@@ -539,13 +539,13 @@
     #define LV_USE_CALENDAR_HEADER_DROPDOWN 1
 #endif  /*LV_USE_CALENDAR*/
 
-#define LV_USE_CHART      1
+#define LV_USE_CHART      0
 
-#define LV_USE_COLORWHEEL 1
+#define LV_USE_COLORWHEEL 0
 
 #define LV_USE_IMGBTN     1
 
-#define LV_USE_KEYBOARD   1
+#define LV_USE_KEYBOARD   0
 
 #define LV_USE_LED        1
 
@@ -557,11 +557,11 @@
 
 #define LV_USE_MSGBOX     1
 
-#define LV_USE_SPINBOX    1
+#define LV_USE_SPINBOX    0
 
-#define LV_USE_SPINNER    1
+#define LV_USE_SPINNER    0
 
-#define LV_USE_TABVIEW    1
+#define LV_USE_TABVIEW    0
 
 #define LV_USE_TILEVIEW   1
 
@@ -595,7 +595,7 @@
 #define LV_USE_THEME_BASIC 1
 
 /*A theme designed for monochrome displays*/
-#define LV_USE_THEME_MONO 1
+#define LV_USE_THEME_MONO 0
 
 /*-----------
  * Layouts
@@ -627,8 +627,8 @@
     //     #define LV_FS_FATFS_LETTER 'A'     /*Set an upper cased letter on which the drive will accessible (e.g. 'A')*/
     //     #define LV_FS_FATFS_CACHE_SIZE 0    /*>0 to cache this number of bytes in lv_fs_read()*/
     // #endif
-    #define LV_USE_FS_LITTLEFS 1
-    #define LV_FS_LITTLEFS_LETTER 'A'
+    // #define LV_USE_FS_LITTLEFS 1
+    // #define LV_FS_LITTLEFS_LETTER 'A'
 #endif
 
 // /*API for open, read, etc*/
@@ -655,7 +655,7 @@
 // #endif
 
 /*PNG decoder library*/
-#define LV_USE_PNG 1
+#define LV_USE_PNG 0
 
 /*BMP decoder library*/
 #define LV_USE_BMP 0
@@ -703,7 +703,7 @@
  *----------*/
 
 /*1: Enable API to take snapshot for object*/
-#define LV_USE_SNAPSHOT 1
+#define LV_USE_SNAPSHOT 0
 
 /*1: Enable Monkey test*/
 #define LV_USE_MONKEY   0
