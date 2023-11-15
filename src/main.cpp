@@ -92,12 +92,23 @@ static bool validate_id(uint32_t id) {
     return (id >= 0x153 && id <= 0xA00);
 }
 
+static bool filter_id(uint32_t id) {
+   switch (id) {
+        case 0x1F0:
+        case 0x1F8:
+            return true;
+    }
+    return false;
+}
+
 TaskHandle_t process_packet_task;
+static uint8_t buffer[12 + 8];
+static uint8_t * packet_data;
 
 void process_packet(void * _) {
     uint32_t id;
-    uint8_t data[12];
-    memcpy(data, process_buffer, 12);
+    uint8_t * data = packet_data; 
+    // memcpy(data, process_buffer, 12);
 
     for(int i=0; i<4; i++) {
         id <<= 8;
@@ -122,7 +133,16 @@ void process_packet(void * _) {
     // vTaskDelete(process_packet_task);
 }
 
-static uint8_t buffer[12];
+uint32_t get_id(uint8_t * data) {
+    uint32_t id = 0;
+    
+    for(int i=0; i<4; i++) {
+        id <<= 8;
+        id += data[i];
+    }
+    return id;
+}
+
 static int hangers = 0;
 
 void CAN_Task_loop(void * parameter) {
@@ -132,14 +152,24 @@ void CAN_Task_loop(void * parameter) {
             unsigned long timer_s = millis();
             Serial.readBytes(buffer, 12);
             uint32_t id = 0;
-            
-            for(int i=0; i<4; i++) {
-                id <<= 8;
-                id += buffer[i];
-            }
+            uint8_t offset = 0;
 
-            if (validate_id(id)) {
-                memcpy(process_buffer, buffer, 12);
+            while(!validate_id(get_id(buffer + offset)) && offset < 8)
+                offset++;
+            
+            if (validate_id(get_id(buffer + offset))) {     
+                packet_data = buffer + offset;
+                id = get_id(packet_data);
+                if (filter_id(id)) {
+                    continue;
+                }       
+                if (offset) {
+                    while (Serial.available() < offset)
+                        vTaskDelay(1);
+                    Serial.readBytes(buffer + 12, offset);
+                }
+
+                // memcpy(process_buffer, buffer, 12);
                 process_packet(NULL);
                 // xTaskCreatePinnedToCore(
                 //     process_packet, /* Function to implement the task */
@@ -155,19 +185,19 @@ void CAN_Task_loop(void * parameter) {
                     xTaskGetTickCount() / 1000.0, id,
                     buffer[4], buffer[5], buffer[6], buffer[7], buffer[8], buffer[9], buffer[10], buffer[11]);
             }
-        } else {
-            if (hangers == avail && avail != 0) {
-                get_changed()->activity |= ACTIVITY_ERROR;
-                Serial.readBytes(buffer, avail);
-                sd_card_logf("%08.3f CER DISCARD:", xTaskGetTickCount() / 1000.0);
-                for (int i = 0; i < avail; i++)
-                    sd_card_logf(" %02X", buffer[i]);
-                sd_card_logf("\n");
-                hangers = 0;
-            } else {
-                hangers = avail;
-            }
-        }
+        } // else {
+        //     if (hangers == avail && avail != 0) {
+        //         get_changed()->activity |= ACTIVITY_ERROR;
+        //         Serial.readBytes(buffer, avail);
+        //         sd_card_logf("%08.3f CER DISCARD:", xTaskGetTickCount() / 1000.0);
+        //         for (int i = 0; i < avail; i++)
+        //             sd_card_logf(" %02X", buffer[i]);
+        //         sd_card_logf("\n");
+        //         hangers = 0;
+        //     } else {
+        //         hangers = avail;
+        //     }
+        // }
         vTaskDelay(1);
     }
 }

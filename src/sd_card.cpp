@@ -19,18 +19,8 @@ static pthread_mutex_t log_file_mutex;
 
 SdFat sd;
 
-#define NUM_BUFFERS 2
-#if NUM_BUFFERS > 16
-    #define buffer_index_t uint32_t
-#else
-#if NUM_BUFFERS > 8
-    #define buffer_index_t uint16_t
-#else
-    #define buffer_index_t uint8_t
-#endif
-#endif
-
-#define FILE_BUFFER_LENGTH 2048
+#define NUM_BUFFERS 8
+#define FILE_BUFFER_LENGTH 512 * 16
 #if FILE_BUFFER_LENGTH > 256
 #define buffer_length_t uint16_t
 #else
@@ -38,61 +28,38 @@ SdFat sd;
 #endif
 static uint8_t file_buffer[NUM_BUFFERS][FILE_BUFFER_LENGTH] = {{0}};
 static buffer_length_t file_buffer_length[NUM_BUFFERS] = {0};
-static buffer_index_t buffer_mutex = 0;
+static pthread_mutex_t buffer_mutex[NUM_BUFFERS];
 
 static void buffer_write(uint8_t * buffer, buffer_length_t length) {
-    buffer_index_t buffer_index = 0;
-
-    pthread_mutex_lock(&log_file_mutex);
-    while ((buffer_mutex & (1 << buffer_index) || FILE_BUFFER_LENGTH <= (file_buffer_length[buffer_index] + length))
-        && buffer_index < NUM_BUFFERS) {
-            buffer_index++;
+    for (int i = 0; i < NUM_BUFFERS; i = (i + 1) % NUM_BUFFERS) {
+        if (FILE_BUFFER_LENGTH > (file_buffer_length[i] + length) && pthread_mutex_trylock(&buffer_mutex[i]) == 0) {
+            memcpy(&file_buffer[i][file_buffer_length[i]], buffer, length);
+            file_buffer_length[i] += length;
+            pthread_mutex_unlock(&buffer_mutex[i]);
+            return;
+        }
+        vTaskDelay(1);
     }
-    if (buffer_index < NUM_BUFFERS) {
-        buffer_mutex |= (1 << buffer_index);
-        pthread_mutex_unlock(&log_file_mutex);
-
-        memcpy(&file_buffer[buffer_index][file_buffer_length[buffer_index]], buffer, length);
-        file_buffer_length[buffer_index] += length;
-
-        pthread_mutex_lock(&log_file_mutex);
-        buffer_mutex &= ~(1 << buffer_index);
-        pthread_mutex_unlock(&log_file_mutex);
-    } else {
-        pthread_mutex_unlock(&log_file_mutex);
-        // all buffers busy
-        // add_message("All buffers busy");
-        // Serial.println("All buffers busy");
-        get_changed()->activity |= ACTIVITY_ERROR;
-    }
+    // Serial.println("Buffers are full or busy");
+    get_changed()->activity |= ACTIVITY_ERROR;
 }
 
 static void rb_flusher(void * parameter) {
     while (true) {
-        // if (rb.bytesUsed() > 512 && !log_file.isBusy()) {
-        // pthread_mutex_lock(&log_file_mutex);
-        buffer_index_t buffer_index = 0;
-        while (buffer_index < NUM_BUFFERS) {
-            pthread_mutex_lock(&log_file_mutex);
-            if (file_buffer_length[buffer_index] && (buffer_mutex & (1 << buffer_index)) == 0) {
-                buffer_mutex |= (1 << buffer_index);
-                pthread_mutex_unlock(&log_file_mutex);
-                
-                if (log_file.write(file_buffer[buffer_index], file_buffer_length[buffer_index]) == file_buffer_length[buffer_index]) {
+        for (int i = 0; i < NUM_BUFFERS; i++) {
+            // if (file_buffer_length[i] && pthread_mutex_trylock(&buffer_mutex[i]) == 0) {
+            if (file_buffer_length[i]) {
+                pthread_mutex_lock(&buffer_mutex[i]);
+                if (log_file.write(file_buffer[i], file_buffer_length[i]) == file_buffer_length[i]) {
                     log_file.flush();
                 } else {
                     // add_message_fmt("Logging error: %02X", log_file.getError());
                     // Serial.printf("Logging error: %02X\n", log_file.getError());
                     get_changed()->activity |= ACTIVITY_ERROR;
                 }
-                file_buffer_length[buffer_index] = 0;
-
-                pthread_mutex_lock(&log_file_mutex);
-                buffer_mutex &= ~(1 << buffer_index);
+                file_buffer_length[i] = 0;
+                pthread_mutex_unlock(&buffer_mutex[i]);
             }
-            pthread_mutex_unlock(&log_file_mutex);
-
-            buffer_index++;
         }
         // pthread_mutex_unlock(&log_file_mutex);
         vTaskDelay(1); // Feed the watchdog. It will trigger and crash if we dont give it some time
@@ -103,7 +70,7 @@ void sd_card_init() {
     SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
     // // delay(100);
 	pthread_mutex_init(&log_file_mutex, NULL);
-    if (!sd.begin(SD_CS)) {
+    if (!sd.begin(SD_CS, SD_SCK_MHZ(10))) {
         add_message("SD Card Mount Failed");
         return;
     }
@@ -134,9 +101,12 @@ void sd_card_init() {
     add_message_fmt("Log file: %s", log_filename);
     log_file = sd.open(log_filename, O_WRONLY | O_CREAT | O_TRUNC);
     // log_file.preAllocate(10 * 25000 * 60);
+
+    for (int i = 0; i < NUM_BUFFERS; i++) {
+        pthread_mutex_init(&buffer_mutex[i], NULL);
+    }
     
     // log_file.setBufferSize(1024 * 1024);
-    sd_card_logf("%08.3f CXX R53 Custom Dash by Jack Humbert\n", xTaskGetTickCount() / 1000.0);
     // log_file.flush();
 
     xTaskCreatePinnedToCore(
@@ -144,9 +114,11 @@ void sd_card_init() {
         "writeTask", // String with name of task.
         5000, // Stack size in bytes. This seems enough for it not to crash.
         NULL, // Parameter passed as input of the task.
-        0, // Priority of the task.
+        2, // Priority of the task.
         NULL, // Task handle.
         1);
+
+    sd_card_logf("%08.3f CXX R53 Custom Dash by Jack Humbert\n", xTaskGetTickCount() / 1000.0);
 }
 
 void sd_card_logf(const char * format, ...) {

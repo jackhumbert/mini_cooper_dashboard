@@ -18,6 +18,7 @@
 
 static dashboard_t dashboard;
 static dashboard_changed_t dashboard_changed;
+static dashboard_changed_t dashboard_queued;
 static lv_obj_t * canvas;
 
 dashboard_t * get_dash(void) {
@@ -185,48 +186,40 @@ extern void start_screen_fade(void);
 
 void dash_loop(void) {
     pthread_mutex_lock(&get_dash()->mutex);
-    if (get_changed()->speed) {
-        speed_update();
-        get_changed()->speed = 0;
-    }
-    if (get_changed()->engine_temp) {
-        coolant_update();
-        get_changed()->engine_temp = 0;
-    }
-    if (get_changed()->rpm) {
-        tach3_update();
-        get_changed()->rpm = 0;
-    }
-    if (get_changed()->fuel_level) {
-        gas_update();
-        get_changed()->fuel_level = 0;
-    }
-    if (get_changed()->running_clock) {
-        clock_update();
-        get_changed()->running_clock = 0;
-    }
-    if (get_changed()->outside_temp) {
-        temp_update();
-        get_changed()->outside_temp = 0;
-    }
-    if (get_changed()->left_turn_signal) {
-        turn_signal_update();
-        get_changed()->left_turn_signal = 0;
-    }
-    if (get_changed()->right_turn_signal) {
-        turn_signal_update();
-        get_changed()->right_turn_signal = 0;
-    }
-    if (get_changed()->lights) {
-        start_screen_fade();
-        get_changed()->lights = 0;
-    }
-    if (get_changed()->headlights) {
-        car_view_update();
-        get_changed()->headlights = 0;
-    }
-    activity_update(get_changed()->activity);
-    get_changed()->activity = 0;
+    memcpy(&dashboard_queued, &dashboard_changed, sizeof(dashboard_changed_t));
+    memset(&dashboard_changed, 0, sizeof(dashboard_changed_t));
 	pthread_mutex_unlock(&get_dash()->mutex);
+
+    if (dashboard_queued.speed) {
+        speed_update();
+    }
+    if (dashboard_queued.engine_temp) {
+        coolant_update();
+    }
+    if (dashboard_queued.rpm) {
+        tach3_update();
+    }
+    if (dashboard_queued.fuel_level) {
+        gas_update();
+    }
+    if (dashboard_queued.running_clock) {
+        clock_update();
+    }
+    if (dashboard_queued.outside_temp) {
+        temp_update();
+    }
+    if (dashboard_queued.left_turn_signal) {
+        turn_signal_update();
+    }
+    if (dashboard_queued.right_turn_signal) {
+        turn_signal_update();
+    }
+    if (dashboard_queued.lights) {
+        start_screen_fade();
+    }
+    if (dashboard_queued.headlights) {
+        car_view_update();
+    }
+    activity_update(dashboard_queued.activity);
     // sd_card_flush();
 }
