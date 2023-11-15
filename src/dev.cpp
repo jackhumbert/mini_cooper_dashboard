@@ -8,8 +8,8 @@
 ESP32Time rtc(-18000);  // offset in seconds GMT+1
 
 static int list_logs() {
-    uint64_t count = sd_card_get_file_count();
-    Serial.printf("%08lX\n", count);
+    // uint64_t count = sd_card_get_file_count();
+    Serial.printf("%08lX\n", 1);
     return 0;
 }
 

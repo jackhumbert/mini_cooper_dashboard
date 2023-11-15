@@ -253,7 +253,7 @@ void send_log(int fd, const char * log_name) {
     if (line[cursor+1] == 'R' && line[cursor+2] == '1' && line[cursor+3] == '1') {
       cursor += 4;
       uint8_t index = 0;
-      while(line[cursor+1] != 0xA) {
+      while(line[cursor] != 0xA) {
         if (line[cursor] == ' ')
           cursor++; // skip spaces
         char b_s[3] = { 0 };

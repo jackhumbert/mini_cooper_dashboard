@@ -7,7 +7,7 @@ static lv_obj_t * turn_right;
 
 void turn_signal_update() {
     lv_obj_set_style_img_recolor(turn_left, get_dash()->left_turn_signal ? GREEN_ON : GREEN_OFF, 0);
-    lv_obj_set_style_img_recolor(turn_right, get_dash()->right_turn_signal ? GREEN_OFF : GREEN_ON, 0);
+    lv_obj_set_style_img_recolor(turn_right, get_dash()->right_turn_signal ? GREEN_ON : GREEN_OFF, 0);
     // lv_obj_invalidate(turn_left);
     // lv_obj_invalidate(turn_right);
 }

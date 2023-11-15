@@ -238,13 +238,14 @@ typedef PREPACK struct {
 } POSTPACK can_0x618_x618_t;
 
 typedef PREPACK struct {
-	uint8_t LeftTurnSignal; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t RightTurnSignal; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x61a_x61A_t;
 
 typedef PREPACK struct {
-	uint8_t Blinker; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t Door; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t AutomaticLights; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t LeftTurnSignal; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t RightTurnSignal; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t Headlights; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t Lights; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x61f_x61F_t;
 
 typedef PREPACK struct {
@@ -502,16 +503,18 @@ int decode_can_0x618_IDK3unk4(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x618_IDK3unk4(can_obj_e46_h_t *o, uint8_t in);
 
 
-int decode_can_0x61a_LeftTurnSignal(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x61a_LeftTurnSignal(can_obj_e46_h_t *o, uint8_t in);
-int decode_can_0x61a_RightTurnSignal(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x61a_RightTurnSignal(can_obj_e46_h_t *o, uint8_t in);
 
 
-int decode_can_0x61f_Blinker(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x61f_Blinker(can_obj_e46_h_t *o, uint8_t in);
-int decode_can_0x61f_Door(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x61f_Door(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x61f_AutomaticLights(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61f_AutomaticLights(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x61f_LeftTurnSignal(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61f_LeftTurnSignal(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x61f_RightTurnSignal(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61f_RightTurnSignal(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x61f_Headlights(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61f_Headlights(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x61f_Lights(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x61f_Lights(can_obj_e46_h_t *o, uint8_t in);
 
 
 #ifdef __cplusplus

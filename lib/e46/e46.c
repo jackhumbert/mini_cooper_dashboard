@@ -1933,17 +1933,8 @@ int print_can_0x618_x618(const can_obj_e46_h_t *o, FILE *output) {
 static int pack_can_0x61a_x61A(can_obj_e46_h_t *o, uint64_t *data) {
 	assert(o);
 	assert(data);
-	register uint64_t x;
-	register uint64_t m = 0;
-	/* LeftTurnSignal: start-bit 9, length 1, endianess motorola, scaling 1, offset 0 */
-	x = ((uint8_t)(o->can_0x61a_x61A.LeftTurnSignal)) & 0x1;
-	x <<= 49; 
-	m |= x;
-	/* RightTurnSignal: start-bit 31, length 1, endianess motorola, scaling 1, offset 0 */
-	x = ((uint8_t)(o->can_0x61a_x61A.RightTurnSignal)) & 0x1;
-	x <<= 39; 
-	m |= x;
-	*data = reverse_byte_order(m);
+	UNUSED(o);
+	UNUSED(data);
 	o->can_0x61a_x61A_tx = 1;
 	return 8;
 }
@@ -1951,56 +1942,21 @@ static int pack_can_0x61a_x61A(can_obj_e46_h_t *o, uint64_t *data) {
 static int unpack_can_0x61a_x61A(can_obj_e46_h_t *o, uint64_t data, uint8_t dlc, dbcc_time_stamp_t time_stamp) {
 	assert(o);
 	assert(dlc <= 8);
-	register uint64_t x;
-	register uint64_t m = reverse_byte_order(data);
+	UNUSED(o);
+	UNUSED(data);
 	if (dlc < 8)
 		return -1;
-	/* LeftTurnSignal: start-bit 9, length 1, endianess motorola, scaling 1, offset 0 */
-	x = (m >> 49) & 0x1;
-	o->can_0x61a_x61A.LeftTurnSignal = x;
-	/* RightTurnSignal: start-bit 31, length 1, endianess motorola, scaling 1, offset 0 */
-	x = (m >> 39) & 0x1;
-	o->can_0x61a_x61A.RightTurnSignal = x;
 	o->can_0x61a_x61A_rx = 1;
 	o->can_0x61a_x61A_time_stamp_rx = time_stamp;
 	return 8;
 }
 
-int decode_can_0x61a_LeftTurnSignal(const can_obj_e46_h_t *o, uint8_t *out) {
-	assert(o);
-	assert(out);
-	uint8_t rval = (uint8_t)(o->can_0x61a_x61A.LeftTurnSignal);
-	*out = rval;
-	return 0;
-}
-
-int encode_can_0x61a_LeftTurnSignal(can_obj_e46_h_t *o, uint8_t in) {
-	assert(o);
-	o->can_0x61a_x61A.LeftTurnSignal = in;
-	return 0;
-}
-
-int decode_can_0x61a_RightTurnSignal(const can_obj_e46_h_t *o, uint8_t *out) {
-	assert(o);
-	assert(out);
-	uint8_t rval = (uint8_t)(o->can_0x61a_x61A.RightTurnSignal);
-	*out = rval;
-	return 0;
-}
-
-int encode_can_0x61a_RightTurnSignal(can_obj_e46_h_t *o, uint8_t in) {
-	assert(o);
-	o->can_0x61a_x61A.RightTurnSignal = in;
-	return 0;
-}
-
 int print_can_0x61a_x61A(const can_obj_e46_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
-	int r = 0;
-	r = print_helper(r, fprintf(output, "LeftTurnSignal = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.LeftTurnSignal)));
-	r = print_helper(r, fprintf(output, "RightTurnSignal = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.RightTurnSignal)));
-	return r;
+	UNUSED(o);
+	UNUSED(output);
+	return 0;
 }
 
 static int pack_can_0x61f_x61F(can_obj_e46_h_t *o, uint64_t *data) {
@@ -2008,15 +1964,28 @@ static int pack_can_0x61f_x61F(can_obj_e46_h_t *o, uint64_t *data) {
 	assert(data);
 	register uint64_t x;
 	register uint64_t m = 0;
-	/* Blinker: start-bit 18, length 1, endianess motorola, scaling 1, offset 0 */
-	x = ((uint8_t)(o->can_0x61f_x61F.Blinker)) & 0x1;
-	x <<= 42; 
+	register uint64_t i = 0;
+	/* AutomaticLights: start-bit 0, length 1, endianess motorola, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x61f_x61F.AutomaticLights)) & 0x1;
+	x <<= 56; 
 	m |= x;
-	/* Door: start-bit 24, length 1, endianess motorola, scaling 1, offset 0 */
-	x = ((uint8_t)(o->can_0x61f_x61F.Door)) & 0x1;
-	x <<= 32; 
+	/* LeftTurnSignal: start-bit 22, length 1, endianess motorola, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x61f_x61F.LeftTurnSignal)) & 0x1;
+	x <<= 46; 
 	m |= x;
-	*data = reverse_byte_order(m);
+	/* RightTurnSignal: start-bit 27, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x61f_x61F.RightTurnSignal)) & 0x1;
+	x <<= 27; 
+	i |= x;
+	/* Headlights: start-bit 30, length 1, endianess motorola, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x61f_x61F.Headlights)) & 0x1;
+	x <<= 38; 
+	m |= x;
+	/* Lights: start-bit 36, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x61f_x61F.Lights)) & 0x1;
+	x <<= 36; 
+	i |= x;
+	*data = reverse_byte_order(m)|(i);
 	o->can_0x61f_x61F_tx = 1;
 	return 8;
 }
@@ -2026,44 +1995,96 @@ static int unpack_can_0x61f_x61F(can_obj_e46_h_t *o, uint64_t data, uint8_t dlc,
 	assert(dlc <= 8);
 	register uint64_t x;
 	register uint64_t m = reverse_byte_order(data);
+	register uint64_t i = (data);
 	if (dlc < 8)
 		return -1;
-	/* Blinker: start-bit 18, length 1, endianess motorola, scaling 1, offset 0 */
-	x = (m >> 42) & 0x1;
-	o->can_0x61f_x61F.Blinker = x;
-	/* Door: start-bit 24, length 1, endianess motorola, scaling 1, offset 0 */
-	x = (m >> 32) & 0x1;
-	o->can_0x61f_x61F.Door = x;
+	/* AutomaticLights: start-bit 0, length 1, endianess motorola, scaling 1, offset 0 */
+	x = (m >> 56) & 0x1;
+	o->can_0x61f_x61F.AutomaticLights = x;
+	/* LeftTurnSignal: start-bit 22, length 1, endianess motorola, scaling 1, offset 0 */
+	x = (m >> 46) & 0x1;
+	o->can_0x61f_x61F.LeftTurnSignal = x;
+	/* RightTurnSignal: start-bit 27, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 27) & 0x1;
+	o->can_0x61f_x61F.RightTurnSignal = x;
+	/* Headlights: start-bit 30, length 1, endianess motorola, scaling 1, offset 0 */
+	x = (m >> 38) & 0x1;
+	o->can_0x61f_x61F.Headlights = x;
+	/* Lights: start-bit 36, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 36) & 0x1;
+	o->can_0x61f_x61F.Lights = x;
 	o->can_0x61f_x61F_rx = 1;
 	o->can_0x61f_x61F_time_stamp_rx = time_stamp;
 	return 8;
 }
 
-int decode_can_0x61f_Blinker(const can_obj_e46_h_t *o, uint8_t *out) {
+int decode_can_0x61f_AutomaticLights(const can_obj_e46_h_t *o, uint8_t *out) {
 	assert(o);
 	assert(out);
-	uint8_t rval = (uint8_t)(o->can_0x61f_x61F.Blinker);
+	uint8_t rval = (uint8_t)(o->can_0x61f_x61F.AutomaticLights);
 	*out = rval;
 	return 0;
 }
 
-int encode_can_0x61f_Blinker(can_obj_e46_h_t *o, uint8_t in) {
+int encode_can_0x61f_AutomaticLights(can_obj_e46_h_t *o, uint8_t in) {
 	assert(o);
-	o->can_0x61f_x61F.Blinker = in;
+	o->can_0x61f_x61F.AutomaticLights = in;
 	return 0;
 }
 
-int decode_can_0x61f_Door(const can_obj_e46_h_t *o, uint8_t *out) {
+int decode_can_0x61f_LeftTurnSignal(const can_obj_e46_h_t *o, uint8_t *out) {
 	assert(o);
 	assert(out);
-	uint8_t rval = (uint8_t)(o->can_0x61f_x61F.Door);
+	uint8_t rval = (uint8_t)(o->can_0x61f_x61F.LeftTurnSignal);
 	*out = rval;
 	return 0;
 }
 
-int encode_can_0x61f_Door(can_obj_e46_h_t *o, uint8_t in) {
+int encode_can_0x61f_LeftTurnSignal(can_obj_e46_h_t *o, uint8_t in) {
 	assert(o);
-	o->can_0x61f_x61F.Door = in;
+	o->can_0x61f_x61F.LeftTurnSignal = in;
+	return 0;
+}
+
+int decode_can_0x61f_RightTurnSignal(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x61f_x61F.RightTurnSignal);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x61f_RightTurnSignal(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x61f_x61F.RightTurnSignal = in;
+	return 0;
+}
+
+int decode_can_0x61f_Headlights(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x61f_x61F.Headlights);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x61f_Headlights(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x61f_x61F.Headlights = in;
+	return 0;
+}
+
+int decode_can_0x61f_Lights(const can_obj_e46_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x61f_x61F.Lights);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x61f_Lights(can_obj_e46_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x61f_x61F.Lights = in;
 	return 0;
 }
 
@@ -2071,8 +2092,11 @@ int print_can_0x61f_x61F(const can_obj_e46_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "Blinker = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.Blinker)));
-	r = print_helper(r, fprintf(output, "Door = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.Door)));
+	r = print_helper(r, fprintf(output, "AutomaticLights = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.AutomaticLights)));
+	r = print_helper(r, fprintf(output, "LeftTurnSignal = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.LeftTurnSignal)));
+	r = print_helper(r, fprintf(output, "RightTurnSignal = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.RightTurnSignal)));
+	r = print_helper(r, fprintf(output, "Headlights = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.Headlights)));
+	r = print_helper(r, fprintf(output, "Lights = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.Lights)));
 	return r;
 }
 

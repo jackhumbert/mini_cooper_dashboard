@@ -54,11 +54,11 @@ unsigned char Serial_CAN::send(unsigned long id, uchar ext, uchar rtrBit, uchar 
 
 uint16_t last_ts = 0xFFFF;
 
-bool validate_id(uint32_t id) {
+static bool validate_id(uint32_t id) {
     return (id >= 0x153 && id <= 0xA00);
 }
 
-bool filter_id(uint32_t id) {
+static bool filter_id(uint32_t id) {
     // uint16_t ts = id >> 8;
     // if (ts - last_ts > 64 && last_ts != 0xFFFF)
     //     return false;
@@ -86,18 +86,13 @@ bool filter_id(uint32_t id) {
     return false;
 }
 
-#define SERIAL_BUFFER_SIZE 12 * 16
-
+static uint8_t buffer[12] = { 0 };
 static int hangers = 0;
 
-// 0: no data
-// 1: get data
 unsigned char Serial_CAN::recv(unsigned long *id, uchar *buf) {
-    int avail = MIN(canSerial->available(), SERIAL_BUFFER_SIZE);
+    int avail = canSerial->available();
     if (avail >= 12) {
-        hangers = 0;
         unsigned long timer_s = millis();
-        uchar buffer[SERIAL_BUFFER_SIZE] = { 0 };
         uint32_t bytes_processed = 0;
         canSerial->readBytes(buffer, avail);
         while (bytes_processed < avail) {
@@ -163,9 +158,16 @@ unsigned char Serial_CAN::recv(unsigned long *id, uchar *buf) {
         return 0;
     } else {
         if (hangers == avail & avail != 0) {
-            canSerial->flush();
+            canSerial->readBytes(buffer, hangers);
+            sd_card_logf("%08.3f CER DISCARD: ", xTaskGetTickCount() / 1000.0);
+            for (int i = 0; i < hangers; i++)
+                sd_card_logf("%02X ", buffer[i]);
+            sd_card_logf("\n");
+            hangers = 0;
+        } else {
+            hangers = avail;
         }
-        hangers = avail;
+        return 0;
     }
 // {
 //     if(canSerial->available())

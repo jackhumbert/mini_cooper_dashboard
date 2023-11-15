@@ -19,7 +19,6 @@ static lv_color_t * disp_draw_buf2 = NULL;
 #include <SPI.h>
 #include <SD.h>
 #include "sd_card.h"
-#include "sd_card.hpp"
 #include "can.h"
 #include "serial_can.h"
 
@@ -86,46 +85,88 @@ int sd_card_log_printf(const char* format, va_list args) {
 }
 
 TaskHandle_t CAN_Task;
-static uchar buffer[12];
+
+static uint8_t process_buffer[12];
+
+static bool validate_id(uint32_t id) {
+    return (id >= 0x153 && id <= 0xA00);
+}
+
+TaskHandle_t process_packet_task;
+
+void process_packet(void * _) {
+    uint32_t id;
+    uint8_t data[12];
+    memcpy(data, process_buffer, 12);
+
+    for(int i=0; i<4; i++) {
+        id <<= 8;
+        id += data[i];
+    }
+                
+    sd_card_logf("%08.3f R11 %08X %02X %02X %02X %02X %02X %02X %02X %02X\n", 
+        xTaskGetTickCount() / 1000.0, id,
+        data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11]);
+
+    uint16_t can_id = id & 0xFFFF;
+    dbcc_time_stamp_t ts = (id >> 16) & 0xFFFF;
+
+    pthread_mutex_lock(&get_dash()->mutex);
+    if (decode_can_message(ts, can_id, (uint8_t*)data + 4) < 0) {
+        get_changed()->activity |= ACTIVITY_ERROR;
+        sd_card_logf("%08.3f CER Could not decode latest message\n", xTaskGetTickCount() / 1000.0);
+    } else {
+        get_changed()->activity |= ACTIVITY_SUCCESS;
+    }
+    pthread_mutex_unlock(&get_dash()->mutex);
+    // vTaskDelete(process_packet_task);
+}
+
+static uint8_t buffer[12];
+static int hangers = 0;
 
 void CAN_Task_loop(void * parameter) {
     while (true) {
-        unsigned long id = 0;
-        if (can.recv(&id, buffer)) {
-            unsigned long can_id = id & 0xFFFF;
-            dbcc_time_stamp_t ts = (id >> 16) & 0xFFFF;
-
-            // sd_card_logf("%08.3f R11 %08X ", xTaskGetTickCount() / 1000.0, id);
-            // for (int i = 0; i < 8; i++) {
-            //     sd_card_logf("%02X ", buf[i]);
-            // }
-            sd_card_logf("%08.3f R11 %08X %02X %02X %02X %02X %02X %02X %02X %02X\n", 
-                xTaskGetTickCount() / 1000.0, id,
-                buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
-
-            // sd_card_logf("\n");
-
-            pthread_mutex_lock(&get_dash()->mutex);
-            if (decode_can_message(ts, can_id, (uint8_t*)buf) < 0) {
-                get_changed()->activity |= 2;
-                sd_card_logf("%08.3f CXX Could not decode latest message\n", xTaskGetTickCount() / 1000.0);
-            } else {
-                get_changed()->activity |= 1;
+        int avail = Serial.available();
+        if (avail >= 12) {
+            unsigned long timer_s = millis();
+            Serial.readBytes(buffer, 12);
+            uint32_t id = 0;
+            
+            for(int i=0; i<4; i++) {
+                id <<= 8;
+                id += buffer[i];
             }
-            pthread_mutex_unlock(&get_dash()->mutex);
+
+            if (validate_id(id)) {
+                memcpy(process_buffer, buffer, 12);
+                process_packet(NULL);
+                // xTaskCreatePinnedToCore(
+                //     process_packet, /* Function to implement the task */
+                //     "Process CAN packet", /* Name of the task */
+                //     5000,  /* Stack size in words */
+                //     NULL,  /* Task input parameter */
+                //     1,  /* Priority of the task */
+                //     &process_packet_task,  /* Task handle. */
+                //     1); /* Core where the task should run */
+            } else {
+                get_changed()->activity |= ACTIVITY_ERROR;
+                sd_card_logf("%08.3f CER %08X %02X %02X %02X %02X %02X %02X %02X %02X\n", 
+                    xTaskGetTickCount() / 1000.0, id,
+                    buffer[4], buffer[5], buffer[6], buffer[7], buffer[8], buffer[9], buffer[10], buffer[11]);
+            }
         } else {
-            // if (buf[12]) {
-            //     File * file = sd_card_get_log_file();
-            //     if (file && *file) {
-            //         uint32_t ticks = xTaskGetTickCount();
-            //         sd_card_logf("[%08X] ", ticks);
-            //         for (int i = 0; i < buf[12]; i++) {
-            //             sd_card_logf("%02X ", buf[i]);
-            //         }
-            //         file->print('\n');
-            //         file->flush();
-            //     }
-            // }
+            if (hangers == avail && avail != 0) {
+                get_changed()->activity |= ACTIVITY_ERROR;
+                Serial.readBytes(buffer, avail);
+                sd_card_logf("%08.3f CER DISCARD:", xTaskGetTickCount() / 1000.0);
+                for (int i = 0; i < avail; i++)
+                    sd_card_logf(" %02X", buffer[i]);
+                sd_card_logf("\n");
+                hangers = 0;
+            } else {
+                hangers = avail;
+            }
         }
         vTaskDelay(1);
     }
@@ -142,19 +183,37 @@ const int   daylightOffset_sec = 3600;
 #define SCREEN_FADE_TIME 2
 
 TaskHandle_t screen_fade_task;
+static bool fade_active;
 
 void screen_fade_cb(void * parameter) {
+    fade_active = true;
     unsigned long start = millis();
+    uint8_t start_value = gfx.getBrightness();
+    uint8_t end_value = get_dash()->lights ? 64 : 255;
     while (millis() - start < (SCREEN_FADE_TIME * 1000)) {
         unsigned long time_diff = millis() - start;
-        uint32_t value = round(pow(time_diff / (SCREEN_FADE_TIME * 1000.0), 2) * 255);
-        // uint32_t value = round(time_diff / (SCREEN_FADE_TIME * 1000.0) * 255);
+        uint32_t value = round(pow(time_diff / (SCREEN_FADE_TIME * 1000.0), 2) * (end_value - start_value) + start_value);
+        // uint32_t value = round(time_diff / (SCREEN_FADE_TIME * 1000.0) * (get_dash()->lights ? 10 : 255));
         // add_message_fmt("brightness: %d", value);
         gfx.setBrightness(value);
     }
-    gfx.setBrightness(255);
+    gfx.setBrightness(end_value);
+    fade_active = false;
     vTaskDelete(screen_fade_task);
 };
+
+extern "C" void start_screen_fade(void) {
+    if (fade_active)
+        vTaskDelete(screen_fade_task);
+    xTaskCreatePinnedToCore(
+      screen_fade_cb, /* Function to implement the task */
+      "Screen Fade In", /* Name of the task */
+      1000,  /* Stack size in words */
+      NULL,  /* Task input parameter */
+      2,  /* Priority of the task */
+      &screen_fade_task,  /* Task handle. */
+      0); /* Core where the task should run */
+}
 
 void setup() {
     // Connect to Wi-Fi
@@ -182,14 +241,7 @@ void setup() {
     gfx.setColorDepth(16); 
     gfx.clearDisplay();
 
-    xTaskCreatePinnedToCore(
-      screen_fade_cb, /* Function to implement the task */
-      "Screen Fade In", /* Name of the task */
-      1000,  /* Stack size in words */
-      NULL,  /* Task input parameter */
-      2,  /* Priority of the task */
-      &screen_fade_task,  /* Task handle. */
-      0); /* Core where the task should run */
+    start_screen_fade();
 
     lv_init();
     lv_log_register_print_cb(my_log_cb);

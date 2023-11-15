@@ -31,7 +31,7 @@ static void u64_to_can_msg(const uint64_t u, uint8_t m[8]) {
 
 int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * data) {
     if (id == 0xA00) {
-        add_message_fmt("Custom event received: %llu", (uint64_t*)data);
+        add_message_fmt("Custom event received: %lu", (uint64_t*)data);
         return 0;
     }
     if (id >= 0x900) {
@@ -44,6 +44,10 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
             case 0x153:
                 decode_can_0x153_Speed(&can_data, &get_dash()->speed);
                 get_changed()->speed = 1;
+                // if (can_data.can_0x153_ASC_1.Speed != get_dash()->speed) {
+                //     get_dash()->speed = can_data.can_0x153_ASC_1.Speed;
+                //     get_changed()->speed = 1;
+                // }
                 return 0;
             case 0x1F0: 
             case 0x1F3: return 0; // unk4 something that counts down
@@ -58,11 +62,18 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 return 0;
             case 0x316:
                 decode_can_0x316_RPM(&can_data, &get_dash()->rpm);
-                get_changed()->rpm = 1;
-                decode_can_0x316_Key(&can_data, &get_dash()->key);
-                get_changed()->key = 1;
-                decode_can_0x316_Starter(&can_data, &get_dash()->starter);
-                get_changed()->starter = 1;
+                // if (can_data.can_0x316_DME1.RPM != get_dash()->rpm) {
+                    // get_dash()->rpm = can_data.can_0x316_DME1.RPM;
+                    get_changed()->rpm = 1;
+                // }
+                if (can_data.can_0x316_DME1.Key != get_dash()->key) {
+                    get_dash()->key = can_data.can_0x316_DME1.Key;
+                    get_changed()->key = 1;
+                }
+                if (can_data.can_0x316_DME1.Starter != get_dash()->starter) {
+                    get_dash()->starter = can_data.can_0x316_DME1.Starter;
+                    get_changed()->starter = 1;
+                }
                 return 0;
             case 0x336: return 0;
             case 0x338:
@@ -84,14 +95,27 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 return 0;
             case 0x618: return 0;
             case 0x61A: return 0;
-                decode_can_0x61a_LeftTurnSignal(&can_data, &get_dash()->left_turn_signal);
-                decode_can_0x61a_RightTurnSignal(&can_data, &get_dash()->right_turn_signal);
-                get_changed()->left_turn_signal = 1;
-                get_changed()->right_turn_signal = 1;
             case 0x61F: 
-                decode_can_0x61f_Door(&can_data, &get_dash()->left_door);
-                get_changed()->left_door = 1;
-                // decode_can_0x61f_Blinker(&can_data, &get_dash()->blinker);
+                if (can_data.can_0x61f_x61F.Lights != get_dash()->lights) {
+                    get_dash()->lights = can_data.can_0x61f_x61F.Lights;
+                    get_changed()->lights = 1;
+                }
+                if (can_data.can_0x61f_x61F.Headlights != get_dash()->headlights) {
+                    get_dash()->headlights = can_data.can_0x61f_x61F.Headlights;
+                    get_changed()->headlights = 1;
+                }
+                if (can_data.can_0x61f_x61F.Lights != get_dash()->lights) {
+                    get_dash()->lights = can_data.can_0x61f_x61F.Lights;
+                    get_changed()->lights = 1;
+                }
+                if (can_data.can_0x61f_x61F.LeftTurnSignal != get_dash()->left_turn_signal) {
+                    get_dash()->left_turn_signal = can_data.can_0x61f_x61F.LeftTurnSignal;
+                    get_changed()->left_turn_signal = 1;
+                }
+                if (can_data.can_0x61f_x61F.RightTurnSignal != get_dash()->right_turn_signal) {
+                    get_dash()->right_turn_signal = can_data.can_0x61f_x61F.RightTurnSignal;
+                    get_changed()->right_turn_signal = 1;
+                }
                 return 0;
         }
         return -1;

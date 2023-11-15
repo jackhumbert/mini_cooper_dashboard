@@ -2,9 +2,11 @@
 
 static lv_obj_t * car_view_cont;
 static lv_obj_t * left_door;
+static lv_obj_t * headlights_indic;
 
 void car_view_update(void) {
     lv_obj_set_style_img_recolor(left_door, get_dash()->left_door ? RED_ON : RED_OFF, 0);
+    lv_obj_set_style_img_recolor(headlights_indic, get_dash()->headlights ? WHITE_ON : WHITE_OFF, 0);
 }
 
 lv_obj_t * car_view_create(lv_obj_t * parent) {
@@ -63,17 +65,12 @@ lv_obj_t * car_view_create(lv_obj_t * parent) {
 {
     LV_IMG_DECLARE(headlights);
     
-    lv_obj_t * icon = lv_img_create(car_view_cont);
-    lv_img_set_src(icon, &headlights);
-    lv_obj_center(icon);
+    headlights_indic = lv_img_create(car_view_cont);
+    lv_img_set_src(headlights_indic, &headlights);
+    lv_obj_center(headlights_indic);
+    lv_obj_set_style_img_recolor(headlights_indic, RED_OFF, 0);
+    lv_obj_set_style_img_recolor_opa(headlights_indic, LV_OPA_100, 0);
     // lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
-
-    static lv_style_t style;
-    lv_style_init(&style);
-    // lv_style_set_img_recolor(&style, BLUE_ON);
-    lv_style_set_img_recolor(&style, AMBER_OFF);
-    lv_style_set_img_recolor_opa(&style, LV_OPA_COVER);
-    lv_obj_add_style(icon, &style, 0);
 }
 
 

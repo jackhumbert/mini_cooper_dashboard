@@ -25,6 +25,10 @@
 #define GREEN_HALF lv_color_hsv_to_rgb(125, 100, 50)
 #define GREEN_OFF lv_color_hsv_to_rgb(120, 100, 8)
 
+#define WHITE_ON lv_color_hsv_to_rgb(0, 0, 100)
+#define WHITE_HALF lv_color_hsv_to_rgb(0, 0, 50)
+#define WHITE_OFF lv_color_hsv_to_rgb(0, 0, 8)
+
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
@@ -91,6 +95,8 @@ typedef struct dashboard_t {
 
     uint8_t outside_temp;
 
+    uint8_t lights;
+    uint8_t headlights;
     uint8_t left_turn_signal;
     uint8_t right_turn_signal;
 
@@ -98,6 +104,9 @@ typedef struct dashboard_t {
     uint8_t right_door;
 } dashboard_t;
 
+
+#define ACTIVITY_SUCCESS 1
+#define ACTIVITY_ERROR 2
 
 typedef struct dashboard_changed_t {
     uint8_t activity;
@@ -150,6 +159,8 @@ typedef struct dashboard_changed_t {
 
     uint8_t outside_temp : 1;
 
+    uint8_t lights : 1;
+    uint8_t headlights : 1;
     uint8_t left_turn_signal : 1;
     uint8_t right_turn_signal : 1;
 

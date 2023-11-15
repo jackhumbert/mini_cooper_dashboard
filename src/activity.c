@@ -15,14 +15,9 @@ static void activity_failure_callback(void * indic, int32_t v) {
     lv_led_set_brightness(failure_led, v / 2.0 * 255);
 }
 
-void activity_update(bool success) {
-    if (success) {
-        lv_led_set_brightness(success_led,  255);
-        lv_anim_start(&s_a);
-    } else {
-        lv_led_set_brightness(failure_led,  255);
-        lv_anim_start(&f_a);
-    }
+void activity_update(uint8_t activity) {
+    lv_led_set_brightness(success_led, (activity & ACTIVITY_SUCCESS == 1) * 255);
+    lv_led_set_brightness(failure_led, (activity & ACTIVITY_ERROR == 1) * 255);
 }
 
 void activity_create(lv_obj_t * parent) {

@@ -35,7 +35,7 @@ static void manually_log_event(lv_event_t * e) {
     lv_obj_t * obj = lv_event_get_target(e);
 
     if(code == LV_EVENT_CLICKED) {
-        sd_card_logf("%08.3f R11 00000A00 %02X", xTaskGetTickCount() / 1000.0, event_num++);
+        sd_card_logf("%08.3f R11 00000A00 %02X 00 00 00 00 00 00 00\n", xTaskGetTickCount() / 1000.0, event_num++);
     }
 }
 
@@ -181,6 +181,8 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     return canvas;
 }
 
+extern void start_screen_fade(void);
+
 void dash_loop(void) {
     pthread_mutex_lock(&get_dash()->mutex);
     if (get_changed()->speed) {
@@ -215,18 +217,16 @@ void dash_loop(void) {
         turn_signal_update();
         get_changed()->right_turn_signal = 0;
     }
-    if (get_changed()->left_door) {
+    if (get_changed()->lights) {
+        start_screen_fade();
+        get_changed()->lights = 0;
+    }
+    if (get_changed()->headlights) {
         car_view_update();
-        get_changed()->left_door = 0;
+        get_changed()->headlights = 0;
     }
-    if (get_changed()->activity & 2) {
-        activity_update(false);
-        get_changed()->activity &= 1;
-    }
-    if (get_changed()->activity & 1) {
-        activity_update(true);
-        get_changed()->activity &= 2;
-    }
+    activity_update(get_changed()->activity);
+    get_changed()->activity = 0;
 	pthread_mutex_unlock(&get_dash()->mutex);
     // sd_card_flush();
 }

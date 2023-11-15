@@ -1,8 +1,6 @@
 #include "sd_card.h"
 #include <SPI.h>
-// #include "sd_card.hpp"
 #include "messages.h"
-// #include <Elog.h>
 #include <SdFat.h>
 #include <RingBuf.h>
 
@@ -20,37 +18,83 @@ static FsFile log_file;
 static pthread_mutex_t log_file_mutex;
 
 SdFat sd;
-RingBuf<FsFile, RING_BUF_CAPACITY> rb;
 
-unsigned long sd_card_get_file_count() {
-	// File d = SD.open("/");
-    // if (!d)
-    //     return 0;
-	// unsigned long count_files = 0;
-	// while (true) {
- 	// 	File entry =  d.openNextFile();
-	// 	if(!entry) {
-	// 		return count_files;
-	// 	}
-	// 	String file_name = entry.name();
-	// 	if( file_name.indexOf('~') != 0 && !entry.isDirectory()) {
-	// 		count_files++;
-	// 	}
-	// }
-    return 0;
+#define NUM_BUFFERS 2
+#if NUM_BUFFERS > 16
+    #define buffer_index_t uint32_t
+#else
+#if NUM_BUFFERS > 8
+    #define buffer_index_t uint16_t
+#else
+    #define buffer_index_t uint8_t
+#endif
+#endif
+
+#define FILE_BUFFER_LENGTH 2048
+#if FILE_BUFFER_LENGTH > 256
+#define buffer_length_t uint16_t
+#else
+#define buffer_length_t uint8_t
+#endif
+static uint8_t file_buffer[NUM_BUFFERS][FILE_BUFFER_LENGTH] = {{0}};
+static buffer_length_t file_buffer_length[NUM_BUFFERS] = {0};
+static buffer_index_t buffer_mutex = 0;
+
+static void buffer_write(uint8_t * buffer, buffer_length_t length) {
+    buffer_index_t buffer_index = 0;
+
+    pthread_mutex_lock(&log_file_mutex);
+    while ((buffer_mutex & (1 << buffer_index) || FILE_BUFFER_LENGTH <= (file_buffer_length[buffer_index] + length))
+        && buffer_index < NUM_BUFFERS) {
+            buffer_index++;
+    }
+    if (buffer_index < NUM_BUFFERS) {
+        buffer_mutex |= (1 << buffer_index);
+        pthread_mutex_unlock(&log_file_mutex);
+
+        memcpy(&file_buffer[buffer_index][file_buffer_length[buffer_index]], buffer, length);
+        file_buffer_length[buffer_index] += length;
+
+        pthread_mutex_lock(&log_file_mutex);
+        buffer_mutex &= ~(1 << buffer_index);
+        pthread_mutex_unlock(&log_file_mutex);
+    } else {
+        pthread_mutex_unlock(&log_file_mutex);
+        // all buffers busy
+        // add_message("All buffers busy");
+        // Serial.println("All buffers busy");
+        get_changed()->activity |= ACTIVITY_ERROR;
+    }
 }
 
 static void rb_flusher(void * parameter) {
     while (true) {
         // if (rb.bytesUsed() > 512 && !log_file.isBusy()) {
-        pthread_mutex_lock(&log_file_mutex);
-        if (rb.writeOut(512)) {
-                // rb.sync();
-            if (!log_file.isBusy()) {
-                log_file.flush();
+        // pthread_mutex_lock(&log_file_mutex);
+        buffer_index_t buffer_index = 0;
+        while (buffer_index < NUM_BUFFERS) {
+            pthread_mutex_lock(&log_file_mutex);
+            if (file_buffer_length[buffer_index] && (buffer_mutex & (1 << buffer_index)) == 0) {
+                buffer_mutex |= (1 << buffer_index);
+                pthread_mutex_unlock(&log_file_mutex);
+                
+                if (log_file.write(file_buffer[buffer_index], file_buffer_length[buffer_index]) == file_buffer_length[buffer_index]) {
+                    log_file.flush();
+                } else {
+                    // add_message_fmt("Logging error: %02X", log_file.getError());
+                    // Serial.printf("Logging error: %02X\n", log_file.getError());
+                    get_changed()->activity |= ACTIVITY_ERROR;
+                }
+                file_buffer_length[buffer_index] = 0;
+
+                pthread_mutex_lock(&log_file_mutex);
+                buffer_mutex &= ~(1 << buffer_index);
             }
+            pthread_mutex_unlock(&log_file_mutex);
+
+            buffer_index++;
         }
-        pthread_mutex_unlock(&log_file_mutex);
+        // pthread_mutex_unlock(&log_file_mutex);
         vTaskDelay(1); // Feed the watchdog. It will trigger and crash if we dont give it some time
     }
 }
@@ -91,11 +135,8 @@ void sd_card_init() {
     log_file = sd.open(log_filename, O_WRONLY | O_CREAT | O_TRUNC);
     // log_file.preAllocate(10 * 25000 * 60);
     
-    rb.begin(&log_file);
-
     // log_file.setBufferSize(1024 * 1024);
-    rb.printf("%08.3f CXX R53 Custom Dash by Jack Humbert\n", xTaskGetTickCount() / 1000.0);
-    rb.sync();
+    sd_card_logf("%08.3f CXX R53 Custom Dash by Jack Humbert\n", xTaskGetTickCount() / 1000.0);
     // log_file.flush();
 
     xTaskCreatePinnedToCore(
@@ -103,7 +144,7 @@ void sd_card_init() {
         "writeTask", // String with name of task.
         5000, // Stack size in bytes. This seems enough for it not to crash.
         NULL, // Parameter passed as input of the task.
-        1, // Priority of the task.
+        0, // Priority of the task.
         NULL, // Task handle.
         1);
 }
@@ -113,11 +154,11 @@ void sd_card_logf(const char * format, ...) {
         static char buffer[256] = {0};
         va_list args;
         va_start(args, format);
-        int length = vsnprintf(buffer, 255, format, args);
+        buffer_length_t length = vsnprintf(buffer, 255, format, args);
 
-        pthread_mutex_lock(&log_file_mutex);
-        rb.write(buffer, length);
-        pthread_mutex_unlock(&log_file_mutex);
+        // pthread_mutex_lock(&log_file_mutex);
+        buffer_write((uint8_t*)buffer, length);
+        // pthread_mutex_unlock(&log_file_mutex);
         // logger.log(INFO, buffer);
 
         va_end (args);
@@ -160,7 +201,7 @@ int sd_card_get_log(unsigned char * data) {
     char filename[20];
     sprintf(filename, "/log_%08llu.crtd", *(uint64_t*)data);
 
-    pthread_mutex_lock(&log_file_mutex);
+    // pthread_mutex_lock(&log_file_mutex);
     if (sd.exists(filename)) {
         add_message_fmt("Dumping %s", filename);
         FsFile file = sd.open(filename, O_RDONLY);
@@ -171,11 +212,11 @@ int sd_card_get_log(unsigned char * data) {
             Serial.write(file.read());
         }
         file.close();
-        pthread_mutex_unlock(&log_file_mutex);
+        // pthread_mutex_unlock(&log_file_mutex);
         return 0;
     } else {
         add_message_fmt("Couldn't find %s", filename);
-        pthread_mutex_unlock(&log_file_mutex);
+        // pthread_mutex_unlock(&log_file_mutex);
         return -1;
     }
 }
