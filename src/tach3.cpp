@@ -90,13 +90,31 @@ void Tach::update(void) {
         // lv_label_set_text_fmt(label, "%0.0f", get_cache()->rpm);
     }
 }
-
-#define INDIC_RADIUS (1850 / 2 + 15)
-#define INDIC_RADIUS_CUTOFF (1850 / 2 - 5)
-#define INDIC_WIDTH 20
-#define INDIC_RESOLUTION 0.1
+#define INDIC_RADIUS (1850 / 2)
+#define INDIC_RADIUS_OUTER (INDIC_RADIUS + 5)
+#define INDIC_RADIUS_INNER (INDIC_RADIUS - 15)
+#define INDIC_Y 232
 
 #define sin_d(x) sin((x) * 3.1415 / 180)
+
+
+static lv_area_t outer_coords = {
+    .x1 = 400 - INDIC_RADIUS_OUTER, 
+    .y1 = INDIC_Y + INDIC_RADIUS - INDIC_RADIUS_OUTER, 
+    .x2 = 400 + INDIC_RADIUS, 
+    .y2 = INDIC_Y + INDIC_RADIUS + INDIC_RADIUS_OUTER
+};
+
+static lv_draw_mask_radius_param_t outer_mask_param;
+
+static lv_area_t inner_coords = {
+    .x1 = 400 - INDIC_RADIUS_INNER, 
+    .y1 = INDIC_Y + INDIC_RADIUS - INDIC_RADIUS_INNER, 
+    .x2 = 400 + INDIC_RADIUS_INNER, 
+    .y2 = INDIC_Y + INDIC_RADIUS + INDIC_RADIUS_INNER
+};
+
+static lv_draw_mask_radius_param_t inner_mask_param;
 
 static void indicator_draw(lv_event_t * e) {
 	lv_event_code_t code = lv_event_get_code(e);
@@ -107,44 +125,28 @@ static void indicator_draw(lv_event_t * e) {
         // dsc->line_dsc->opa = LV_OPA_0;
 
 
-        lv_area_t outer_coords = {
-            .x1 = 400 - INDIC_RADIUS, 
-            .y1 = 240 + 1850 / 2 - INDIC_RADIUS, 
-            .x2 = 400 + INDIC_RADIUS, 
-            .y2 = 240 + 1850 / 2 + INDIC_RADIUS
-        };
-        lv_draw_mask_radius_param_t outer_mask_param;
-        lv_draw_mask_radius_init(&outer_mask_param, &outer_coords, INDIC_RADIUS, false);
         int16_t outer_mask_id = lv_draw_mask_add(&outer_mask_param, NULL);
-
-
-        lv_area_t inner_coords = {
-            .x1 = 400 - INDIC_RADIUS_CUTOFF, 
-            .y1 = 240 + 1850 / 2 - INDIC_RADIUS_CUTOFF, 
-            .x2 = 400 + INDIC_RADIUS_CUTOFF, 
-            .y2 = 240 + 1850 / 2 + INDIC_RADIUS_CUTOFF
-        };
-        lv_draw_mask_radius_param_t inner_mask_param;
-        lv_draw_mask_radius_init(&inner_mask_param, &inner_coords, INDIC_RADIUS_CUTOFF, true);
+        lv_draw_mask_radius_init(&outer_mask_param, &outer_coords, INDIC_RADIUS_OUTER, false);
         int16_t inner_mask_id = lv_draw_mask_add(&inner_mask_param, NULL);
+        lv_draw_mask_radius_init(&inner_mask_param, &inner_coords, INDIC_RADIUS_INNER, true);
 
-
-        static lv_draw_line_dsc_t line_dsc;
-        line_dsc.opa = 255;
-        line_dsc.color = AMBER_ON;
-        line_dsc.width = 3;
-        line_dsc.round_end = 0;
-        line_dsc.round_start = 0;
-        line_dsc.raw_end = 1;
+        static lv_draw_line_dsc_t line_dsc = {
+            .color = AMBER_ON,
+            .width = 3,
+            .opa = 255,
+            .round_start = 0,
+            .round_end = 0,
+            .raw_end = 1
+        };
         static lv_point_t p1, p2;
 
         float end = 66 + 180 + 48 * get_cache()->rpm / 8000;
 
-        p1.x = 400 + (sin_d(end + 90) * (INDIC_RADIUS + 40));
-        p1.y = 240 + 1850 / 2  + (sin_d(end) * (INDIC_RADIUS + 40));
+        p1.x = 400 + (sin_d(end + 90) * (INDIC_RADIUS_OUTER + 40));
+        p1.y = INDIC_Y + INDIC_RADIUS  + (sin_d(end) * (INDIC_RADIUS_OUTER + 40));
         
-        p2.x = 400 + (sin_d(end + 90) * (INDIC_RADIUS_CUTOFF - 40));
-        p2.y = 240 + 1850 / 2 + (sin_d(end) * (INDIC_RADIUS_CUTOFF - 40));
+        p2.x = 400 + (sin_d(end + 90) * (INDIC_RADIUS_INNER - 40));
+        p2.y = INDIC_Y + INDIC_RADIUS + (sin_d(end) * (INDIC_RADIUS_INNER - 40));
 
         lv_draw_line(dsc->draw_ctx, &line_dsc, &p1, &p2);
         
@@ -211,10 +213,10 @@ Tach::Tach(lv_obj_t * parent) {
 
     // lv_meter_add_scale_lines(meter, scale, AMBER_ON, AMBER_ON, false, 5);
 
-    // for (int i = 1; i < 8; i++) {
-    //     lv_meter_indicator_t * line = lv_meter_add_needle_line(lv_obj, scale, 1, lv_color_black(), 0);
-    //     lv_meter_set_indicator_value(lv_obj, line, i * 1000);
-    // }
+    for (int i = 1; i < 8; i++) {
+        lv_meter_indicator_t * line = lv_meter_add_needle_line(lv_obj, scale, 1, lv_color_black(), 0);
+        lv_meter_set_indicator_value(lv_obj, line, i * 1000);
+    }
 
     // lv_meter_indicator_t * bottom = lv_meter_add_arc(lv_obj, scale, 1, AMBER_HALF, -1);
     // lv_meter_set_indicator_start_value(lv_obj, bottom, 0);
@@ -257,53 +259,54 @@ Tach::Tach(lv_obj_t * parent) {
 
         indicator = lv_meter_add_needle_line(lv_obj, scale, 10, lv_color_black(), 0);
         lv_meter_set_indicator_value(lv_obj, indicator, 0);
+
         lv_obj_add_event_cb(lv_obj, indicator_draw, LV_EVENT_DRAW_PART_BEGIN, this);
         // lv_obj_set_style_bg_opa(lv_obj, LV_OPA_0, LV_PART_INDICATOR);
         // lv_obj_set_style_line_opa(lv_obj, LV_OPA_0, LV_PART_INDICATOR);
         indicator->opa = 0;
     }
 
-    {
-        lv_obj_t * tick_meter = lv_meter_create(lv_obj);
-        lv_obj_remove_style(tick_meter, NULL, LV_PART_INDICATOR);
-        lv_obj_remove_style(tick_meter, NULL, LV_PART_MAIN);
-        // lv_obj_set_style_blend_mode(meter, LV_BLEND_MODE_ADDITIVE, 0);
-        // lv_obj_center(meter);
-        lv_obj_set_size(tick_meter, 1850, 105);
-        lv_obj_set_style_pad_all(tick_meter, 0, 0);
-        // lv_obj_align(tick_meter, LV_ALIGN_TOP_MID, 0, 240);
-        lv_obj_align(tick_meter, LV_ALIGN_CENTER, 0, 0);
-        // lv_coord_t angle2 = -24 + 660 + 1800 + 240;
-        // lv_obj_set_style_translate_x(tick_meter, (lv_trigo_sin(angle2 / 10 + 90) * INDIC_RADIUS) >> LV_TRIGO_SHIFT, 0);
-        // lv_obj_set_style_translate_y(tick_meter, 1850 / 2 + (lv_trigo_sin(angle2 / 10) * INDIC_RADIUS) >> LV_TRIGO_SHIFT, 0);
+    // {
+    //     lv_obj_t * tick_meter = lv_meter_create(lv_obj);
+    //     lv_obj_remove_style(tick_meter, NULL, LV_PART_INDICATOR);
+    //     lv_obj_remove_style(tick_meter, NULL, LV_PART_MAIN);
+    //     // lv_obj_set_style_blend_mode(meter, LV_BLEND_MODE_ADDITIVE, 0);
+    //     // lv_obj_center(meter);
+    //     lv_obj_set_size(tick_meter, 1850, 105);
+    //     lv_obj_set_style_pad_all(tick_meter, 0, 0);
+    //     // lv_obj_align(tick_meter, LV_ALIGN_TOP_MID, 0, 240);
+    //     lv_obj_align(tick_meter, LV_ALIGN_CENTER, 0, 0);
+    //     // lv_coord_t angle2 = -24 + 660 + 1800 + 240;
+    //     // lv_obj_set_style_translate_x(tick_meter, (lv_trigo_sin(angle2 / 10 + 90) * INDIC_RADIUS) >> LV_TRIGO_SHIFT, 0);
+    //     // lv_obj_set_style_translate_y(tick_meter, 1850 / 2 + (lv_trigo_sin(angle2 / 10) * INDIC_RADIUS) >> LV_TRIGO_SHIFT, 0);
 
-        lv_meter_scale_t * scale = lv_meter_add_scale(tick_meter);
-        // lv_meter_set_scale_ticks(tick_meter, scale, 81, 1, 24, lv_color_black());
-        // lv_meter_set_scale_major_ticks(meter, scale, 10, 5, 12, lv_color_black(), 20);
-        lv_meter_set_scale_range(tick_meter, scale, 0, 8000, 48, 66 + 180);
+    //     lv_meter_scale_t * scale = lv_meter_add_scale(tick_meter);
+    //     // lv_meter_set_scale_ticks(tick_meter, scale, 81, 1, 24, lv_color_black());
+    //     // lv_meter_set_scale_major_ticks(meter, scale, 10, 5, 12, lv_color_black(), 20);
+    //     lv_meter_set_scale_range(tick_meter, scale, 0, 8000, 48, 66 + 180);
 
-        lv_meter_indicator_t * line = lv_meter_add_needle_line(tick_meter, scale, 3, lv_color_black(), 0);
-        lv_meter_set_indicator_value(tick_meter, line, 0);
+    //     lv_meter_indicator_t * line = lv_meter_add_needle_line(tick_meter, scale, 3, lv_color_black(), 0);
+    //     lv_meter_set_indicator_value(tick_meter, line, 0);
 
-        // for (int i = 1; i < 8; i++) {
-        //     line = lv_meter_add_needle_line(tick_meter, scale, 5, lv_color_black(), 0);
-        //     lv_meter_set_indicator_value(tick_meter, line, i * 1000);
-        // }
+    //     // for (int i = 1; i < 8; i++) {
+    //     //     line = lv_meter_add_needle_line(tick_meter, scale, 5, lv_color_black(), 0);
+    //     //     lv_meter_set_indicator_value(tick_meter, line, i * 1000);
+    //     // }
 
-        // for (uint16_t i = 100; i < 8000; i+=100) {
-        //     line = lv_meter_add_needle_line(tick_meter, scale, 1, lv_color_black(), 0);
-        //     lv_meter_set_indicator_value(tick_meter, line, i);
-        // }
+    //     // for (uint16_t i = 100; i < 8000; i+=100) {
+    //     //     line = lv_meter_add_needle_line(tick_meter, scale, 1, lv_color_black(), 0);
+    //     //     lv_meter_set_indicator_value(tick_meter, line, i);
+    //     // }
         
-        lv_meter_scale_t * scale2 = lv_meter_add_scale(tick_meter);
-        // lv_meter_set_scale_ticks(tick_meter, scale, 81, 1, 24, lv_color_black());
-        // lv_meter_set_scale_major_ticks(meter, scale, 10, 5, 12, lv_color_black(), 20);
-        lv_meter_set_scale_range(tick_meter, scale2, 0, 1, 6, 60 + 180);
+    //     lv_meter_scale_t * scale2 = lv_meter_add_scale(tick_meter);
+    //     // lv_meter_set_scale_ticks(tick_meter, scale, 81, 1, 24, lv_color_black());
+    //     // lv_meter_set_scale_major_ticks(meter, scale, 10, 5, 12, lv_color_black(), 20);
+    //     lv_meter_set_scale_range(tick_meter, scale2, 0, 1, 6, 60 + 180);
 
-        lv_meter_indicator_t * blackout = lv_meter_add_arc(tick_meter, scale2, 22, lv_color_black(), -4);
-        lv_meter_set_indicator_start_value(tick_meter, blackout, 0);
-        lv_meter_set_indicator_end_value(tick_meter, blackout, 1);
-    }
+    //     lv_meter_indicator_t * blackout = lv_meter_add_arc(tick_meter, scale2, 22, lv_color_black(), -4);
+    //     lv_meter_set_indicator_start_value(tick_meter, blackout, 0);
+    //     lv_meter_set_indicator_end_value(tick_meter, blackout, 1);
+    // }
 
     // tach_line = lv_meter_add_needle_line(lv_obj, scale, 5, AMBER_ON, 0);
     // lv_meter_set_indicator_value(lv_obj, tach_line, 0);
