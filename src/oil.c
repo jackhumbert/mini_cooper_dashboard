@@ -9,8 +9,13 @@ static lv_font_t * font_big;
 static lv_font_t * font_small;
 
 void oil_temp_update() {
-    uint16_t temp = round(get_dash()->oil_temp * 9 / 5.0 + 32);
-    lv_label_set_text_fmt(oil_temp_label, "%d°F",temp);
+    int16_t temp = 0;
+    if (get_dash()->oil_temp > -48) {
+        temp = round(get_dash()->oil_temp * 9 / 5.0 + 32);
+        lv_label_set_text_fmt(oil_temp_label, "%d°F",temp);
+    } else {
+        lv_label_set_text(oil_temp_label, "-°F");
+    }
     lv_meter_set_indicator_end_value(oil_temp_meter, oil_temp_indic,temp);
     lv_color_t old_color = oil_temp_indic->type_data.arc.color;
     if (temp > 260) {
@@ -45,6 +50,23 @@ lv_obj_t * oil_pressure_meter;
 lv_meter_indicator_t * oil_pressure_indic;
 
 lv_obj_t * oil_pressure_label;
+
+void oil_pressure_update(void) {
+    uint16_t value = (uint16_t)round(get_dash()->oil_pressure * 0.14503263234);
+    lv_label_set_text_fmt(oil_pressure_label, "%d psi", value);
+    lv_meter_set_indicator_end_value(oil_pressure_meter, oil_pressure_indic, value);
+    lv_color_t old_color = oil_pressure_indic->type_data.arc.color;
+    if (value > 65 || value < 2) {
+        oil_pressure_indic->type_data.arc.color = RED_ON;
+        lv_obj_set_style_text_color(oil_pressure_label, RED_ON, 0);
+    } else {
+        oil_pressure_indic->type_data.arc.color = AMBER_ON;
+        lv_obj_set_style_text_color(oil_pressure_label, AMBER_ON, 0);
+    }
+    if (old_color.full != oil_pressure_indic->type_data.arc.color.full) {
+        lv_obj_invalidate(oil_pressure_meter);
+    }
+}
 
 static void set_oil_pressure_value(void * indic, int32_t v) {
     lv_label_set_text_fmt(oil_pressure_label, "%d psi", v);

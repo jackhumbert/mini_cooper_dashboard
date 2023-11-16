@@ -202,27 +202,28 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     static lv_style_t style;
     lv_style_init(&style);
     lv_style_set_flex_flow(&style, LV_FLEX_FLOW_ROW_WRAP);
-    lv_style_set_flex_main_place(&style, LV_FLEX_ALIGN_SPACE_AROUND);
+    lv_style_set_flex_main_place(&style, LV_FLEX_ALIGN_SPACE_BETWEEN);
     lv_style_set_layout(&style, LV_LAYOUT_FLEX);
 
     lv_obj_t * cont = lv_obj_create(canvas);
     lv_obj_remove_style_all(cont);
-    lv_obj_set_size(cont, 20 * 8 * 3 + 40, 20 * 9 * 2);
+    lv_obj_set_size(cont, 800, 480);
     lv_obj_center(cont);
     lv_obj_add_style(cont, &style, 0);
 
-    // widgets.push_back(new BitTable(cont, &dashboard_queued.x1F3, 0x1F3, &dashboard.x1F3));
-    // widgets.push_back(new BitTable(cont, &dashboard_queued.x316, 0x316, &dashboard.x316));
-    // widgets.push_back(new BitTable(cont, &dashboard_queued.x329, 0x329, &dashboard.x329));
-    // widgets.push_back(new BitTable(cont, &dashboard_queued.x501, 0x501, &dashboard.x501));
-    // widgets.push_back(new BitTable(cont, &dashboard_queued.x545, 0x545, &dashboard.x545));
-    // widgets.push_back(new BitTable(cont, &dashboard_queued.x565, 0x565, &dashboard.x565));
-    // widgets.push_back(new BitTable(cont, &dashboard_queued.x610, 0x610, &dashboard.x610));
-    // widgets.push_back(new BitTable(cont, &dashboard_queued.x613, 0x613, &dashboard.x613));
-    // widgets.push_back(new BitTable(cont, &dashboard_queued.x615, 0x615, &dashboard.x615));
-    // widgets.push_back(new BitTable(cont, &dashboard_queued.x618, 0x618, &dashboard.x618));
-    // widgets.push_back(new BitTable(cont, &dashboard_queued.x61A, 0x61A, &dashboard.x61A));
-    // widgets.push_back(new BitTable(cont, &dashboard_queued.x61F, 0x61F, &dashboard.x61F));
+    widgets.push_back(new BitTable(cont, &dashboard_queued.x1F3, 0x1F3, &dashboard.x1F3));
+    widgets.push_back(new BitTable(cont, &dashboard_queued.x316, 0x316, &dashboard.x316));
+    widgets.push_back(new BitTable(cont, &dashboard_queued.x329, 0x329, &dashboard.x329));
+    widgets.push_back(new BitTable(cont, &dashboard_queued.x336, 0x336, &dashboard.x336));
+    widgets.push_back(new BitTable(cont, &dashboard_queued.x501, 0x501, &dashboard.x501));
+    widgets.push_back(new BitTable(cont, &dashboard_queued.x545, 0x545, &dashboard.x545));
+    widgets.push_back(new BitTable(cont, &dashboard_queued.x565, 0x565, &dashboard.x565));
+    widgets.push_back(new BitTable(cont, &dashboard_queued.x610, 0x610, &dashboard.x610));
+    widgets.push_back(new BitTable(cont, &dashboard_queued.x613, 0x613, &dashboard.x613));
+    widgets.push_back(new BitTable(cont, &dashboard_queued.x615, 0x615, &dashboard.x615));
+    widgets.push_back(new BitTable(cont, &dashboard_queued.x618, 0x618, &dashboard.x618));
+    widgets.push_back(new BitTable(cont, &dashboard_queued.x61A, 0x61A, &dashboard.x61A));
+    widgets.push_back(new BitTable(cont, &dashboard_queued.x61F, 0x61F, &dashboard.x61F));
 
 
     // setup_effect(canvas);
@@ -271,6 +272,9 @@ void dash_loop(void) {
     }
     if (dashboard_queued.oil_temp) {
         oil_temp_update();
+    }
+    if (dashboard_queued.oil_pressure) {
+        oil_pressure_update();
     }
     activity_update(dashboard_queued.activity);
     // sd_card_flush();

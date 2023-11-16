@@ -55,10 +55,11 @@ BO_ 809 DME2: 8 DME_Etc
    SG_ Engine_Running : 28|1@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 1557 x615: 8 DME_Etc
-   SG_ OutsideTemp : 24|8@1+ (1,0) [0|0] "deg_c" DME_Etc
+   SG_ OutsideTemp : 24|8@1- (1,0) [0|0] "deg_c" DME_Etc
    SG_ Handbrake2 : 33|1@0+ (1,0) [0|1] "" Vector__XXX
    SG_ RunningLights2 : 10|1@0+ (1,0) [0|1] "" Vector__XXX
    SG_ AC_Status : 6|2@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ Hood : 11|1@0+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 1349 DME4: 8 DME_Etc
    SG_ Fuel_Consumption : 8|16@1+ (1,0) [0|0] "mpg" DME_Etc
@@ -101,6 +102,7 @@ BO_ 339 ASC_1: 8 DME_Etc
    SG_ Brake_Pedal_Pressed : 4|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Tyre_Pressure_Set : 0|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Unk4 : 40|8@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ CheckEngineLight : 9|1@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 824 DME3: 8 DME_Etc
    SG_ Throttle_Position : 40|8@1+ (1,0) [0|0] "" DME_Etc
@@ -118,20 +120,17 @@ BO_ 499 x1F3: 8 DME_Etc
    SG_ IDK1_unk7 : 59|1@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 1381 x565: 8 DME_Etc
-   SG_ IDK2_unk1 : 4|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ IDK2_unk1 : 55|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK2_unk2 : 6|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK2_unk3 : 13|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK2_unk4 : 16|8@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK2_unk5 : 25|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK2_unk6 : 41|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ Unk7 : 56|8@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ Unk6 : 48|8@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ OilPressure : 48|8@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 1560 x618: 8 DME_Etc
-   SG_ IDK3unk1 : 16|1@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ IDK3unk2 : 17|1@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ IDK3unk3 : 19|1@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ IDK3unk4 : 23|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ IDK3unk2 : 16|8@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 1567 x61F: 8 DME_Etc
    SG_ LeftTurnSignal : 22|1@0+ (1,0) [0|1] "" Vector__XXX
@@ -144,6 +143,7 @@ BO_ 1567 x61F: 8 DME_Etc
    SG_ InteriorLightLevel : 8|6@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 1562 x61A: 8 DME_Etc
+   SG_ StalkState : 40|20@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 822 x336: 8 DME_Etc
    SG_ x336Sig347 : 0|64@1+ (1,0) [0|1] "" Vector__XXX
@@ -160,6 +160,8 @@ BO_ 1281 x501: 8 DME_Etc
 BA_DEF_ BO_ "GenMsgBackgroundColor" STRING ;
 BA_DEF_ BO_ "GenMsgForegroundColor" STRING ;
 BA_DEF_ BO_ "isj1939dbc" INT 0 0;
+BA_DEF_ BO_ "matchingcriteria" INT 0 0;
+BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_DEF_ BO_ "matchingcriteria" INT 0 0;
 BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_DEF_ BO_ "matchingcriteria" INT 0 0;

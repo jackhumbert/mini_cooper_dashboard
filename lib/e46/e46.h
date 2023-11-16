@@ -61,6 +61,7 @@ typedef PREPACK struct {
 	uint8_t Unk4; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Tyre_Pressure_Set; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Brake_Pedal_Pressed; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t CheckEngineLight; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x153_ASC_1_t;
 
 typedef enum {
@@ -218,14 +219,14 @@ typedef enum {
 } can_0x545_DME4_Oil_Pressure_Light_e;
 
 typedef PREPACK struct {
+	uint8_t OilPressure; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK2_unk4; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t Unk6; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Unk7; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t IDK2_unk2; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK2_unk1; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK2_unk6; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t IDK2_unk5; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t IDK2_unk2; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK2_unk3; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t IDK2_unk5; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x565_x565_t;
 
 typedef PREPACK struct {
@@ -241,20 +242,19 @@ typedef PREPACK struct {
 } POSTPACK can_0x613_Instrument_Cluster_t;
 
 typedef PREPACK struct {
-	uint8_t OutsideTemp; /* scaling 1.0, offset 0.0, units deg_c  */
+	int8_t OutsideTemp; /* scaling 1.0, offset 0.0, units deg_c  */
 	uint8_t AC_Status; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t RunningLights2; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t Hood; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Handbrake2; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x615_x615_t;
 
 typedef PREPACK struct {
-	uint8_t IDK3unk1; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK3unk2; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t IDK3unk3; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t IDK3unk4; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x618_x618_t;
 
 typedef PREPACK struct {
+	uint32_t StalkState; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x61a_x61A_t;
 
 typedef PREPACK struct {
@@ -373,6 +373,8 @@ int decode_can_0x153_Tyre_Pressure_Set(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x153_Tyre_Pressure_Set(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x153_Brake_Pedal_Pressed(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x153_Brake_Pedal_Pressed(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x153_CheckEngineLight(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x153_CheckEngineLight(can_obj_e46_h_t *o, uint8_t in);
 
 
 int decode_can_0x1f0_Wheel_1_Left_Front_Speed(const can_obj_e46_h_t *o, double *out);
@@ -503,22 +505,22 @@ int decode_can_0x545_EML(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x545_EML(can_obj_e46_h_t *o, uint8_t in);
 
 
+int decode_can_0x565_OilPressure(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x565_OilPressure(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x565_IDK2_unk4(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x565_IDK2_unk4(can_obj_e46_h_t *o, uint8_t in);
-int decode_can_0x565_Unk6(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x565_Unk6(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x565_Unk7(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x565_Unk7(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x565_IDK2_unk2(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x565_IDK2_unk2(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x565_IDK2_unk1(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x565_IDK2_unk1(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x565_IDK2_unk6(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x565_IDK2_unk6(can_obj_e46_h_t *o, uint8_t in);
-int decode_can_0x565_IDK2_unk5(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x565_IDK2_unk5(can_obj_e46_h_t *o, uint8_t in);
-int decode_can_0x565_IDK2_unk2(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x565_IDK2_unk2(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x565_IDK2_unk3(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x565_IDK2_unk3(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x565_IDK2_unk5(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x565_IDK2_unk5(can_obj_e46_h_t *o, uint8_t in);
 
 
 int decode_can_0x610_x610Sig39(const can_obj_e46_h_t *o, uint64_t *out);
@@ -537,26 +539,24 @@ int decode_can_0x613_Fuel_Level(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x613_Fuel_Level(can_obj_e46_h_t *o, uint8_t in);
 
 
-int decode_can_0x615_OutsideTemp(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x615_OutsideTemp(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x615_OutsideTemp(const can_obj_e46_h_t *o, int8_t *out);
+int encode_can_0x615_OutsideTemp(can_obj_e46_h_t *o, int8_t in);
 int decode_can_0x615_AC_Status(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x615_AC_Status(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x615_RunningLights2(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x615_RunningLights2(can_obj_e46_h_t *o, uint8_t in);
+int decode_can_0x615_Hood(const can_obj_e46_h_t *o, uint8_t *out);
+int encode_can_0x615_Hood(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x615_Handbrake2(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x615_Handbrake2(can_obj_e46_h_t *o, uint8_t in);
 
 
-int decode_can_0x618_IDK3unk1(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x618_IDK3unk1(can_obj_e46_h_t *o, uint8_t in);
 int decode_can_0x618_IDK3unk2(const can_obj_e46_h_t *o, uint8_t *out);
 int encode_can_0x618_IDK3unk2(can_obj_e46_h_t *o, uint8_t in);
-int decode_can_0x618_IDK3unk3(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x618_IDK3unk3(can_obj_e46_h_t *o, uint8_t in);
-int decode_can_0x618_IDK3unk4(const can_obj_e46_h_t *o, uint8_t *out);
-int encode_can_0x618_IDK3unk4(can_obj_e46_h_t *o, uint8_t in);
 
 
+int decode_can_0x61a_StalkState(const can_obj_e46_h_t *o, uint32_t *out);
+int encode_can_0x61a_StalkState(can_obj_e46_h_t *o, uint32_t in);
 
 
 int decode_can_0x61f_InteriorLightLevel(const can_obj_e46_h_t *o, uint8_t *out);

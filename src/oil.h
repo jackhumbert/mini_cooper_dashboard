@@ -5,3 +5,4 @@ lv_obj_t * oil_temp_create(lv_obj_t * parent);
 lv_obj_t * oil_pressure_create(lv_obj_t * parent);
 
 void oil_temp_update();
+void oil_pressure_update(void);

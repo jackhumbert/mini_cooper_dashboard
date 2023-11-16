@@ -56,6 +56,7 @@ typedef struct dashboard_t {
     uint64_t x1F3;
     uint64_t x316;
     uint64_t x329;
+    uint64_t x336;
     uint64_t x501;
     uint64_t x545;
     uint64_t x565;
@@ -111,12 +112,14 @@ typedef struct dashboard_t {
     double oil_temp;
     uint8_t unk7;
 
+    uint8_t oil_pressure;
+
     // 0x613
     double odometer;
     uint16_t running_clock;
     uint8_t fuel_level;
 
-    uint8_t outside_temp;
+    int8_t outside_temp;
 
     uint8_t brights;
     uint8_t running_lights;
@@ -139,6 +142,7 @@ typedef struct dashboard_changed_t {
     uint8_t x1F3;
     uint8_t x316;
     uint8_t x329;
+    uint8_t x336;
     uint8_t x501;
     uint8_t x545;
     uint8_t x565;
@@ -202,6 +206,7 @@ typedef struct dashboard_changed_t {
     uint8_t odometer;
     uint8_t running_clock;
     uint8_t fuel_level;
+    uint8_t oil_pressure;
 
     uint8_t outside_temp;
 
@@ -219,11 +224,11 @@ typedef struct dashboard_changed_t {
 dashboard_t * get_dash(void);
 dashboard_t * get_cache(void);
 
-#define has_changed(t) (get_dash()->##t != get_cache()->##t)
+#define has_changed(t) (get_dash()->t != get_cache()->t)
 
 dashboard_changed_t * get_changed(void);
 
-#define update_changed(t) if (has_changed(t)) get_changed()->##t = 1
+#define update_changed(t) if (has_changed(t)) get_changed()->t = 1
 
 lv_obj_t * dash_create(lv_disp_t *);
 void dash_loop(void);

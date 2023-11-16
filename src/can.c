@@ -71,7 +71,10 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 decode_can_0x329_Throttle_Position(&can_data, &get_dash()->throttle_position);
                 update_changed(throttle_position);
                 return 0;
-            case 0x336: return 0;
+            case 0x336: 
+                get_dash()->x336 = *(uint64_t*)data;
+                get_changed()->x336 = 1;
+                return 0;
             case 0x338:
                 decode_can_0x338_Clutch(&can_data, &get_dash()->clutch);
                 return 0;
@@ -88,6 +91,8 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 get_changed()->x545 = 1;
                 return 0;
             case 0x565: 
+                decode_can_0x565_OilPressure(&can_data, &get_dash()->oil_pressure);
+                update_changed(oil_pressure);
                 get_dash()->x565 = *(uint64_t*)data;
                 get_changed()->x565 = 1;
                 return 0;
@@ -109,12 +114,14 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 decode_can_0x615_OutsideTemp(&can_data, &get_dash()->outside_temp);
                 update_changed(outside_temp);
                 return 0;
-            case 0x618: return 0;
+            case 0x618: 
                 get_dash()->x618 = *(uint64_t*)data;
                 get_changed()->x618 = 1;
-            case 0x61A: return 0;
+                return 0;
+            case 0x61A: 
                 get_dash()->x61A = *(uint64_t*)data;
                 get_changed()->x61A = 1;
+                return 0;
             case 0x61F: 
                 get_dash()->x61F = *(uint64_t*)data;
                 get_changed()->x61F = 1;

@@ -11,9 +11,9 @@ static bool overflow;
 long offset = -18000;
 
 void clock_update() {
-    // Tear apart hms into h:m:s
-    int hour = get_dash()->running_clock / SEC_PER_HOUR;
-    int min = (get_dash()->running_clock % SEC_PER_HOUR) / SEC_PER_MIN;
+    // running_clock is in minutes
+    int hour = get_dash()->running_clock / 60 % 24;
+    int min = get_dash()->running_clock % 60;
     //   int sec = (hms % SEC_PER_HOUR) % SEC_PER_MIN; // or hms % SEC_PER_MIN
 
     bool pm =  hour >= 12;
@@ -95,11 +95,10 @@ lv_obj_t * clock_create(lv_obj_t * parent) {
     }
 
     // Form the seconds of the day
-    long hms = timeinfo.tm_sec % SEC_PER_DAY;
-    hms += timeinfo.tm_hour * SEC_PER_HOUR;
-    hms += timeinfo.tm_min * SEC_PER_MIN;
+    long hms = timeinfo.tm_min % 60;
+    hms += timeinfo.tm_hour * 60;
     // mod `hms` to insure in positive range of [0...SEC_PER_DAY)
-    hms = (hms + SEC_PER_DAY) % SEC_PER_DAY;
+    hms = (hms + 3600) % 3600;
 
 
     // // Form the seconds of the day
