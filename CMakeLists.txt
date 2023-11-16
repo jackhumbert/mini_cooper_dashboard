@@ -67,7 +67,7 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/src/assets/fonts.c")
     endforeach()
 endif()
 
-add_custom_target(e46 COMMAND ../dbcc/dbcc e46.dbc WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/lib/e46)
+add_custom_target(r53 COMMAND ../dbcc/dbcc r53.dbc WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/lib/r53 SOURCES lib/r53/r53.dbc BYPRODUCTS lib/r53/r53.c lib/r53/r53.h)
 
 
 # include_directories(${SDL2_INCLUDE_DIRS})

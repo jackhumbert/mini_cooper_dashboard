@@ -7534,7 +7534,7 @@ design rules under a new name.</description>
 <mfgpreviewcolor name="silkscreencolor" color="0xFFFEFEFE"/>
 <mfgpreviewcolor name="backgroundcolor" color="0xFF282828"/>
 <mfgpreviewcolor name="coppercolor" color="0xFFFFBF00"/>
-<mfgpreviewcolor name="substratecolor" color="0xFF786E46"/>
+<mfgpreviewcolor name="substratecolor" color="0xFF786r53"/>
 </mfgpreviewcolors>
 </board>
 </drawing>

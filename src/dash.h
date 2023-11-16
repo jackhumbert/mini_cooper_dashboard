@@ -9,6 +9,9 @@
 #define CANVAS_WIDTH  800
 #define CANVAS_HEIGHT 480
 
+#define GAUGE_SIZE 120, 120
+#define GAUGE_WIDTH 16
+
 #define AMBER_ON lv_color_hsv_to_rgb(20, 100, 100)
 #define AMBER_HALF lv_color_hsv_to_rgb(18, 100, 50)
 #define AMBER_OFF lv_color_hsv_to_rgb(15, 100, 8)
@@ -23,11 +26,13 @@
 
 #define GREEN_ON lv_color_hsv_to_rgb(130, 100, 100)
 #define GREEN_HALF lv_color_hsv_to_rgb(125, 100, 50)
-#define GREEN_OFF lv_color_hsv_to_rgb(120, 100, 8)
+#define GREEN_OFF lv_color_hsv_to_rgb(120, 100, 5)
 
 #define WHITE_ON lv_color_hsv_to_rgb(0, 0, 100)
 #define WHITE_HALF lv_color_hsv_to_rgb(0, 0, 50)
 #define WHITE_OFF lv_color_hsv_to_rgb(0, 0, 8)
+
+#define IMPORTANT_TEXT WHITE_ON
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
@@ -111,8 +116,10 @@ typedef struct dashboard_t {
     uint8_t oil_pressure_light;
     double oil_temp;
     uint8_t unk7;
+    uint8_t check_engine_light;
+    uint8_t eml_light;
 
-    uint8_t oil_pressure;
+    double oil_pressure;
 
     // 0x613
     double odometer;
@@ -120,6 +127,7 @@ typedef struct dashboard_t {
     uint8_t fuel_level;
 
     int8_t outside_temp;
+    uint8_t hood;
 
     uint8_t brights;
     uint8_t running_lights;
@@ -202,6 +210,8 @@ typedef struct dashboard_changed_t {
     uint8_t oil_pressure_light;
     uint8_t oil_temp;
     uint8_t unk7;
+    uint8_t check_engine_light;
+    uint8_t eml_light;
 
     uint8_t odometer;
     uint8_t running_clock;
@@ -209,6 +219,7 @@ typedef struct dashboard_changed_t {
     uint8_t oil_pressure;
 
     uint8_t outside_temp;
+    uint8_t hood;
 
     uint8_t brights;
     uint8_t running_lights;
@@ -227,6 +238,7 @@ dashboard_t * get_cache(void);
 #define has_changed(t) (get_dash()->t != get_cache()->t)
 
 dashboard_changed_t * get_changed(void);
+dashboard_changed_t * get_queued(void);
 
 #define update_changed(t) if (has_changed(t)) get_changed()->t = 1
 

@@ -7,15 +7,16 @@ extern "C"
 
 #include "tach.h"
 #include "tach2.h"
-#include "tach3.h"
-#include "speed.h"
+#include "tach3.hpp"
+#include "speed.hpp"
 #include "clock.h"
-#include "temp.h"
-#include "car_view.h"
+#include "outside_temp.hpp"
+#include "car_view.hpp"
 #include "turn_signal.h"
-#include "oil.h"
-#include "coolant.h"
-#include "gas.h"
+#include "oil_temp.hpp"
+#include "oil_pressure.hpp"
+#include "coolant.hpp"
+#include "fuel.hpp"
 #include "messages.h"
 #include "effect.h"
 #include "theme.h"
@@ -49,6 +50,10 @@ dashboard_t * get_cache(void) {
 
 dashboard_changed_t * get_changed(void) {
     return &dashboard_changed;
+}
+
+dashboard_changed_t * get_queued(void) {
+    return &dashboard_queued;
 }
 
 static uint8_t event_num = 0;
@@ -114,15 +119,11 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     
     canvas = lv_scr_act();
 
-    lv_obj_t * tach = tach3_create(canvas);
-    lv_obj_align(tach, LV_ALIGN_TOP_MID, 0, 240);
+    widgets.push_back(new Tach(canvas));
+    widgets.push_back(new Speed(canvas));
 
-    lv_obj_t * speed = speed_create(canvas);
-    lv_obj_align(speed, LV_ALIGN_TOP_MID, 0, 40);
-    // lv_obj_set_grid_cell(speed, LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_CENTER, 2, 2);
-
-    static lv_coord_t col_dsc[] = {48, 48, 48, 48, 48, LV_GRID_TEMPLATE_LAST};
-    static lv_coord_t row_dsc[] = {72, 48, 48, 48, 48, 48, 157, 20, LV_GRID_TEMPLATE_LAST};
+    // static lv_coord_t col_dsc[] = {48, 48, 48, 48, 48, LV_GRID_TEMPLATE_LAST};
+    // static lv_coord_t row_dsc[] = {72, 48, 48, 48, 48, 48, 157, 20, LV_GRID_TEMPLATE_LAST};
 
     /*Create a container with grid*/
     // lv_obj_t * cont = lv_obj_create(canvas);
@@ -136,34 +137,23 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     // lv_obj_set_layout(cont, LV_LAYOUT_GRID);
 
     lv_obj_t * clock = clock_create(canvas);
-    lv_obj_align(clock, LV_ALIGN_TOP_LEFT, 300, 180);
+    lv_obj_align(clock, LV_ALIGN_TOP_LEFT, 300, 160);
 
-    lv_obj_t * temp = temp_create(canvas);
-    lv_obj_align(temp, LV_ALIGN_TOP_RIGHT, -300, 180);
+    widgets.push_back(new OutsideTemp(canvas));
 
     lv_obj_t * turn_left = turn_signal_left_create(canvas);
-    lv_obj_align(turn_left, LV_ALIGN_TOP_LEFT, 295 - 24, 308 - 24);
+    lv_obj_align(turn_left, LV_ALIGN_TOP_LEFT, 295 - 24, 308 - 40);
     // lv_obj_set_grid_cell(turn_left, LV_GRID_ALIGN_CENTER, 4, 1, LV_GRID_ALIGN_CENTER, 2, 2);
 
     lv_obj_t * turn_right = turn_signal_right_create(canvas);
-    lv_obj_align(turn_right, LV_ALIGN_TOP_LEFT, 505 - 24, 308 - 24);
+    lv_obj_align(turn_right, LV_ALIGN_TOP_RIGHT, -(295 - 24), 308 - 40);
     // lv_obj_set_grid_cell(turn_right, LV_GRID_ALIGN_CENTER, 1, 1, LV_GRID_ALIGN_CENTER, 3, 2);
 
-    lv_obj_t * car_view = car_view_create(canvas);
-    lv_obj_align(car_view, LV_ALIGN_BOTTOM_MID, 0, -20);
-    // lv_obj_set_grid_cell(car_view, LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_CENTER, 6, 1);
-
-    lv_obj_t * oil_pressure_view = oil_pressure_create(canvas);
-    lv_obj_align(oil_pressure_view, LV_ALIGN_TOP_LEFT, 41, 357);
-
-    lv_obj_t * oil_temp_view = oil_temp_create(canvas);
-    lv_obj_align(oil_temp_view, LV_ALIGN_TOP_LEFT, 180, 316);
-
-    lv_obj_t * coolant_view = coolant_create(canvas);
-    lv_obj_align(coolant_view, LV_ALIGN_TOP_RIGHT, -180, 316);
-
-    lv_obj_t * gas_view = gas_create(canvas);
-    lv_obj_align(gas_view, LV_ALIGN_TOP_RIGHT, -41, 357);
+    widgets.push_back(new CarView(canvas));
+    widgets.push_back(new OilPressure(canvas));
+    widgets.push_back(new OilTemp(canvas));
+    widgets.push_back(new Coolant(canvas));
+    widgets.push_back(new Fuel(canvas));
 
     lv_obj_t * messages_view = messages_create(canvas);
     lv_obj_align(messages_view, LV_ALIGN_TOP_LEFT, 10, 10);
@@ -211,19 +201,19 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     lv_obj_center(cont);
     lv_obj_add_style(cont, &style, 0);
 
-    widgets.push_back(new BitTable(cont, &dashboard_queued.x1F3, 0x1F3, &dashboard.x1F3));
-    widgets.push_back(new BitTable(cont, &dashboard_queued.x316, 0x316, &dashboard.x316));
-    widgets.push_back(new BitTable(cont, &dashboard_queued.x329, 0x329, &dashboard.x329));
-    widgets.push_back(new BitTable(cont, &dashboard_queued.x336, 0x336, &dashboard.x336));
-    widgets.push_back(new BitTable(cont, &dashboard_queued.x501, 0x501, &dashboard.x501));
-    widgets.push_back(new BitTable(cont, &dashboard_queued.x545, 0x545, &dashboard.x545));
-    widgets.push_back(new BitTable(cont, &dashboard_queued.x565, 0x565, &dashboard.x565));
-    widgets.push_back(new BitTable(cont, &dashboard_queued.x610, 0x610, &dashboard.x610));
-    widgets.push_back(new BitTable(cont, &dashboard_queued.x613, 0x613, &dashboard.x613));
-    widgets.push_back(new BitTable(cont, &dashboard_queued.x615, 0x615, &dashboard.x615));
-    widgets.push_back(new BitTable(cont, &dashboard_queued.x618, 0x618, &dashboard.x618));
-    widgets.push_back(new BitTable(cont, &dashboard_queued.x61A, 0x61A, &dashboard.x61A));
-    widgets.push_back(new BitTable(cont, &dashboard_queued.x61F, 0x61F, &dashboard.x61F));
+    // widgets.push_back(new BitTable(cont, &dashboard_queued.x1F3, 0x1F3, &dashboard.x1F3));
+    // widgets.push_back(new BitTable(cont, &dashboard_queued.x316, 0x316, &dashboard.x316));
+    // widgets.push_back(new BitTable(cont, &dashboard_queued.x329, 0x329, &dashboard.x329));
+    // widgets.push_back(new BitTable(cont, &dashboard_queued.x336, 0x336, &dashboard.x336));
+    // widgets.push_back(new BitTable(cont, &dashboard_queued.x501, 0x501, &dashboard.x501));
+    // widgets.push_back(new BitTable(cont, &dashboard_queued.x545, 0x545, &dashboard.x545));
+    // widgets.push_back(new BitTable(cont, &dashboard_queued.x565, 0x565, &dashboard.x565));
+    // widgets.push_back(new BitTable(cont, &dashboard_queued.x610, 0x610, &dashboard.x610));
+    // widgets.push_back(new BitTable(cont, &dashboard_queued.x613, 0x613, &dashboard.x613));
+    // widgets.push_back(new BitTable(cont, &dashboard_queued.x615, 0x615, &dashboard.x615));
+    // widgets.push_back(new BitTable(cont, &dashboard_queued.x618, 0x618, &dashboard.x618));
+    // widgets.push_back(new BitTable(cont, &dashboard_queued.x61A, 0x61A, &dashboard.x61A));
+    // widgets.push_back(new BitTable(cont, &dashboard_queued.x61F, 0x61F, &dashboard.x61F));
 
 
     // setup_effect(canvas);
@@ -240,23 +230,8 @@ void dash_loop(void) {
     for (auto widget : widgets) {
         widget->update();
     }
-    if (dashboard_queued.speed) {
-        speed_update();
-    }
-    if (dashboard_queued.engine_temp) {
-        coolant_update();
-    }
-    if (dashboard_queued.rpm) {
-        tach3_update();
-    }
-    if (dashboard_queued.fuel_level) {
-        gas_update();
-    }
     if (dashboard_queued.running_clock) {
         clock_update();
-    }
-    if (dashboard_queued.outside_temp) {
-        temp_update();
     }
     if (dashboard_queued.left_turn_signal) {
         turn_signal_update();
@@ -266,15 +241,6 @@ void dash_loop(void) {
     }
     if (dashboard_queued.running_lights) {
         start_screen_fade();
-    }
-    if (dashboard_queued.brights || dashboard_queued.running_lights) {
-        car_view_update();
-    }
-    if (dashboard_queued.oil_temp) {
-        oil_temp_update();
-    }
-    if (dashboard_queued.oil_pressure) {
-        oil_pressure_update();
     }
     activity_update(dashboard_queued.activity);
     // sd_card_flush();

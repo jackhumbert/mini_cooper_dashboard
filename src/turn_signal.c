@@ -20,8 +20,8 @@ lv_obj_t * turn_signal_left_create(lv_obj_t * parent) {
     lv_img_set_src(turn_left, &slice15);
     lv_obj_set_size(turn_left, 48, 48);
     // lv_obj_set_style_blend_mode(turn_left, LV_BLEND_MODE_ADDITIVE, 0);
-    lv_obj_set_style_transform_pivot_x(turn_left, 24, 0);
-    lv_obj_set_style_transform_pivot_y(turn_left, 24, 0);
+    lv_obj_set_style_transform_pivot_x(turn_left, LV_PCT(50), 0);
+    lv_obj_set_style_transform_pivot_y(turn_left, LV_PCT(50), 0);
     lv_obj_set_style_transform_angle(turn_left, 1800, 0);
     lv_obj_set_style_img_recolor(turn_left, GREEN_OFF, 0);
     lv_obj_set_style_img_recolor_opa(turn_left, LV_OPA_100, 0);
@@ -41,6 +41,8 @@ lv_obj_t * turn_signal_right_create(lv_obj_t * parent) {
     lv_img_set_src(turn_right, &slice15);
     lv_obj_set_size(turn_right, 48, 48);
     // lv_obj_set_style_blend_mode(turn_right, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_set_style_transform_pivot_x(turn_left, LV_PCT(50), 0);
+    lv_obj_set_style_transform_pivot_y(turn_left, LV_PCT(50), 0);
     lv_obj_set_style_img_recolor(turn_right, GREEN_OFF, 0);
     lv_obj_set_style_img_recolor_opa(turn_right, LV_OPA_100, 0);
 

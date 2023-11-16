@@ -1,4 +1,4 @@
-most of it is the exact same as E46 bmw. I am using canbus for water temp, rpm, wheelspeed, throttle position (actual TB not pedal)
+most of it is the exact same as r53 bmw. I am using canbus for water temp, rpm, wheelspeed, throttle position (actual TB not pedal)
 
 this should get you started
 

@@ -15,7 +15,7 @@ void BitTable::update(void) {
 }
 
 BitTable::BitTable(lv_obj_t * parent, uint8_t * update_bit, uint32_t id, uint64_t * data) : 
-    Widget(parent, update_bit), 
+    update_bit(update_bit),
     id(id), 
     data(data)
 {

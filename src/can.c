@@ -1,16 +1,7 @@
 #include "can.h"
-#include "speed.h"
-#include "tach3.h"
-#include "messages.h"
-#include "temp.h"
-#include "gas.h"
-#include "oil.h"
-#include "clock.h"
-#include "coolant.h"
-#include "turn_signal.h"
-#include "car_view.h"
+#include "messages.h"-
 
-static can_obj_e46_h_t can_data;
+static can_obj_r53_h_t can_data;
 
 static uint64_t u64_from_can_msg(const uint8_t m[8]) {
 	return ((uint64_t)m[7] << 56) | ((uint64_t)m[6] << 48) | ((uint64_t)m[5] << 40) | ((uint64_t)m[4] << 32) 
@@ -87,6 +78,10 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 update_changed(oil_temp);
                 decode_can_0x545_Unk7(&can_data, &get_dash()->unk7);
                 update_changed(unk7);
+                decode_can_0x545_CheckEngineLight(&can_data, &get_dash()->check_engine_light);
+                update_changed(check_engine_light);
+                decode_can_0x545_EML(&can_data, &get_dash()->eml_light);
+                update_changed(eml_light);
                 get_dash()->x545 = *(uint64_t*)data;
                 get_changed()->x545 = 1;
                 return 0;
@@ -113,6 +108,10 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 get_changed()->x615 = 1;
                 decode_can_0x615_OutsideTemp(&can_data, &get_dash()->outside_temp);
                 update_changed(outside_temp);
+                decode_can_0x615_Handbrake(&can_data, &get_dash()->handbrake);
+                update_changed(handbrake);
+                decode_can_0x615_Hood(&can_data, &get_dash()->hood);
+                update_changed(hood);
                 return 0;
             case 0x618: 
                 get_dash()->x618 = *(uint64_t*)data;
@@ -125,10 +124,11 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
             case 0x61F: 
                 get_dash()->x61F = *(uint64_t*)data;
                 get_changed()->x61F = 1;
-                if (can_data.can_0x61f_x61F.Handbrake != get_dash()->handbrake) {
-                    get_dash()->handbrake = can_data.can_0x61f_x61F.Handbrake;
-                    get_changed()->handbrake = 1;
-                }
+                // only when running
+                // if (can_data.can_0x61f_x61F.Handbrake != get_dash()->handbrake) {
+                //     get_dash()->handbrake = can_data.can_0x61f_x61F.Handbrake;
+                //     get_changed()->handbrake = 1;
+                // }
                 if (can_data.can_0x61f_x61F.Brights != get_dash()->brights) {
                     get_dash()->brights = can_data.can_0x61f_x61F.Brights;
                     get_changed()->brights = 1;

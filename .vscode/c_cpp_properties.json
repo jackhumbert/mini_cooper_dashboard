@@ -10,7 +10,7 @@
             "includePath": [
                 "/Users/jackhumbert/Github/r53_dash/include",
                 "/Users/jackhumbert/Github/r53_dash/src",
-                "/Users/jackhumbert/Github/r53_dash/lib/e46",
+                "/Users/jackhumbert/Github/r53_dash/lib/r53",
                 "/Users/jackhumbert/.platformio/packages/framework-arduinoespressif32/libraries/SD/src",
                 "/Users/jackhumbert/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                 "/Users/jackhumbert/Github/r53_dash/.pio/libdeps/esp32-s3-devkitc-1-myboard/ESP32Time",
@@ -256,7 +256,7 @@
                 "path": [
                     "/Users/jackhumbert/Github/r53_dash/include",
                     "/Users/jackhumbert/Github/r53_dash/src",
-                    "/Users/jackhumbert/Github/r53_dash/lib/e46",
+                    "/Users/jackhumbert/Github/r53_dash/lib/r53",
                     "/Users/jackhumbert/.platformio/packages/framework-arduinoespressif32/libraries/SD/src",
                     "/Users/jackhumbert/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                     "/Users/jackhumbert/Github/r53_dash/.pio/libdeps/esp32-s3-devkitc-1-myboard/ESP32Time",

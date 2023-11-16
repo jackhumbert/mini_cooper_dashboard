@@ -56,7 +56,7 @@ BO_ 809 DME2: 8 DME_Etc
 
 BO_ 1557 x615: 8 DME_Etc
    SG_ OutsideTemp : 24|8@1- (1,0) [0|0] "deg_c" DME_Etc
-   SG_ Handbrake2 : 33|1@0+ (1,0) [0|1] "" Vector__XXX
+   SG_ Handbrake : 33|1@0+ (1,0) [0|1] "" Vector__XXX
    SG_ RunningLights2 : 10|1@0+ (1,0) [0|1] "" Vector__XXX
    SG_ AC_Status : 6|2@1+ (1,0) [0|1] "" Vector__XXX
    SG_ Hood : 11|1@0+ (1,0) [0|1] "" Vector__XXX
@@ -127,7 +127,7 @@ BO_ 1381 x565: 8 DME_Etc
    SG_ IDK2_unk5 : 25|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ IDK2_unk6 : 41|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ Unk7 : 56|8@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ OilPressure : 48|8@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ OilPressure : 48|8@1+ (2,0) [0|0] "mPa" Vector__XXX
 
 BO_ 1560 x618: 8 DME_Etc
    SG_ IDK3unk2 : 16|8@1+ (1,0) [0|0] "" Vector__XXX
@@ -138,7 +138,7 @@ BO_ 1567 x61F: 8 DME_Etc
    SG_ RightTurnSignal : 27|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ RunningLights : 36|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ Brights : 23|1@0+ (1,0) [0|1] "" Vector__XXX
-   SG_ Handbrake : 25|1@0+ (1,0) [0|1] "" Vector__XXX
+   SG_ RunningHandbrake : 25|1@0+ (1,0) [0|1] "" Vector__XXX
    SG_ Cruise : 31|1@0+ (1,0) [0|1] "" Vector__XXX
    SG_ InteriorLightLevel : 8|6@1+ (1,0) [0|1] "" Vector__XXX
 
@@ -199,7 +199,7 @@ VAL_ 790 Key 0 "Off" 1 "On";
 VAL_ 790 Starter 0 "Off" 1 "On";
 VAL_ 790 AC_Clutch 0 "Off" 1 "On";
 VAL_ 809 Brake_Light_Switch 1 "Pressed" 0 "Not_Pressed";
-VAL_ 809 Brake_Light_Switch_Error 0 "Off" 1 "Error!!";
+VAL_ 809 Brake_Light_Switch_Error 0 "Off" 1 "Error";
 VAL_ 809 Clutch_Switch 0 "Not_pressed" 1 "Pressed";
 VAL_ 809 Engine_Running 0 "Not_running" 1 "Running";
 VAL_ 1349 Charge_Light 0 "Off" 1 "On";
