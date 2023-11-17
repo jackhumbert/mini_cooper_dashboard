@@ -1117,8 +1117,16 @@ static int pack_can_0x336_x336(can_obj_r53_h_t *o, uint64_t *data) {
 	assert(data);
 	register uint64_t x;
 	register uint64_t i = 0;
-	/* x336Sig347: start-bit 0, length 64, endianess intel, scaling 1, offset 0 */
-	x = ((uint64_t)(o->can_0x336_x336.x336Sig347)) & 0xffffffffffffffff;
+	/* Unk0: start-bit 0, length 16, endianess intel, scaling 1, offset 0 */
+	x = ((uint16_t)(o->can_0x336_x336.Unk0)) & 0xffff;
+	i |= x;
+	/* Unk4: start-bit 32, length 16, endianess intel, scaling 1, offset 0 */
+	x = ((uint16_t)(o->can_0x336_x336.Unk4)) & 0xffff;
+	x <<= 32; 
+	i |= x;
+	/* Unk6: start-bit 48, length 16, endianess intel, scaling 1, offset 0 */
+	x = ((uint16_t)(o->can_0x336_x336.Unk6)) & 0xffff;
+	x <<= 48; 
 	i |= x;
 	*data = (i);
 	o->can_0x336_x336_tx = 1;
@@ -1132,33 +1140,67 @@ static int unpack_can_0x336_x336(can_obj_r53_h_t *o, uint64_t data, uint8_t dlc,
 	register uint64_t i = (data);
 	if (dlc < 8)
 		return -1;
-	/* x336Sig347: start-bit 0, length 64, endianess intel, scaling 1, offset 0 */
-	x = i & 0xffffffffffffffff;
-	o->can_0x336_x336.x336Sig347 = x;
+	/* Unk0: start-bit 0, length 16, endianess intel, scaling 1, offset 0 */
+	x = i & 0xffff;
+	o->can_0x336_x336.Unk0 = x;
+	/* Unk4: start-bit 32, length 16, endianess intel, scaling 1, offset 0 */
+	x = (i >> 32) & 0xffff;
+	o->can_0x336_x336.Unk4 = x;
+	/* Unk6: start-bit 48, length 16, endianess intel, scaling 1, offset 0 */
+	x = (i >> 48) & 0xffff;
+	o->can_0x336_x336.Unk6 = x;
 	o->can_0x336_x336_rx = 1;
 	o->can_0x336_x336_time_stamp_rx = time_stamp;
 	return 8;
 }
 
-int decode_can_0x336_x336Sig347(const can_obj_r53_h_t *o, uint64_t *out) {
+int decode_can_0x336_Unk0(const can_obj_r53_h_t *o, uint16_t *out) {
 	assert(o);
 	assert(out);
-	uint64_t rval = (uint64_t)(o->can_0x336_x336.x336Sig347);
+	uint16_t rval = (uint16_t)(o->can_0x336_x336.Unk0);
 	if (rval <= 1) {
 		*out = rval;
 		return 0;
 	} else {
-		*out = (uint64_t)0;
+		*out = (uint16_t)0;
 		return -1;
 	}
 }
 
-int encode_can_0x336_x336Sig347(can_obj_r53_h_t *o, uint64_t in) {
+int encode_can_0x336_Unk0(can_obj_r53_h_t *o, uint16_t in) {
 	assert(o);
-	o->can_0x336_x336.x336Sig347 = 0;
+	o->can_0x336_x336.Unk0 = 0;
 	if (in > 1)
 		return -1;
-	o->can_0x336_x336.x336Sig347 = in;
+	o->can_0x336_x336.Unk0 = in;
+	return 0;
+}
+
+int decode_can_0x336_Unk4(const can_obj_r53_h_t *o, uint16_t *out) {
+	assert(o);
+	assert(out);
+	uint16_t rval = (uint16_t)(o->can_0x336_x336.Unk4);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x336_Unk4(can_obj_r53_h_t *o, uint16_t in) {
+	assert(o);
+	o->can_0x336_x336.Unk4 = in;
+	return 0;
+}
+
+int decode_can_0x336_Unk6(const can_obj_r53_h_t *o, uint16_t *out) {
+	assert(o);
+	assert(out);
+	uint16_t rval = (uint16_t)(o->can_0x336_x336.Unk6);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x336_Unk6(can_obj_r53_h_t *o, uint16_t in) {
+	assert(o);
+	o->can_0x336_x336.Unk6 = in;
 	return 0;
 }
 
@@ -1166,7 +1208,9 @@ int print_can_0x336_x336(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "x336Sig347 = (wire: %.0f)\n", (double)(o->can_0x336_x336.x336Sig347)));
+	r = print_helper(r, fprintf(output, "Unk0 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk0)));
+	r = print_helper(r, fprintf(output, "Unk4 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk4)));
+	r = print_helper(r, fprintf(output, "Unk6 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk6)));
 	return r;
 }
 
@@ -1701,25 +1745,29 @@ static int pack_can_0x565_x565(can_obj_r53_h_t *o, uint64_t *data) {
 	x = ((uint8_t)(o->can_0x565_x565.Unk7)) & 0xff;
 	x <<= 56; 
 	i |= x;
-	/* IDK2_unk2: start-bit 6, length 1, endianess intel, scaling 1, offset 0 */
-	x = ((uint8_t)(o->can_0x565_x565.IDK2_unk2)) & 0x1;
-	x <<= 6; 
-	i |= x;
-	/* IDK2_unk1: start-bit 55, length 1, endianess intel, scaling 1, offset 0 */
-	x = ((uint8_t)(o->can_0x565_x565.IDK2_unk1)) & 0x1;
-	x <<= 55; 
+	/* Unk4: start-bit 4, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x565_x565.Unk4)) & 0x1;
+	x <<= 4; 
 	i |= x;
 	/* IDK2_unk6: start-bit 41, length 1, endianess intel, scaling 1, offset 0 */
 	x = ((uint8_t)(o->can_0x565_x565.IDK2_unk6)) & 0x1;
 	x <<= 41; 
 	i |= x;
-	/* IDK2_unk3: start-bit 13, length 1, endianess intel, scaling 1, offset 0 */
-	x = ((uint8_t)(o->can_0x565_x565.IDK2_unk3)) & 0x1;
-	x <<= 13; 
+	/* IDK2_unk1: start-bit 55, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x565_x565.IDK2_unk1)) & 0x1;
+	x <<= 55; 
 	i |= x;
 	/* IDK2_unk5: start-bit 25, length 1, endianess intel, scaling 1, offset 0 */
 	x = ((uint8_t)(o->can_0x565_x565.IDK2_unk5)) & 0x1;
 	x <<= 25; 
+	i |= x;
+	/* IDK2_unk2: start-bit 6, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x565_x565.IDK2_unk2)) & 0x1;
+	x <<= 6; 
+	i |= x;
+	/* IDK2_unk3: start-bit 13, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x565_x565.IDK2_unk3)) & 0x1;
+	x <<= 13; 
 	i |= x;
 	*data = (i);
 	o->can_0x565_x565_tx = 1;
@@ -1742,21 +1790,24 @@ static int unpack_can_0x565_x565(can_obj_r53_h_t *o, uint64_t data, uint8_t dlc,
 	/* Unk7: start-bit 56, length 8, endianess intel, scaling 1, offset 0 */
 	x = (i >> 56) & 0xff;
 	o->can_0x565_x565.Unk7 = x;
-	/* IDK2_unk2: start-bit 6, length 1, endianess intel, scaling 1, offset 0 */
-	x = (i >> 6) & 0x1;
-	o->can_0x565_x565.IDK2_unk2 = x;
-	/* IDK2_unk1: start-bit 55, length 1, endianess intel, scaling 1, offset 0 */
-	x = (i >> 55) & 0x1;
-	o->can_0x565_x565.IDK2_unk1 = x;
+	/* Unk4: start-bit 4, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 4) & 0x1;
+	o->can_0x565_x565.Unk4 = x;
 	/* IDK2_unk6: start-bit 41, length 1, endianess intel, scaling 1, offset 0 */
 	x = (i >> 41) & 0x1;
 	o->can_0x565_x565.IDK2_unk6 = x;
-	/* IDK2_unk3: start-bit 13, length 1, endianess intel, scaling 1, offset 0 */
-	x = (i >> 13) & 0x1;
-	o->can_0x565_x565.IDK2_unk3 = x;
+	/* IDK2_unk1: start-bit 55, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 55) & 0x1;
+	o->can_0x565_x565.IDK2_unk1 = x;
 	/* IDK2_unk5: start-bit 25, length 1, endianess intel, scaling 1, offset 0 */
 	x = (i >> 25) & 0x1;
 	o->can_0x565_x565.IDK2_unk5 = x;
+	/* IDK2_unk2: start-bit 6, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 6) & 0x1;
+	o->can_0x565_x565.IDK2_unk2 = x;
+	/* IDK2_unk3: start-bit 13, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 13) & 0x1;
+	o->can_0x565_x565.IDK2_unk3 = x;
 	o->can_0x565_x565_rx = 1;
 	o->can_0x565_x565_time_stamp_rx = time_stamp;
 	return 8;
@@ -1822,31 +1873,17 @@ int encode_can_0x565_Unk7(can_obj_r53_h_t *o, uint8_t in) {
 	return 0;
 }
 
-int decode_can_0x565_IDK2_unk2(const can_obj_r53_h_t *o, uint8_t *out) {
+int decode_can_0x565_Unk4(const can_obj_r53_h_t *o, uint8_t *out) {
 	assert(o);
 	assert(out);
-	uint8_t rval = (uint8_t)(o->can_0x565_x565.IDK2_unk2);
+	uint8_t rval = (uint8_t)(o->can_0x565_x565.Unk4);
 	*out = rval;
 	return 0;
 }
 
-int encode_can_0x565_IDK2_unk2(can_obj_r53_h_t *o, uint8_t in) {
+int encode_can_0x565_Unk4(can_obj_r53_h_t *o, uint8_t in) {
 	assert(o);
-	o->can_0x565_x565.IDK2_unk2 = in;
-	return 0;
-}
-
-int decode_can_0x565_IDK2_unk1(const can_obj_r53_h_t *o, uint8_t *out) {
-	assert(o);
-	assert(out);
-	uint8_t rval = (uint8_t)(o->can_0x565_x565.IDK2_unk1);
-	*out = rval;
-	return 0;
-}
-
-int encode_can_0x565_IDK2_unk1(can_obj_r53_h_t *o, uint8_t in) {
-	assert(o);
-	o->can_0x565_x565.IDK2_unk1 = in;
+	o->can_0x565_x565.Unk4 = in;
 	return 0;
 }
 
@@ -1864,17 +1901,17 @@ int encode_can_0x565_IDK2_unk6(can_obj_r53_h_t *o, uint8_t in) {
 	return 0;
 }
 
-int decode_can_0x565_IDK2_unk3(const can_obj_r53_h_t *o, uint8_t *out) {
+int decode_can_0x565_IDK2_unk1(const can_obj_r53_h_t *o, uint8_t *out) {
 	assert(o);
 	assert(out);
-	uint8_t rval = (uint8_t)(o->can_0x565_x565.IDK2_unk3);
+	uint8_t rval = (uint8_t)(o->can_0x565_x565.IDK2_unk1);
 	*out = rval;
 	return 0;
 }
 
-int encode_can_0x565_IDK2_unk3(can_obj_r53_h_t *o, uint8_t in) {
+int encode_can_0x565_IDK2_unk1(can_obj_r53_h_t *o, uint8_t in) {
 	assert(o);
-	o->can_0x565_x565.IDK2_unk3 = in;
+	o->can_0x565_x565.IDK2_unk1 = in;
 	return 0;
 }
 
@@ -1892,6 +1929,34 @@ int encode_can_0x565_IDK2_unk5(can_obj_r53_h_t *o, uint8_t in) {
 	return 0;
 }
 
+int decode_can_0x565_IDK2_unk2(const can_obj_r53_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x565_x565.IDK2_unk2);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x565_IDK2_unk2(can_obj_r53_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x565_x565.IDK2_unk2 = in;
+	return 0;
+}
+
+int decode_can_0x565_IDK2_unk3(const can_obj_r53_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x565_x565.IDK2_unk3);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x565_IDK2_unk3(can_obj_r53_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x565_x565.IDK2_unk3 = in;
+	return 0;
+}
+
 int print_can_0x565_x565(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
@@ -1899,11 +1964,12 @@ int print_can_0x565_x565(const can_obj_r53_h_t *o, FILE *output) {
 	r = print_helper(r, fprintf(output, "OilPressure = (wire: %.0f)\n", (double)(o->can_0x565_x565.OilPressure)));
 	r = print_helper(r, fprintf(output, "IDK2_unk4 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk4)));
 	r = print_helper(r, fprintf(output, "Unk7 = (wire: %.0f)\n", (double)(o->can_0x565_x565.Unk7)));
-	r = print_helper(r, fprintf(output, "IDK2_unk2 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk2)));
-	r = print_helper(r, fprintf(output, "IDK2_unk1 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk1)));
+	r = print_helper(r, fprintf(output, "Unk4 = (wire: %.0f)\n", (double)(o->can_0x565_x565.Unk4)));
 	r = print_helper(r, fprintf(output, "IDK2_unk6 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk6)));
-	r = print_helper(r, fprintf(output, "IDK2_unk3 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk3)));
+	r = print_helper(r, fprintf(output, "IDK2_unk1 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk1)));
 	r = print_helper(r, fprintf(output, "IDK2_unk5 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk5)));
+	r = print_helper(r, fprintf(output, "IDK2_unk2 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk2)));
+	r = print_helper(r, fprintf(output, "IDK2_unk3 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk3)));
 	return r;
 }
 
@@ -1912,8 +1978,8 @@ static int pack_can_0x610_x610(can_obj_r53_h_t *o, uint64_t *data) {
 	assert(data);
 	register uint64_t x;
 	register uint64_t i = 0;
-	/* x610Sig39: start-bit 0, length 64, endianess intel, scaling 1, offset 0 */
-	x = ((uint64_t)(o->can_0x610_x610.x610Sig39)) & 0xffffffffffffffff;
+	/* VIN: start-bit 0, length 64, endianess intel, scaling 1, offset 0 */
+	x = ((uint64_t)(o->can_0x610_x610.VIN)) & 0xffffffffffffffff;
 	i |= x;
 	*data = (i);
 	o->can_0x610_x610_tx = 1;
@@ -1927,18 +1993,18 @@ static int unpack_can_0x610_x610(can_obj_r53_h_t *o, uint64_t data, uint8_t dlc,
 	register uint64_t i = (data);
 	if (dlc < 8)
 		return -1;
-	/* x610Sig39: start-bit 0, length 64, endianess intel, scaling 1, offset 0 */
+	/* VIN: start-bit 0, length 64, endianess intel, scaling 1, offset 0 */
 	x = i & 0xffffffffffffffff;
-	o->can_0x610_x610.x610Sig39 = x;
+	o->can_0x610_x610.VIN = x;
 	o->can_0x610_x610_rx = 1;
 	o->can_0x610_x610_time_stamp_rx = time_stamp;
 	return 8;
 }
 
-int decode_can_0x610_x610Sig39(const can_obj_r53_h_t *o, uint64_t *out) {
+int decode_can_0x610_VIN(const can_obj_r53_h_t *o, uint64_t *out) {
 	assert(o);
 	assert(out);
-	uint64_t rval = (uint64_t)(o->can_0x610_x610.x610Sig39);
+	uint64_t rval = (uint64_t)(o->can_0x610_x610.VIN);
 	if (rval <= 1) {
 		*out = rval;
 		return 0;
@@ -1948,12 +2014,12 @@ int decode_can_0x610_x610Sig39(const can_obj_r53_h_t *o, uint64_t *out) {
 	}
 }
 
-int encode_can_0x610_x610Sig39(can_obj_r53_h_t *o, uint64_t in) {
+int encode_can_0x610_VIN(can_obj_r53_h_t *o, uint64_t in) {
 	assert(o);
-	o->can_0x610_x610.x610Sig39 = 0;
+	o->can_0x610_x610.VIN = 0;
 	if (in > 1)
 		return -1;
-	o->can_0x610_x610.x610Sig39 = in;
+	o->can_0x610_x610.VIN = in;
 	return 0;
 }
 
@@ -1961,7 +2027,7 @@ int print_can_0x610_x610(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "x610Sig39 = (wire: %.0f)\n", (double)(o->can_0x610_x610.x610Sig39)));
+	r = print_helper(r, fprintf(output, "VIN = (wire: %.0f)\n", (double)(o->can_0x610_x610.VIN)));
 	return r;
 }
 
@@ -2143,6 +2209,10 @@ static int pack_can_0x615_x615(can_obj_r53_h_t *o, uint64_t *data) {
 	x = ((uint8_t)(o->can_0x615_x615.Hood)) & 0x1;
 	x <<= 51; 
 	m |= x;
+	/* DriverDoorMaybe: start-bit 32, length 1, endianess motorola, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x615_x615.DriverDoorMaybe)) & 0x1;
+	x <<= 24; 
+	m |= x;
 	/* Handbrake: start-bit 33, length 1, endianess motorola, scaling 1, offset 0 */
 	x = ((uint8_t)(o->can_0x615_x615.Handbrake)) & 0x1;
 	x <<= 25; 
@@ -2172,6 +2242,9 @@ static int unpack_can_0x615_x615(can_obj_r53_h_t *o, uint64_t data, uint8_t dlc,
 	/* Hood: start-bit 11, length 1, endianess motorola, scaling 1, offset 0 */
 	x = (m >> 51) & 0x1;
 	o->can_0x615_x615.Hood = x;
+	/* DriverDoorMaybe: start-bit 32, length 1, endianess motorola, scaling 1, offset 0 */
+	x = (m >> 24) & 0x1;
+	o->can_0x615_x615.DriverDoorMaybe = x;
 	/* Handbrake: start-bit 33, length 1, endianess motorola, scaling 1, offset 0 */
 	x = (m >> 25) & 0x1;
 	o->can_0x615_x615.Handbrake = x;
@@ -2244,6 +2317,20 @@ int encode_can_0x615_Hood(can_obj_r53_h_t *o, uint8_t in) {
 	return 0;
 }
 
+int decode_can_0x615_DriverDoorMaybe(const can_obj_r53_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x615_x615.DriverDoorMaybe);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x615_DriverDoorMaybe(can_obj_r53_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x615_x615.DriverDoorMaybe = in;
+	return 0;
+}
+
 int decode_can_0x615_Handbrake(const can_obj_r53_h_t *o, uint8_t *out) {
 	assert(o);
 	assert(out);
@@ -2266,6 +2353,7 @@ int print_can_0x615_x615(const can_obj_r53_h_t *o, FILE *output) {
 	r = print_helper(r, fprintf(output, "AC_Status = (wire: %.0f)\n", (double)(o->can_0x615_x615.AC_Status)));
 	r = print_helper(r, fprintf(output, "RunningLights2 = (wire: %.0f)\n", (double)(o->can_0x615_x615.RunningLights2)));
 	r = print_helper(r, fprintf(output, "Hood = (wire: %.0f)\n", (double)(o->can_0x615_x615.Hood)));
+	r = print_helper(r, fprintf(output, "DriverDoorMaybe = (wire: %.0f)\n", (double)(o->can_0x615_x615.DriverDoorMaybe)));
 	r = print_helper(r, fprintf(output, "Handbrake = (wire: %.0f)\n", (double)(o->can_0x615_x615.Handbrake)));
 	return r;
 }

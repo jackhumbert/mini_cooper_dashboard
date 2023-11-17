@@ -230,6 +230,11 @@ void dash_loop(void) {
     for (auto widget : widgets) {
         widget->update();
     }
+    if (dashboard_queued.x610) {
+        uint8_t * vin = (uint8_t*)&dashboard_cache.x610;
+        // add_message_fmt("VIN: %llX", dashboard_cache.x610);
+        add_message_fmt("VIN: %c%c%02X%02X%X", vin[4], vin[3], vin[2], vin[1], vin[0] >> 4);
+    }
     if (dashboard_queued.running_clock) {
         clock_update();
     }

@@ -64,11 +64,6 @@ typedef PREPACK struct {
 	uint8_t CheckEngineLight; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x153_ASC_1_t;
 
-typedef enum {
-	CAN_0X153_ASC_1_BRAKE_PEDAL_PRESSED_NOT_PRESSED = 0,
-	CAN_0X153_ASC_1_BRAKE_PEDAL_PRESSED_PRESSED = 1,
-} can_0x153_ASC_1_Brake_Pedal_Pressed_e;
-
 typedef PREPACK struct {
 	uint16_t Wheel_1_Left_Front_Speed; /* scaling 0.1, offset 0.0, units none  */
 	uint16_t Wheel_2_Right_Front_Speed; /* scaling 0.1, offset 0.0, units none  */
@@ -109,26 +104,6 @@ typedef PREPACK struct {
 	uint8_t AC_Clutch; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x316_DME1_t;
 
-typedef enum {
-	CAN_0X316_DME1_KEY_OFF = 0,
-	CAN_0X316_DME1_KEY_ON = 1,
-} can_0x316_DME1_Key_e;
-
-typedef enum {
-	CAN_0X316_DME1_IGNITION_ON_DME_READY_OFF = 0,
-	CAN_0X316_DME1_IGNITION_ON_DME_READY_ON = 1,
-} can_0x316_DME1_Ignition_on_DME_ready_e;
-
-typedef enum {
-	CAN_0X316_DME1_STARTER_OFF = 0,
-	CAN_0X316_DME1_STARTER_ON = 1,
-} can_0x316_DME1_Starter_e;
-
-typedef enum {
-	CAN_0X316_DME1_AC_CLUTCH_OFF = 0,
-	CAN_0X316_DME1_AC_CLUTCH_ON = 1,
-} can_0x316_DME1_AC_Clutch_e;
-
 typedef PREPACK struct {
 	uint8_t Driver_Desired_Torque; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Throttle_Position; /* scaling 1.0, offset 0.0, units %  */
@@ -141,28 +116,10 @@ typedef PREPACK struct {
 	uint8_t Brake_Light_Switch; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x329_DME2_t;
 
-typedef enum {
-	CAN_0X329_DME2_BRAKE_LIGHT_SWITCH_ERROR_OFF = 0,
-	CAN_0X329_DME2_BRAKE_LIGHT_SWITCH_ERROR_ERROR = 1,
-} can_0x329_DME2_Brake_Light_Switch_Error_e;
-
-typedef enum {
-	CAN_0X329_DME2_CLUTCH_SWITCH_NOT_PRESSED = 0,
-	CAN_0X329_DME2_CLUTCH_SWITCH_PRESSED = 1,
-} can_0x329_DME2_Clutch_Switch_e;
-
-typedef enum {
-	CAN_0X329_DME2_ENGINE_RUNNING_NOT_RUNNING = 0,
-	CAN_0X329_DME2_ENGINE_RUNNING_RUNNING = 1,
-} can_0x329_DME2_Engine_Running_e;
-
-typedef enum {
-	CAN_0X329_DME2_BRAKE_LIGHT_SWITCH_NOT_PRESSED = 0,
-	CAN_0X329_DME2_BRAKE_LIGHT_SWITCH_PRESSED = 1,
-} can_0x329_DME2_Brake_Light_Switch_e;
-
 typedef PREPACK struct {
-	uint64_t x336Sig347; /* scaling 1.0, offset 0.0, units none  */
+	uint16_t Unk0; /* scaling 1.0, offset 0.0, units none  */
+	uint16_t Unk4; /* scaling 1.0, offset 0.0, units none  */
+	uint16_t Unk6; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x336_x336_t;
 
 typedef PREPACK struct {
@@ -171,21 +128,6 @@ typedef PREPACK struct {
 	uint8_t Engine_Running; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Brake_Switch; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x338_DME3_t;
-
-typedef enum {
-	CAN_0X338_DME3_CLUTCH_NOT_PRESSED = 0,
-	CAN_0X338_DME3_CLUTCH_PRESSED = 1,
-} can_0x338_DME3_Clutch_e;
-
-typedef enum {
-	CAN_0X338_DME3_ENGINE_RUNNING_NOT_RUNNING = 0,
-	CAN_0X338_DME3_ENGINE_RUNNING_RUNNING = 1,
-} can_0x338_DME3_Engine_Running_e;
-
-typedef enum {
-	CAN_0X338_DME3_BRAKE_SWITCH_NOT_PRESSED = 0,
-	CAN_0X338_DME3_BRAKE_SWITCH_PRESSED = 1,
-} can_0x338_DME3_Brake_Switch_e;
 
 typedef PREPACK struct {
 	uint64_t x501Sig34; /* scaling 1.0, offset 0.0, units none  */
@@ -208,29 +150,20 @@ typedef PREPACK struct {
 	uint8_t EML; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x545_DME4_t;
 
-typedef enum {
-	CAN_0X545_DME4_CHARGE_LIGHT_OFF = 0,
-	CAN_0X545_DME4_CHARGE_LIGHT_ON = 1,
-} can_0x545_DME4_Charge_Light_e;
-
-typedef enum {
-	CAN_0X545_DME4_OIL_PRESSURE_LIGHT_OFF = 0,
-	CAN_0X545_DME4_OIL_PRESSURE_LIGHT_ON = 1,
-} can_0x545_DME4_Oil_Pressure_Light_e;
-
 typedef PREPACK struct {
 	uint8_t OilPressure; /* scaling 2.0, offset 0.0, units mPa  */
 	uint8_t IDK2_unk4; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Unk7; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t IDK2_unk2; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t IDK2_unk1; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t Unk4; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK2_unk6; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t IDK2_unk3; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t IDK2_unk1; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t IDK2_unk5; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t IDK2_unk2; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t IDK2_unk3; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x565_x565_t;
 
 typedef PREPACK struct {
-	uint64_t x610Sig39; /* scaling 1.0, offset 0.0, units none  */
+	uint64_t VIN; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x610_x610_t;
 
 typedef PREPACK struct {
@@ -246,6 +179,7 @@ typedef PREPACK struct {
 	uint8_t AC_Status; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t RunningLights2; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Hood; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t DriverDoorMaybe; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Handbrake; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x615_x615_t;
 
@@ -457,8 +391,12 @@ int decode_can_0x329_Brake_Light_Switch(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x329_Brake_Light_Switch(can_obj_r53_h_t *o, uint8_t in);
 
 
-int decode_can_0x336_x336Sig347(const can_obj_r53_h_t *o, uint64_t *out);
-int encode_can_0x336_x336Sig347(can_obj_r53_h_t *o, uint64_t in);
+int decode_can_0x336_Unk0(const can_obj_r53_h_t *o, uint16_t *out);
+int encode_can_0x336_Unk0(can_obj_r53_h_t *o, uint16_t in);
+int decode_can_0x336_Unk4(const can_obj_r53_h_t *o, uint16_t *out);
+int encode_can_0x336_Unk4(can_obj_r53_h_t *o, uint16_t in);
+int decode_can_0x336_Unk6(const can_obj_r53_h_t *o, uint16_t *out);
+int encode_can_0x336_Unk6(can_obj_r53_h_t *o, uint16_t in);
 
 
 int decode_can_0x338_Throttle_Position(const can_obj_r53_h_t *o, uint8_t *out);
@@ -511,20 +449,22 @@ int decode_can_0x565_IDK2_unk4(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x565_IDK2_unk4(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x565_Unk7(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x565_Unk7(can_obj_r53_h_t *o, uint8_t in);
-int decode_can_0x565_IDK2_unk2(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x565_IDK2_unk2(can_obj_r53_h_t *o, uint8_t in);
-int decode_can_0x565_IDK2_unk1(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x565_IDK2_unk1(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x565_Unk4(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x565_Unk4(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x565_IDK2_unk6(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x565_IDK2_unk6(can_obj_r53_h_t *o, uint8_t in);
-int decode_can_0x565_IDK2_unk3(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x565_IDK2_unk3(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x565_IDK2_unk1(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x565_IDK2_unk1(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x565_IDK2_unk5(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x565_IDK2_unk5(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x565_IDK2_unk2(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x565_IDK2_unk2(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x565_IDK2_unk3(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x565_IDK2_unk3(can_obj_r53_h_t *o, uint8_t in);
 
 
-int decode_can_0x610_x610Sig39(const can_obj_r53_h_t *o, uint64_t *out);
-int encode_can_0x610_x610Sig39(can_obj_r53_h_t *o, uint64_t in);
+int decode_can_0x610_VIN(const can_obj_r53_h_t *o, uint64_t *out);
+int encode_can_0x610_VIN(can_obj_r53_h_t *o, uint64_t in);
 
 
 int decode_can_0x613_Odometer(const can_obj_r53_h_t *o, double *out);
@@ -547,6 +487,8 @@ int decode_can_0x615_RunningLights2(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x615_RunningLights2(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x615_Hood(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x615_Hood(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x615_DriverDoorMaybe(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x615_DriverDoorMaybe(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x615_Handbrake(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x615_Handbrake(can_obj_r53_h_t *o, uint8_t in);
 

@@ -94,6 +94,7 @@ void Tach::update(void) {
 #define INDIC_RADIUS_OUTER (INDIC_RADIUS + 5)
 #define INDIC_RADIUS_INNER (INDIC_RADIUS - 15)
 #define INDIC_Y 232
+#define INDIC_OVERSHOOT 0
 
 #define sin_d(x) sin((x) * 3.1415 / 180)
 
@@ -125,10 +126,10 @@ static void indicator_draw(lv_event_t * e) {
         // dsc->line_dsc->opa = LV_OPA_0;
 
 
-        int16_t outer_mask_id = lv_draw_mask_add(&outer_mask_param, NULL);
-        lv_draw_mask_radius_init(&outer_mask_param, &outer_coords, INDIC_RADIUS_OUTER, false);
-        int16_t inner_mask_id = lv_draw_mask_add(&inner_mask_param, NULL);
-        lv_draw_mask_radius_init(&inner_mask_param, &inner_coords, INDIC_RADIUS_INNER, true);
+        // int16_t outer_mask_id = lv_draw_mask_add(&outer_mask_param, NULL);
+        // lv_draw_mask_radius_init(&outer_mask_param, &outer_coords, INDIC_RADIUS_OUTER, false);
+        // int16_t inner_mask_id = lv_draw_mask_add(&inner_mask_param, NULL);
+        // lv_draw_mask_radius_init(&inner_mask_param, &inner_coords, INDIC_RADIUS_INNER, true);
 
         static lv_draw_line_dsc_t line_dsc = {
             .color = AMBER_ON,
@@ -136,24 +137,26 @@ static void indicator_draw(lv_event_t * e) {
             .opa = 255,
             .round_start = 0,
             .round_end = 0,
-            .raw_end = 1
+            .raw_end = 0
         };
         static lv_point_t p1, p2;
 
         float end = 66 + 180 + 48 * get_cache()->rpm / 8000;
+        float x_comp = sin_d(end + 90);
+        float y_comp = sin_d(end);
 
-        p1.x = 400 + (sin_d(end + 90) * (INDIC_RADIUS_OUTER + 40));
-        p1.y = INDIC_Y + INDIC_RADIUS  + (sin_d(end) * (INDIC_RADIUS_OUTER + 40));
+        p1.x = 400 + (x_comp * (INDIC_RADIUS_OUTER + INDIC_OVERSHOOT));
+        p1.y = INDIC_Y + INDIC_RADIUS + (y_comp * (INDIC_RADIUS_OUTER + INDIC_OVERSHOOT));
         
-        p2.x = 400 + (sin_d(end + 90) * (INDIC_RADIUS_INNER - 40));
-        p2.y = INDIC_Y + INDIC_RADIUS + (sin_d(end) * (INDIC_RADIUS_INNER - 40));
+        p2.x = 400 + (x_comp * (INDIC_RADIUS_INNER - INDIC_OVERSHOOT));
+        p2.y = INDIC_Y + INDIC_RADIUS + (y_comp * (INDIC_RADIUS_INNER - INDIC_OVERSHOOT));
 
         lv_draw_line(dsc->draw_ctx, &line_dsc, &p1, &p2);
         
-        lv_draw_mask_free_param(&inner_mask_param);
-        lv_draw_mask_remove_id(inner_mask_id);
-        lv_draw_mask_free_param(&outer_mask_param);
-        lv_draw_mask_remove_id(outer_mask_id);
+        // lv_draw_mask_free_param(&inner_mask_param);
+        // lv_draw_mask_remove_id(inner_mask_id);
+        // lv_draw_mask_free_param(&outer_mask_param);
+        // lv_draw_mask_remove_id(outer_mask_id);
 
 }
 

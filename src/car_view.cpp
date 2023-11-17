@@ -22,23 +22,30 @@ void CarView::update(void) {
     }
     if (get_queued()->hood) {
         if (get_cache()->hood) {
-            lv_obj_set_style_bg_color(hood_obj, RED_ON, 0);
+            lv_obj_set_style_img_recolor(hood_obj, RED_ON, 0);
         } else {
-            lv_obj_set_style_bg_color(hood_obj, RED_OFF, 0);
+            lv_obj_set_style_img_recolor(hood_obj, RED_OFF, 0);
         }
     }
     if (get_queued()->eml_light) {
         if (get_cache()->eml_light) {
-            lv_obj_set_style_bg_color(eml_obj, RED_ON, 0);
+            lv_obj_set_style_img_recolor(eml_obj, AMBER_ON, 0);
         } else {
-            lv_obj_set_style_bg_color(eml_obj, RED_OFF, 0);
+            lv_obj_set_style_img_recolor(eml_obj, AMBER_OFF, 0);
         }
     }
     if (get_queued()->check_engine_light) {
         if (get_cache()->check_engine_light) {
-            lv_obj_set_style_bg_color(check_engine_obj, RED_ON, 0);
+            lv_obj_set_style_img_recolor(check_engine_obj, AMBER_ON, 0);
         } else {
-            lv_obj_set_style_bg_color(check_engine_obj, RED_OFF, 0);
+            lv_obj_set_style_img_recolor(check_engine_obj, AMBER_OFF, 0);
+        }
+    }
+    if (get_queued()->charge_light) {
+        if (get_cache()->charge_light) {
+            lv_obj_set_style_img_recolor(battery_obj, RED_ON, 0);
+        } else {
+            lv_obj_set_style_img_recolor(battery_obj, RED_OFF, 0);
         }
     }
 }

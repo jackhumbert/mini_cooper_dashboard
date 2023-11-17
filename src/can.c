@@ -82,6 +82,8 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 update_changed(check_engine_light);
                 decode_can_0x545_EML(&can_data, &get_dash()->eml_light);
                 update_changed(eml_light);
+                decode_can_0x545_Charge_Light(&can_data, &get_dash()->charge_light);
+                update_changed(charge_light);
                 get_dash()->x545 = *(uint64_t*)data;
                 get_changed()->x545 = 1;
                 return 0;
