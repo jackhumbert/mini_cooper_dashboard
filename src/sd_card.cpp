@@ -116,6 +116,7 @@ void sd_card_init() {
     sprintf(log_filename, "/log_%08ld.crtd", log_number);
 
     add_message_fmt("Log file: %s", log_filename);
+    set_log_filename(log_filename);
     log_file = sd.open(log_filename, O_WRONLY | O_CREAT | O_TRUNC);
     // log_file.preAllocate(10 * 25000 * 60);
 

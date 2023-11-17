@@ -35,14 +35,18 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
             case 0x153:
                 decode_can_0x153_Speed(&can_data, &get_dash()->speed);
                 update_changed(speed);
+                get_dash()->x153 = *(uint64_t*)data;
+                get_changed()->x153 = 1;
                 return 0;
             case 0x1F0: 
             case 0x1F3:  // unk4 something that counts down
                 get_dash()->x1F3 = *(uint64_t*)data;
                 get_changed()->x1F3 = 1;
                 return 0;
-            case 0x1F5: return 0; // same as 0x610
-            case 0x1F8: return 0; // never changes?
+            case 0x1F5: return 0;
+            case 0x1F8: return 0;
+                get_dash()->x1F8 = *(uint64_t*)data;
+                get_changed()->x1F8 = 1;
             case 0x316:
                 get_dash()->x316 = *(uint64_t*)data;
                 get_changed()->x316 = 1;
@@ -50,24 +54,18 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 update_changed(rpm);
                 decode_can_0x316_Key(&can_data, &get_dash()->key);
                 update_changed(key);
-                decode_can_0x316_Starter(&can_data, &get_dash()->starter);
-                update_changed(starter);
                 return 0;
             case 0x329:
                 get_dash()->x329 = *(uint64_t*)data;
                 get_changed()->x329 = 1;
                 decode_can_0x329_Engine_Temp(&can_data, &get_dash()->engine_temp);
                 update_changed(engine_temp);
-                decode_can_0x329_Clutch_Switch(&can_data, &get_dash()->clutch_switch);
                 decode_can_0x329_Throttle_Position(&can_data, &get_dash()->throttle_position);
                 update_changed(throttle_position);
                 return 0;
             case 0x336: 
                 get_dash()->x336 = *(uint64_t*)data;
                 get_changed()->x336 = 1;
-                return 0;
-            case 0x338:
-                decode_can_0x338_Clutch(&can_data, &get_dash()->clutch);
                 return 0;
             case 0x501: 
                 get_dash()->x501 = *(uint64_t*)data;

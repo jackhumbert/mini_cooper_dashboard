@@ -10,6 +10,11 @@
 
 static lv_obj_t * messages;
 static char ** pending_messages;
+static lv_obj_t * log_file_name;
+
+void set_log_filename(char * name) {
+    lv_label_set_text(log_file_name, name);
+}
 
 lv_obj_t * messages_create(lv_obj_t * parent) {
 
@@ -18,8 +23,8 @@ lv_obj_t * messages_create(lv_obj_t * parent) {
     lv_obj_set_size(messages_cont, MESSAGES_WIDTH, MESSAGES_HEIGHT);
     lv_obj_set_scroll_dir(messages_cont, LV_DIR_NONE);
 
-{
     DASH_FONT(RAJDHANI_SEMIBOLD, 14);
+{
 
     lv_obj_t * messages_label = lv_label_create(messages_cont);
     lv_obj_align(messages_label, LV_ALIGN_TOP_MID, 0, 0);
@@ -27,6 +32,17 @@ lv_obj_t * messages_create(lv_obj_t * parent) {
     lv_obj_set_style_text_font(messages_label, RAJDHANI_SEMIBOLD_14, 0);
     lv_obj_set_style_text_color(messages_label, AMBER_HALF, 0);
     lv_obj_set_width(messages_label, MESSAGES_WIDTH);
+}
+
+{
+
+    log_file_name = lv_label_create(messages_cont);
+    lv_label_set_text(log_file_name, "");
+    lv_obj_align(log_file_name, LV_ALIGN_TOP_MID, 0, 0);
+    lv_obj_set_style_text_align(log_file_name, LV_TEXT_ALIGN_RIGHT, 0);
+    lv_obj_set_style_text_font(log_file_name, RAJDHANI_SEMIBOLD_14, 0);
+    lv_obj_set_style_text_color(log_file_name, AMBER_HALF, 0);
+    lv_obj_set_width(log_file_name, MESSAGES_WIDTH);
 }
 
 {

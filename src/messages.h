@@ -11,6 +11,7 @@ extern "C"
 void add_message(const char * message);
 void add_message_fmt(const char *fmt, ...);
 void dash_log(char* message);
+void set_log_filename(char * name);
 
 #ifdef __cplusplus
 } // extern "C"

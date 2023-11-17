@@ -58,7 +58,9 @@ enum light_state {
 typedef struct dashboard_t {
 	pthread_mutex_t	mutex;
 
+    uint64_t x153;
     uint64_t x1F3;
+    uint64_t x1F8;
     uint64_t x316;
     uint64_t x329;
     uint64_t x336;
@@ -85,6 +87,9 @@ typedef struct dashboard_t {
     double steering_velocity;
     uint8_t steering_angle_direction;
     uint8_t steering_velocity_direction;
+
+    // 0x1F8
+    uint8_t brake_pressure;
 
     double rpm;
     uint8_t torque_loss_of_consumers;
@@ -147,7 +152,9 @@ typedef struct dashboard_t {
 typedef struct dashboard_changed_t {
     uint8_t activity;
 
+    uint8_t x153;
     uint8_t x1F3;
+    uint8_t x1F8;
     uint8_t x316;
     uint8_t x329;
     uint8_t x336;
@@ -177,6 +184,9 @@ typedef struct dashboard_changed_t {
     uint8_t steering_velocity;
     uint8_t steering_angle_direction;
     uint8_t steering_velocity_direction;
+
+    // 0x1F8
+    uint8_t brake_pressure;
 
     // 0x316
     uint8_t rpm;

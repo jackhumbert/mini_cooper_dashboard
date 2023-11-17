@@ -96,7 +96,7 @@ static bool validate_id(uint32_t id) {
 static bool filter_id(uint32_t id) {
    switch (id) {
         case 0x1F0:
-        case 0x1F8:
+        // case 0x1F8:
             return true;
     }
     return false;

@@ -33,26 +33,15 @@ NS_ :
 
 BS_: 
 BU_: DME_Etc 
-BO_ 790 DME1: 8 DME_Etc
+BO_ 790 x316_DME1: 8 DME_Etc
    SG_ RPM : 16|16@1+ (0.156,0) [0|0] "" DME_Etc
-   SG_ Torque_before_interventions : 32|8@1+ (1,0) [0|0] "" DME_Etc
-   SG_ Torque_after_interventions : 8|8@1+ (1,0) [0|0] "" Vector__XXX
-   SG_ Torque_loss_of_consumers : 40|8@1+ (1,0) [0|0] "" DME_Etc
-   SG_ Ignition_on_DME_ready : 2|1@1+ (1,0) [0|0] "" DME_Etc
    SG_ Key : 0|1@1+ (1,0) [0|0] "" Vector__XXX
-   SG_ Starter : 4|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ AC_Clutch : 6|1@1+ (1,0) [0|0] "" Vector__XXX
 
-BO_ 809 DME2: 8 DME_Etc
+BO_ 809 x329_DME2: 8 DME_Etc
    SG_ Engine_Temp : 8|8@1+ (0.75,-48.373) [0|0] "deg_c" DME_Etc
    SG_ Throttle_Position : 40|8@1+ (1,0) [0|0] "%" DME_Etc
    SG_ Cycling_Number : 0|8@1+ (1,0) [0|0] "" DME_Etc
-   SG_ Atmospheric_Pressure : 16|8@1+ (2,597) [0|0] "mbar" DME_Etc
-   SG_ Driver_Desired_Torque : 32|8@1+ (1,0) [0|0] "" DME_Etc
-   SG_ Brake_Light_Switch : 48|1@1+ (1,0) [0|0] "" DME_Etc
-   SG_ Brake_Light_Switch_Error : 49|1@1+ (1,0) [0|0] "" Vector__XXX
-   SG_ Clutch_Switch : 24|1@1+ (1,0) [0|0] "" Vector__XXX
-   SG_ Engine_Running : 28|1@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 1557 x615: 8 DME_Etc
    SG_ OutsideTemp : 24|8@1- (1,0) [0|0] "deg_c" DME_Etc
@@ -60,9 +49,8 @@ BO_ 1557 x615: 8 DME_Etc
    SG_ RunningLights2 : 10|1@0+ (1,0) [0|1] "" Vector__XXX
    SG_ AC_Status : 6|2@1+ (1,0) [0|1] "" Vector__XXX
    SG_ Hood : 11|1@0+ (1,0) [0|1] "" Vector__XXX
-   SG_ DriverDoorMaybe : 32|1@0+ (1,0) [0|1] "" Vector__XXX
 
-BO_ 1349 DME4: 8 DME_Etc
+BO_ 1349 x545_DME4: 8 DME_Etc
    SG_ Fuel_Consumption : 8|16@1+ (1,0) [0|0] "mpg" DME_Etc
    SG_ Charge_Light : 40|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Oil_Pressure_Light : 44|1@1+ (1,0) [0|0] "" DME_Etc
@@ -78,25 +66,28 @@ BO_ 1349 DME4: 8 DME_Etc
    SG_ RPM5_5k : 30|1@1+ (1,0) [0|0] "" DME_Etc
    SG_ Unk7 : 56|8@1+ (1,0) [0|0] "" DME_Etc
 
-BO_ 1555 Instrument_Cluster: 8 DME_Etc
+BO_ 1555 x613_Instrument_Cluster: 8 DME_Etc
    SG_ Odometer : 0|16@1+ (10,0) [0|0] "" DME_Etc
    SG_ Fuel_Level : 16|8@1+ (1,0) [0|0] "" DME_Etc
    SG_ Running_Clock : 24|16@1+ (1,0) [0|0] "Seconds" DME_Etc
-   SG_ Unk5 : 40|12@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ Unk6 : 52|12@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ Unk40 : 40|6@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ Unk52 : 52|4@1- (1,0) [0|1] "" Vector__XXX
+   SG_ Unk46 : 46|6@1+ (1,0) [0|1] "" Vector__XXX
 
-BO_ 496 ABS_1: 8 DME_Etc
+BO_ 496 x1F0_ABS_1: 8 DME_Etc
    SG_ Wheel_1_Left_Front_Speed : 0|12@1+ (0.0625,0) [0|0] "" Vector__XXX
    SG_ Wheel_2_Right_Front_Speed : 16|12@1+ (0.0625,0) [0|0] "" DME_Etc
    SG_ Wheel_3_Left_Rear_Speed : 32|12@1+ (0.0625,0) [0|0] "" DME_Etc
    SG_ Wheel_4_Right_Rear_Speed : 48|12@1+ (0.0625,0) [0|0] "" Vector__XXX
 
-BO_ 501 Steering_Angle_Sensor: 8 DME_Etc
+BO_ 501 x1F5_Steering_Angle_Sensor: 8 DME_Etc
    SG_ Steering_Angle : 0|15@1+ (0.045,0) [0|0] "" DME_Etc
    SG_ Steering_Angle_Velocity : 16|15@1+ (0.045,0) [0|0] "" DME_Etc
    SG_ Steering_Angle_Direction : 15|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Steering_Angle_Velocity_Direction : 31|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Steering_Counter : 44|4@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ unk39 : 39|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ unk40 : 40|1@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 339 ASC_1: 8 DME_Etc
    SG_ Speed : 11|13@1+ (0.0625,0) [0|0] "" DME_Etc
@@ -104,21 +95,20 @@ BO_ 339 ASC_1: 8 DME_Etc
    SG_ Tyre_Pressure_Set : 0|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Unk4 : 40|8@1+ (1,0) [0|0] "" Vector__XXX
    SG_ CheckEngineLight : 9|1@1+ (1,0) [0|0] "" Vector__XXX
-
-BO_ 824 DME3: 8 DME_Etc
-   SG_ Throttle_Position : 40|8@1+ (1,0) [0|0] "" DME_Etc
-   SG_ Clutch : 24|1@1+ (1,0) [0|0] "" DME_Etc
-   SG_ Engine_Running : 28|1@1+ (1,0) [0|0] "" DME_Etc
-   SG_ Brake_Switch : 48|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ unk7 : 7|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ unk6 : 6|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ unk2 : 2|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ unk8 : 8|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ unk60 : 60|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ unk63 : 63|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ unk32 : 32|1@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 499 x1F3: 8 DME_Etc
-   SG_ IDK1_unk1 : 7|1@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ IDK1_unk2 : 8|1@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ IDK1_unk3 : 15|1@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ IDK1_unk4 : 24|8@1+ (1,0) [0|255] "" Vector__XXX
-   SG_ IDK1_unk5 : 32|1@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ MotionSensing : 38|10@1+ (1,0) [0|4] "" Vector__XXX
-   SG_ IDK1_unk7 : 59|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ unk24 : 24|10@1+ (1,0) [0|255] "" Vector__XXX
+   SG_ unk38 : 38|10@1+ (1,0) [0|4] "" Vector__XXX
+   SG_ unk59 : 59|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ unk6 : 6|9@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ unk6_sign : 15|1@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 1381 x565: 8 DME_Etc
    SG_ IDK2_unk1 : 55|1@1+ (1,0) [0|1] "" Vector__XXX
@@ -132,7 +122,7 @@ BO_ 1381 x565: 8 DME_Etc
    SG_ Unk4 : 4|1@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 1560 x618: 8 DME_Etc
-   SG_ IDK3unk2 : 16|8@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ Unk2 : 16|8@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 1567 x61F: 8 DME_Etc
    SG_ LeftTurnSignal : 22|1@0+ (1,0) [0|1] "" Vector__XXX
@@ -143,9 +133,24 @@ BO_ 1567 x61F: 8 DME_Etc
    SG_ RunningHandbrake : 25|1@0+ (1,0) [0|1] "" Vector__XXX
    SG_ Cruise : 31|1@0+ (1,0) [0|1] "" Vector__XXX
    SG_ InteriorLightLevel : 8|6@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ unkStartup18 : 18|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ unkStartup30 : 30|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ unkStartup29 : 29|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ unkStartup28 : 28|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ unkStartup26 : 26|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ unkStartup24 : 24|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ unk38 : 38|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ unk19 : 19|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ unk17 : 19|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ unk16 : 19|1@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 1562 x61A: 8 DME_Etc
-   SG_ StalkState : 40|20@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ StalkState : 56|4@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ SyncClockRunning : 31|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ unk63 : 63|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ SyncClockNotRunning : 24|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ unk27 : 27|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ CustomValue : 40|16@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 822 x336: 8 DME_Etc
    SG_ Unk0 : 0|16@1+ (1,0) [0|1] "" Vector__XXX
@@ -153,17 +158,26 @@ BO_ 822 x336: 8 DME_Etc
    SG_ Unk6 : 48|16@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 504 x1F8: 8 DME_Etc
-   SG_ BrakePressure : 16|8@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ Unk2 : 16|8@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ Unk0 : 0|8@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 1552 x610: 8 DME_Etc
    SG_ VIN : 0|64@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 1281 x501: 8 DME_Etc
-   SG_ x501Sig34 : 0|64@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ Unk1 : 8|8@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ Unk3 : 24|8@1- (1,0) [0|1] "" Vector__XXX
+   SG_ Unk56 : 56|1@1+ (1,0) [0|1] "" Vector__XXX
 
 BA_DEF_ BO_ "GenMsgBackgroundColor" STRING ;
 BA_DEF_ BO_ "GenMsgForegroundColor" STRING ;
 BA_DEF_ BO_ "isj1939dbc" INT 0 0;
+BA_DEF_ BO_ "matchingcriteria" INT 0 0;
+BA_DEF_ BO_ "filterlabeling" INT 0 0;
+BA_DEF_ BO_ "matchingcriteria" INT 0 0;
+BA_DEF_ BO_ "filterlabeling" INT 0 0;
+BA_DEF_ BO_ "matchingcriteria" INT 0 0;
+BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_DEF_ BO_ "matchingcriteria" INT 0 0;
 BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_DEF_ BO_ "matchingcriteria" INT 0 0;
@@ -187,7 +201,6 @@ BA_ "GenMsgBackgroundColor" BO_ 1555 "#ffffff";
 BA_ "GenMsgBackgroundColor" BO_ 496 "#ffffff";
 BA_ "GenMsgBackgroundColor" BO_ 501 "#ffffff";
 BA_ "GenMsgBackgroundColor" BO_ 339 "#ffffff";
-BA_ "GenMsgBackgroundColor" BO_ 824 "#ffffff";
 BA_ "GenMsgForegroundColor" BO_ 1381 "#000000";
 BA_ "GenMsgForegroundColor" BO_ 1562 "#000000";
 BA_ "GenMsgForegroundColor" BO_ 822 "#000000";
@@ -197,18 +210,11 @@ BA_DEF_DEF_ "GenMsgForegroundColor" "#000000";
 BA_DEF_DEF_ "isj1939dbc" 0;
 BA_DEF_DEF_ "matchingcriteria" 0;
 BA_DEF_DEF_ "filterlabeling" 0;
+BA_DEF_DEF_ "matchingcriteria" 0;
+BA_DEF_DEF_ "filterlabeling" false;
 CM_ BO_ 822 "Check control";
-VAL_ 790 Ignition_on_DME_ready 1 "On" 0 "Off";
 VAL_ 790 Key 0 "Off" 1 "On";
-VAL_ 790 Starter 0 "Off" 1 "On";
 VAL_ 790 AC_Clutch 0 "Off" 1 "On";
-VAL_ 809 Brake_Light_Switch 1 "Pressed" 0 "Not_Pressed";
-VAL_ 809 Brake_Light_Switch_Error 0 "Off" 1 "Error";
-VAL_ 809 Clutch_Switch 0 "Not_pressed" 1 "Pressed";
-VAL_ 809 Engine_Running 0 "Not_running" 1 "Running";
 VAL_ 1349 Charge_Light 0 "Off" 1 "On";
 VAL_ 1349 Oil_Pressure_Light 0 "Off" 1 "On";
 VAL_ 339 Brake_Pedal_Pressed 0 "Not_pressed" 1 "Pressed";
-VAL_ 824 Clutch 0 "Not_pressed" 1 "Pressed";
-VAL_ 824 Engine_Running 0 "Not_running" 1 "Running";
-VAL_ 824 Brake_Switch 0 "Not_pressed" 1 "Pressed";

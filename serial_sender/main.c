@@ -211,10 +211,26 @@ void get_log(int fd, uint64_t id, uint8_t force) {
   }
 }
 
+void get_latest_logs(int fd) {
+  uint8_t command[12] = {0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+  write_port(fd, command, 12);
+  delay(1000);
+  char buf[9];
+  ssize_t bytes = read_port(fd, (uint8_t*)buf, 9);
+  if (bytes != 9) {
+    printf("Could not read log count: %s, %lu bytes\n", buf, bytes);
+    return;
+  }
+  uint64_t num_logs = strtol(buf, NULL, 16);
+  printf("Current log: %llu\n", num_logs);
+  get_log(fd, num_logs - 1, 1);
+  get_log(fd, num_logs, 1);
+}
+
 void get_logs(int fd) {
   uint8_t command[12] = {0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
   write_port(fd, command, 12);
-  delay(5000);
+  delay(1000);
   char buf[9];
   ssize_t bytes = read_port(fd, (uint8_t*)buf, 9);
   if (bytes != 9) {
@@ -311,6 +327,8 @@ int main(int argc, char* argv[]) {
     send_log(fd, argv[2]);
   } else if (strcmp(argv[1], "get_log") == 0) {
     get_log(fd, strtol(argv[2], NULL, 10), 1);
+  } else if (strcmp(argv[1], "get_latest_logs") == 0) {
+    get_latest_logs(fd);
   } else if (strcmp(argv[1], "get_logs") == 0) {
     get_logs(fd);
   } else if (strcmp(argv[1], "set_time") == 0) {

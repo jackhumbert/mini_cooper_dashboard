@@ -6,8 +6,12 @@ static lv_obj_t * turn_right;
 // static lv_style_t turn_right_style;
 
 void turn_signal_update() {
-    lv_obj_set_style_img_recolor(turn_left, get_dash()->left_turn_signal ? GREEN_ON : GREEN_OFF, 0);
-    lv_obj_set_style_img_recolor(turn_right, get_dash()->right_turn_signal ? GREEN_ON : GREEN_OFF, 0);
+    if (get_queued()->left_turn_signal) {
+        lv_obj_set_style_img_recolor(turn_left, get_dash()->left_turn_signal ? GREEN_ON : GREEN_OFF, 0);
+    }
+    if (get_queued()->right_turn_signal) {
+        lv_obj_set_style_img_recolor(turn_right, get_dash()->right_turn_signal ? GREEN_ON : GREEN_OFF, 0);
+    }
     // lv_obj_invalidate(turn_left);
     // lv_obj_invalidate(turn_right);
 }

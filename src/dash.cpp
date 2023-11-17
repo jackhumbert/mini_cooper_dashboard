@@ -63,16 +63,20 @@ static void manually_log_event(lv_event_t * e) {
     lv_obj_t * obj = lv_event_get_target(e);
 
     if(code == LV_EVENT_CLICKED) {
-        sd_card_logf("%08.3f R11 00000A00 %02X 00 00 00 00 00 00 00\n", xTaskGetTickCount() / 1000.0, event_num++);
+        sd_card_logf("%08.3f R11 00000A00 %02X 00 00 00 00 00 00 00\n", xTaskGetTickCount() / 1000.0, event_num);
+        add_message_fmt("Custom event %d logged", event_num);
+        event_num++;
     }
 }
 
-static void clear_messages(lv_event_t * e) {
+static bool events = true;
+
+static void toggle_events(lv_event_t * e) {
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * obj = lv_event_get_target(e);
 
     if(code == LV_EVENT_CLICKED) {
-        sd_card_clear_messages();
+        events = !events;
     }
 }
 
@@ -158,36 +162,7 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     lv_obj_t * messages_view = messages_create(canvas);
     lv_obj_align(messages_view, LV_ALIGN_TOP_LEFT, 10, 10);
 
-// {
-//     lv_obj_t * msg_dump = lv_btn_create(canvas);
-//     lv_obj_add_event_cb(msg_dump, manually_log_event, LV_EVENT_ALL, NULL);
-//     lv_obj_align(msg_dump, LV_ALIGN_TOP_RIGHT, -10, 50);
 
-//     DASH_FONT(RAJDHANI_SEMIBOLD, 16);
-//     lv_obj_t * label = lv_label_create(msg_dump);
-//     lv_obj_set_style_text_font(label, RAJDHANI_SEMIBOLD_16, 0);
-//     lv_label_set_text(label, "Log Event");
-// }
-
-// {
-//     lv_obj_t * msg_clea = lv_btn_create(canvas);
-//     lv_obj_add_event_cb(msg_clea, clear_messages, LV_EVENT_ALL, NULL);
-//     lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -10, 100);
-
-//     lv_obj_t * label = lv_label_create(msg_clea);
-//     lv_label_set_text(label, "Close Log File");
-// }
-
-// {
-//     lv_obj_t * msg_clea = lv_btn_create(canvas);
-//     // lv_obj_add_event_cb(msg_clea, clear_messages, LV_EVENT_ALL, NULL);
-//     lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -10, 150);
-
-//     lv_obj_t * label = lv_label_create(msg_clea);
-//     lv_label_set_text(label, "Dummy Button");
-// }
-
-    activity_create(canvas);
 
     static lv_style_t style;
     lv_style_init(&style);
@@ -201,7 +176,9 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     lv_obj_center(cont);
     lv_obj_add_style(cont, &style, 0);
 
+    // widgets.push_back(new BitTable(cont, &dashboard_queued.x153, 0x153, &dashboard.x153));
     // widgets.push_back(new BitTable(cont, &dashboard_queued.x1F3, 0x1F3, &dashboard.x1F3));
+    widgets.push_back(new BitTable(cont, &dashboard_queued.x1F8, 0x1F8, &dashboard.x1F8));
     // widgets.push_back(new BitTable(cont, &dashboard_queued.x316, 0x316, &dashboard.x316));
     // widgets.push_back(new BitTable(cont, &dashboard_queued.x329, 0x329, &dashboard.x329));
     // widgets.push_back(new BitTable(cont, &dashboard_queued.x336, 0x336, &dashboard.x336));
@@ -216,6 +193,39 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     // widgets.push_back(new BitTable(cont, &dashboard_queued.x61F, 0x61F, &dashboard.x61F));
 
 
+    DASH_FONT(RAJDHANI_SEMIBOLD, 16);
+{
+    lv_obj_t * msg_dump = lv_btn_create(canvas);
+    lv_obj_add_event_cb(msg_dump, manually_log_event, LV_EVENT_ALL, NULL);
+    lv_obj_align(msg_dump, LV_ALIGN_TOP_RIGHT, -10, 50);
+
+    lv_obj_t * label = lv_label_create(msg_dump);
+    lv_obj_set_style_text_font(label, RAJDHANI_SEMIBOLD_16, 0);
+    lv_label_set_text(label, "Log Event");
+}
+
+// {
+//     lv_obj_t * msg_clea = lv_btn_create(canvas);
+//     lv_obj_add_event_cb(msg_clea, toggle_events, LV_EVENT_ALL, NULL);
+//     lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -10, 100);
+
+//     lv_obj_t * label = lv_label_create(msg_clea);
+//     lv_label_set_text(label, "Close Log File");
+// }
+
+{
+    lv_obj_t * msg_clea = lv_btn_create(canvas);
+    lv_obj_add_flag(msg_clea, LV_OBJ_FLAG_CHECKABLE);
+    lv_obj_add_event_cb(msg_clea, toggle_events, LV_EVENT_ALL, NULL);
+    lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -10, 150);
+
+    lv_obj_t * label = lv_label_create(msg_clea);
+    lv_obj_set_style_text_font(label, RAJDHANI_SEMIBOLD_16, 0);
+    lv_label_set_text(label, "Toggle Updates");
+}
+
+    activity_create(canvas);
+
     // setup_effect(canvas);
     return canvas;
 }
@@ -227,25 +237,22 @@ void dash_loop(void) {
     memset(&dashboard_changed, 0, sizeof(dashboard_changed_t));
 	pthread_mutex_unlock(&get_dash()->mutex);
 
-    for (auto widget : widgets) {
-        widget->update();
-    }
-    if (dashboard_queued.x610) {
-        uint8_t * vin = (uint8_t*)&dashboard_cache.x610;
-        // add_message_fmt("VIN: %llX", dashboard_cache.x610);
-        add_message_fmt("VIN: %c%c%02X%02X%X", vin[4], vin[3], vin[2], vin[1], vin[0] >> 4);
-    }
-    if (dashboard_queued.running_clock) {
-        clock_update();
-    }
-    if (dashboard_queued.left_turn_signal) {
+    if (events) {
+        for (auto widget : widgets) {
+            widget->update();
+        }
+        if (dashboard_queued.x610) {
+            uint8_t * vin = (uint8_t*)&dashboard_cache.x610;
+            // add_message_fmt("VIN: %llX", dashboard_cache.x610);
+            add_message_fmt("VIN: %c%c%02X%02X%X", vin[4], vin[3], vin[2], vin[1], vin[0] >> 4);
+        }
+        if (dashboard_queued.running_clock) {
+            clock_update();
+        }
         turn_signal_update();
-    }
-    if (dashboard_queued.right_turn_signal) {
-        turn_signal_update();
-    }
-    if (dashboard_queued.running_lights) {
-        start_screen_fade();
+        if (dashboard_queued.running_lights) {
+            start_screen_fade();
+        }
     }
     activity_update(dashboard_queued.activity);
     // sd_card_flush();
