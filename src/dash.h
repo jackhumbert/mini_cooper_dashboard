@@ -55,11 +55,31 @@ enum light_state {
 
 };
 
+// 22 or 11030
+// 43
+
+typedef enum {
+    // outside_temp = 1,       // 197 (55f)
+    // range = 2,              // 617 (64m)
+    // average_consumption = 3,// 652 (27.0mpg)
+    // current_consumption = 4,// 270 (--mpg)
+    // average_speed = 9,      // 32766 (19.7mph)
+    // current_speed
+
+
+    average_speed = 1,       // 197 (19.7mph)
+    outside_temp = 2,        // 617 (55f)
+    range = 3,               // 652 (64m)
+    average_consumption = 4, // 270 (27.0mpg)
+    current_consumption = 9, // 32766 (--mpg)
+} stalk_state_t;
+
 typedef struct dashboard_t {
 	pthread_mutex_t	mutex;
 
     uint64_t x153;
     uint64_t x1F3;
+    uint64_t x1F5;
     uint64_t x1F8;
     uint64_t x316;
     uint64_t x329;
@@ -74,15 +94,23 @@ typedef struct dashboard_t {
     uint64_t x61A;
     uint64_t x61F;
 
+    // 0x153
     double speed;
     uint8_t tire_pressure_set;
     uint8_t brake_pedal_pressed;
 
+    // 0x1F0
     double wheel_lf_speed;
     double wheel_rf_speed;
     double wheel_lr_speed;
     double wheel_rr_speed;
 
+    // 0x1F3
+    int16_t forward_force;
+    int16_t lateral_force;
+    uint8_t lateral_force_sign;
+
+    // 0x1F5
     double steering_angle;
     double steering_velocity;
     uint8_t steering_angle_direction;
@@ -134,6 +162,10 @@ typedef struct dashboard_t {
     int8_t outside_temp;
     uint8_t hood;
 
+    // 0x61A
+    stalk_state_t stalk_state;
+    uint16_t custom_value;
+
     uint8_t brights;
     uint8_t running_lights;
     uint8_t left_turn_signal;
@@ -154,6 +186,7 @@ typedef struct dashboard_changed_t {
 
     uint8_t x153;
     uint8_t x1F3;
+    uint8_t x1F5;
     uint8_t x1F8;
     uint8_t x316;
     uint8_t x329;
@@ -178,6 +211,10 @@ typedef struct dashboard_changed_t {
     uint8_t wheel_rf_speed;
     uint8_t wheel_lr_speed;
     uint8_t wheel_rr_speed;
+
+    // 0x1F3
+    uint8_t forward_force;
+    uint8_t lateral_force;
 
     // 0x1F5
     uint8_t steering_angle;
@@ -230,6 +267,10 @@ typedef struct dashboard_changed_t {
 
     uint8_t outside_temp;
     uint8_t hood;
+
+    // 0x61A
+    uint8_t stalk_state;
+    uint8_t custom_value;
 
     uint8_t brights;
     uint8_t running_lights;

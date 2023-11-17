@@ -42,11 +42,22 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
             case 0x1F3:  // unk4 something that counts down
                 get_dash()->x1F3 = *(uint64_t*)data;
                 get_changed()->x1F3 = 1;
+                decode_can_0x1f3_ForwardForce(&can_data, &get_dash()->forward_force);
+                get_dash()->forward_force -= 512;
+                update_changed(forward_force);
+                decode_can_0x1f3_LateralForce(&can_data, &get_dash()->lateral_force);
+                decode_can_0x1f3_LateralForceSign(&can_data, &get_dash()->lateral_force_sign);
+                get_dash()->lateral_force *= get_dash()->lateral_force_sign ? -1 : 1;
+                update_changed(lateral_force);
                 return 0;
-            case 0x1F5: return 0;
-            case 0x1F8: return 0;
+            case 0x1F5:
+                get_dash()->x1F5 = *(uint64_t*)data;
+                get_changed()->x1F5 = 1;
+                return 0;
+            case 0x1F8: 
                 get_dash()->x1F8 = *(uint64_t*)data;
                 get_changed()->x1F8 = 1;
+                return 0;
             case 0x316:
                 get_dash()->x316 = *(uint64_t*)data;
                 get_changed()->x316 = 1;
@@ -120,6 +131,10 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
             case 0x61A: 
                 get_dash()->x61A = *(uint64_t*)data;
                 get_changed()->x61A = 1;
+                decode_can_0x61a_CustomValue(&can_data, &get_dash()->custom_value);
+                update_changed(custom_value);
+                decode_can_0x61a_StalkState(&can_data, (uint8_t*)&get_dash()->stalk_state);
+                update_changed(stalk_state);
                 return 0;
             case 0x61F: 
                 get_dash()->x61F = *(uint64_t*)data;

@@ -158,18 +158,17 @@ void CAN_Task_loop(void * parameter) {
             while(!validate_id(get_id(buffer + offset)) && offset < 8)
                 offset++;
             
+            if (offset) {
+                while (Serial.available() < offset);
+                Serial.readBytes(buffer + 12, offset);
+            }
+
             if (validate_id(get_id(buffer + offset))) {     
                 packet_data = buffer + offset;
                 id = get_id(packet_data);
                 if (filter_id(id)) {
                     continue;
                 }       
-                if (offset) {
-                    while (Serial.available() < offset)
-                        vTaskDelay(1);
-                    Serial.readBytes(buffer + 12, offset);
-                }
-
                 // memcpy(process_buffer, buffer, 12);
                 process_packet(NULL);
                 // xTaskCreatePinnedToCore(
@@ -183,7 +182,7 @@ void CAN_Task_loop(void * parameter) {
             } else {
                 get_changed()->activity |= ACTIVITY_ERROR;
                 sd_card_logf("%08.3f CER %08X %02X %02X %02X %02X %02X %02X %02X %02X\n", 
-                    xTaskGetTickCount() / 1000.0, id,
+                    xTaskGetTickCount() / 1000.0, get_id(buffer + offset),
                     buffer[4], buffer[5], buffer[6], buffer[7], buffer[8], buffer[9], buffer[10], buffer[11]);
             }
         } // else {

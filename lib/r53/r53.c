@@ -439,20 +439,20 @@ static int pack_can_0x1f3_x1F3(can_obj_r53_h_t *o, uint64_t *data) {
 	assert(data);
 	register uint64_t x;
 	register uint64_t i = 0;
-	/* unk24: start-bit 24, length 10, endianess intel, scaling 1, offset 0 */
-	x = ((uint16_t)(o->can_0x1f3_x1F3.unk24)) & 0x3ff;
+	/* ForwardForce: start-bit 24, length 10, endianess intel, scaling 1, offset 0 */
+	x = ((uint16_t)(o->can_0x1f3_x1F3.ForwardForce)) & 0x3ff;
 	x <<= 24; 
 	i |= x;
 	/* unk38: start-bit 38, length 10, endianess intel, scaling 1, offset 0 */
 	x = ((uint16_t)(o->can_0x1f3_x1F3.unk38)) & 0x3ff;
 	x <<= 38; 
 	i |= x;
-	/* unk6: start-bit 6, length 9, endianess intel, scaling 1, offset 0 */
-	x = ((uint16_t)(o->can_0x1f3_x1F3.unk6)) & 0x1ff;
+	/* LateralForce: start-bit 6, length 9, endianess intel, scaling 1, offset 0 */
+	x = ((uint16_t)(o->can_0x1f3_x1F3.LateralForce)) & 0x1ff;
 	x <<= 6; 
 	i |= x;
-	/* unk6_sign: start-bit 15, length 1, endianess intel, scaling 1, offset 0 */
-	x = ((uint8_t)(o->can_0x1f3_x1F3.unk6_sign)) & 0x1;
+	/* LateralForceSign: start-bit 15, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x1f3_x1F3.LateralForceSign)) & 0x1;
 	x <<= 15; 
 	i |= x;
 	/* unk59: start-bit 59, length 1, endianess intel, scaling 1, offset 0 */
@@ -471,18 +471,18 @@ static int unpack_can_0x1f3_x1F3(can_obj_r53_h_t *o, uint64_t data, uint8_t dlc,
 	register uint64_t i = (data);
 	if (dlc < 8)
 		return -1;
-	/* unk24: start-bit 24, length 10, endianess intel, scaling 1, offset 0 */
+	/* ForwardForce: start-bit 24, length 10, endianess intel, scaling 1, offset 0 */
 	x = (i >> 24) & 0x3ff;
-	o->can_0x1f3_x1F3.unk24 = x;
+	o->can_0x1f3_x1F3.ForwardForce = x;
 	/* unk38: start-bit 38, length 10, endianess intel, scaling 1, offset 0 */
 	x = (i >> 38) & 0x3ff;
 	o->can_0x1f3_x1F3.unk38 = x;
-	/* unk6: start-bit 6, length 9, endianess intel, scaling 1, offset 0 */
+	/* LateralForce: start-bit 6, length 9, endianess intel, scaling 1, offset 0 */
 	x = (i >> 6) & 0x1ff;
-	o->can_0x1f3_x1F3.unk6 = x;
-	/* unk6_sign: start-bit 15, length 1, endianess intel, scaling 1, offset 0 */
+	o->can_0x1f3_x1F3.LateralForce = x;
+	/* LateralForceSign: start-bit 15, length 1, endianess intel, scaling 1, offset 0 */
 	x = (i >> 15) & 0x1;
-	o->can_0x1f3_x1F3.unk6_sign = x;
+	o->can_0x1f3_x1F3.LateralForceSign = x;
 	/* unk59: start-bit 59, length 1, endianess intel, scaling 1, offset 0 */
 	x = (i >> 59) & 0x1;
 	o->can_0x1f3_x1F3.unk59 = x;
@@ -491,25 +491,17 @@ static int unpack_can_0x1f3_x1F3(can_obj_r53_h_t *o, uint64_t data, uint8_t dlc,
 	return 8;
 }
 
-int decode_can_0x1f3_unk24(const can_obj_r53_h_t *o, uint16_t *out) {
+int decode_can_0x1f3_ForwardForce(const can_obj_r53_h_t *o, uint16_t *out) {
 	assert(o);
 	assert(out);
-	uint16_t rval = (uint16_t)(o->can_0x1f3_x1F3.unk24);
-	if (rval <= 255) {
-		*out = rval;
-		return 0;
-	} else {
-		*out = (uint16_t)0;
-		return -1;
-	}
+	uint16_t rval = (uint16_t)(o->can_0x1f3_x1F3.ForwardForce);
+	*out = rval;
+	return 0;
 }
 
-int encode_can_0x1f3_unk24(can_obj_r53_h_t *o, uint16_t in) {
+int encode_can_0x1f3_ForwardForce(can_obj_r53_h_t *o, uint16_t in) {
 	assert(o);
-	o->can_0x1f3_x1F3.unk24 = 0;
-	if (in > 255)
-		return -1;
-	o->can_0x1f3_x1F3.unk24 = in;
+	o->can_0x1f3_x1F3.ForwardForce = in;
 	return 0;
 }
 
@@ -535,39 +527,31 @@ int encode_can_0x1f3_unk38(can_obj_r53_h_t *o, uint16_t in) {
 	return 0;
 }
 
-int decode_can_0x1f3_unk6(const can_obj_r53_h_t *o, uint16_t *out) {
+int decode_can_0x1f3_LateralForce(const can_obj_r53_h_t *o, uint16_t *out) {
 	assert(o);
 	assert(out);
-	uint16_t rval = (uint16_t)(o->can_0x1f3_x1F3.unk6);
-	if (rval <= 1) {
-		*out = rval;
-		return 0;
-	} else {
-		*out = (uint16_t)0;
-		return -1;
-	}
-}
-
-int encode_can_0x1f3_unk6(can_obj_r53_h_t *o, uint16_t in) {
-	assert(o);
-	o->can_0x1f3_x1F3.unk6 = 0;
-	if (in > 1)
-		return -1;
-	o->can_0x1f3_x1F3.unk6 = in;
-	return 0;
-}
-
-int decode_can_0x1f3_unk6_sign(const can_obj_r53_h_t *o, uint8_t *out) {
-	assert(o);
-	assert(out);
-	uint8_t rval = (uint8_t)(o->can_0x1f3_x1F3.unk6_sign);
+	uint16_t rval = (uint16_t)(o->can_0x1f3_x1F3.LateralForce);
 	*out = rval;
 	return 0;
 }
 
-int encode_can_0x1f3_unk6_sign(can_obj_r53_h_t *o, uint8_t in) {
+int encode_can_0x1f3_LateralForce(can_obj_r53_h_t *o, uint16_t in) {
 	assert(o);
-	o->can_0x1f3_x1F3.unk6_sign = in;
+	o->can_0x1f3_x1F3.LateralForce = in;
+	return 0;
+}
+
+int decode_can_0x1f3_LateralForceSign(const can_obj_r53_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x1f3_x1F3.LateralForceSign);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x1f3_LateralForceSign(can_obj_r53_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x1f3_x1F3.LateralForceSign = in;
 	return 0;
 }
 
@@ -589,10 +573,10 @@ int print_can_0x1f3_x1F3(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "unk24 = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.unk24)));
+	r = print_helper(r, fprintf(output, "ForwardForce = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.ForwardForce)));
 	r = print_helper(r, fprintf(output, "unk38 = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.unk38)));
-	r = print_helper(r, fprintf(output, "unk6 = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.unk6)));
-	r = print_helper(r, fprintf(output, "unk6_sign = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.unk6_sign)));
+	r = print_helper(r, fprintf(output, "LateralForce = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.LateralForce)));
+	r = print_helper(r, fprintf(output, "LateralForceSign = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.LateralForceSign)));
 	r = print_helper(r, fprintf(output, "unk59 = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.unk59)));
 	return r;
 }
@@ -2379,20 +2363,12 @@ int decode_can_0x61a_CustomValue(const can_obj_r53_h_t *o, uint16_t *out) {
 	assert(o);
 	assert(out);
 	uint16_t rval = (uint16_t)(o->can_0x61a_x61A.CustomValue);
-	if (rval <= 1) {
-		*out = rval;
-		return 0;
-	} else {
-		*out = (uint16_t)0;
-		return -1;
-	}
+	*out = rval;
+	return 0;
 }
 
 int encode_can_0x61a_CustomValue(can_obj_r53_h_t *o, uint16_t in) {
 	assert(o);
-	o->can_0x61a_x61A.CustomValue = 0;
-	if (in > 1)
-		return -1;
 	o->can_0x61a_x61A.CustomValue = in;
 	return 0;
 }
@@ -2401,20 +2377,12 @@ int decode_can_0x61a_StalkState(const can_obj_r53_h_t *o, uint8_t *out) {
 	assert(o);
 	assert(out);
 	uint8_t rval = (uint8_t)(o->can_0x61a_x61A.StalkState);
-	if (rval <= 1) {
-		*out = rval;
-		return 0;
-	} else {
-		*out = (uint8_t)0;
-		return -1;
-	}
+	*out = rval;
+	return 0;
 }
 
 int encode_can_0x61a_StalkState(can_obj_r53_h_t *o, uint8_t in) {
 	assert(o);
-	o->can_0x61a_x61A.StalkState = 0;
-	if (in > 1)
-		return -1;
 	o->can_0x61a_x61A.StalkState = in;
 	return 0;
 }

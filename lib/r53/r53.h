@@ -78,10 +78,10 @@ typedef PREPACK struct {
 } POSTPACK can_0x1f0_x1F0_ABS_1_t;
 
 typedef PREPACK struct {
-	uint16_t unk24; /* scaling 1.0, offset 0.0, units none  */
+	uint16_t ForwardForce; /* scaling 1.0, offset 0.0, units none  */
 	uint16_t unk38; /* scaling 1.0, offset 0.0, units none  */
-	uint16_t unk6; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t unk6_sign; /* scaling 1.0, offset 0.0, units none  */
+	uint16_t LateralForce; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t LateralForceSign; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t unk59; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x1f3_x1F3_t;
 
@@ -336,14 +336,14 @@ int decode_can_0x1f0_Wheel_4_Right_Rear_Speed(const can_obj_r53_h_t *o, double *
 int encode_can_0x1f0_Wheel_4_Right_Rear_Speed(can_obj_r53_h_t *o, double in);
 
 
-int decode_can_0x1f3_unk24(const can_obj_r53_h_t *o, uint16_t *out);
-int encode_can_0x1f3_unk24(can_obj_r53_h_t *o, uint16_t in);
+int decode_can_0x1f3_ForwardForce(const can_obj_r53_h_t *o, uint16_t *out);
+int encode_can_0x1f3_ForwardForce(can_obj_r53_h_t *o, uint16_t in);
 int decode_can_0x1f3_unk38(const can_obj_r53_h_t *o, uint16_t *out);
 int encode_can_0x1f3_unk38(can_obj_r53_h_t *o, uint16_t in);
-int decode_can_0x1f3_unk6(const can_obj_r53_h_t *o, uint16_t *out);
-int encode_can_0x1f3_unk6(can_obj_r53_h_t *o, uint16_t in);
-int decode_can_0x1f3_unk6_sign(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x1f3_unk6_sign(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x1f3_LateralForce(const can_obj_r53_h_t *o, uint16_t *out);
+int encode_can_0x1f3_LateralForce(can_obj_r53_h_t *o, uint16_t in);
+int decode_can_0x1f3_LateralForceSign(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x1f3_LateralForceSign(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x1f3_unk59(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x1f3_unk59(can_obj_r53_h_t *o, uint8_t in);
 

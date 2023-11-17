@@ -13,7 +13,9 @@ static char ** pending_messages;
 static lv_obj_t * log_file_name;
 
 void set_log_filename(char * name) {
-    lv_label_set_text(log_file_name, name);
+    if (log_file_name) {
+        lv_label_set_text(log_file_name, name);
+    }
 }
 
 lv_obj_t * messages_create(lv_obj_t * parent) {

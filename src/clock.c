@@ -10,10 +10,13 @@ static lv_obj_t * time_label;
 static bool overflow;
 long offset = -18000;
 
+static uint16_t minute_offset = 12 * 60 - 7;
+
 void clock_update() {
     // running_clock is in minutes
-    int hour = get_dash()->running_clock / 60 % 24;
-    int min = get_dash()->running_clock % 60;
+    uint16_t corrected = get_dash()->running_clock + minute_offset;
+    int hour = corrected / 60 % 24;
+    int min = corrected % 60;
     //   int sec = (hms % SEC_PER_HOUR) % SEC_PER_MIN; // or hms % SEC_PER_MIN
 
     bool pm =  hour >= 12;
@@ -108,8 +111,9 @@ lv_obj_t * clock_create(lv_obj_t * parent) {
     // // mod `hms` to insure in positive range of [0...SEC_PER_DAY)
     // hms = (hms + SEC_PER_DAY) % SEC_PER_DAY;
 
-    get_dash()->running_clock = hms;
-    clock_update();
+    // get_dash()->running_clock = hms;
+    // clock_update();
+    lv_label_set_text(time_label, "--:-- AM");
 
     // lv_obj_set_style_blend_mode(time_label, LV_BLEND_MODE_ADDITIVE, 0);
 
