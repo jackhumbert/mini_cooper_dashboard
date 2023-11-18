@@ -1,5 +1,5 @@
 #include "can.h"
-#include "messages.h"-
+#include "messages.h"
 
 static can_obj_r53_h_t can_data;
 
@@ -61,7 +61,7 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
             case 0x316:
                 // get_dash()->x316 = *(uint64_t*)data;
                 // get_changed()->x316 = 1;
-                decode_can_0x316_RPM_Alt(&can_data, &get_dash()->rpm_fp);
+                decode_can_0x316_RPM(&can_data, &get_dash()->rpm_fp);
                 get_dash()->rpm = get_dash()->rpm_fp;
                 update_changed(rpm);
                 decode_can_0x316_Key(&can_data, &get_dash()->key);
@@ -115,6 +115,8 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 update_changed(fuel_level);
                 decode_can_0x613_Running_Clock(&can_data, &get_dash()->running_clock);
                 update_changed(running_clock);
+                decode_can_0x613_Odometer(&can_data, &get_dash()->odometer);
+                update_changed(odometer);
                 return 0;
             case 0x615:
                 // get_dash()->x615 = *(uint64_t*)data;
@@ -166,6 +168,8 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                     get_dash()->cruise = can_data.can_0x61f_x61F.Cruise;
                     get_changed()->cruise = 1;
                 }
+                decode_can_0x61f_InteriorLightLevel(&can_data, &get_dash()->interior_light_level);
+                update_changed(interior_light_level);
                 return 0;
         }
         return -1;

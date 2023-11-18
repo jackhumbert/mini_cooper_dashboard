@@ -1,16 +1,18 @@
 #include "car_view.hpp"
 
 void CarView::update(void) {
-    if (get_queued()->left_door) {
-        lv_obj_set_style_img_recolor(door_left_obj, get_cache()->left_door ? RED_ON : RED_OFF, 0);
-    }
+    // if (get_queued()->left_door) {
+    //     lv_obj_set_style_img_recolor(door_left_obj, get_cache()->left_door ? RED_ON : RED_OFF, 0);
+    // }
     if (get_queued()->brights || get_queued()->running_lights) {
         if (get_cache()->brights) {
             lv_obj_set_style_img_recolor(headlights_obj, BLUE_ON, 0);
+            lv_obj_set_style_opa(headlights_obj, LV_OPA_100, 0);
         } else if (get_cache()->running_lights) {
-            lv_obj_set_style_img_recolor(headlights_obj, AMBER_ON, 0);
+            lv_obj_set_style_img_recolor(headlights_obj, lv_color_hsv_to_rgb(20, 80, 100), 0);
+            lv_obj_set_style_opa(headlights_obj, LV_OPA_100, 0);
         } else {
-            lv_obj_set_style_img_recolor(headlights_obj, AMBER_OFF, 0);
+            lv_obj_set_style_opa(headlights_obj, LV_OPA_0, 0);
         }
     }
     if (get_queued()->handbrake) {
@@ -22,9 +24,11 @@ void CarView::update(void) {
     }
     if (get_queued()->hood) {
         if (get_cache()->hood) {
-            lv_obj_set_style_img_recolor(hood_obj, RED_ON, 0);
+            // lv_obj_set_style_img_recolor(hood_obj, RED_ON, 0);
+            lv_obj_set_style_opa(hood_obj, LV_OPA_100, 0);
         } else {
-            lv_obj_set_style_img_recolor(hood_obj, RED_OFF, 0);
+            // lv_obj_set_style_img_recolor(hood_obj, RED_OFF, 0);
+            lv_obj_set_style_opa(hood_obj, LV_OPA_0, 0);
         }
     }
     if (get_queued()->eml_light) {
@@ -59,6 +63,7 @@ CarView::CarView(lv_obj_t * parent) {
     lv_obj_set_size(lv_obj, 84 + 48 * 2, 158 + 40); // 84
     lv_obj_align(lv_obj, LV_ALIGN_BOTTOM_MID, 0, -20);
 
+    LV_IMG_DECLARE(car_view_fill);
     LV_IMG_DECLARE(car_view);
     LV_IMG_DECLARE(hood);
     LV_IMG_DECLARE(trunk);
@@ -69,59 +74,69 @@ CarView::CarView(lv_obj_t * parent) {
     LV_IMG_DECLARE(gas_cap);
     LV_IMG_DECLARE(foglights);
 
+    lv_obj_t * car_view_fill_obj = lv_img_create(lv_obj);
+    lv_img_set_src(car_view_fill_obj, &car_view_fill);
+    lv_obj_align(car_view_fill_obj, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_set_style_img_recolor(car_view_fill_obj, AMBER_OFF, 0);
+    lv_obj_set_style_img_recolor_opa(car_view_fill_obj, LV_OPA_100, 0);
+
     car_view_obj = lv_img_create(lv_obj);
     lv_img_set_src(car_view_obj, &car_view);
     lv_obj_align(car_view_obj, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_set_style_img_recolor(car_view_obj, AMBER_OFF, 0);
+    lv_obj_set_style_img_recolor(car_view_obj, DASH_BACKGROUND, 0);
     lv_obj_set_style_img_recolor_opa(car_view_obj, LV_OPA_100, 0);
     
     hood_obj = lv_img_create(lv_obj);
     lv_img_set_src(hood_obj, &hood);
     lv_obj_align(hood_obj, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_set_style_img_recolor(hood_obj, RED_OFF, 0);
+    lv_obj_set_style_img_recolor(hood_obj, RED_ON, 0);
     lv_obj_set_style_img_recolor_opa(hood_obj, LV_OPA_100, 0);
+    lv_obj_set_style_opa(hood_obj, LV_OPA_0, 0);
     
-    trunk_obj = lv_img_create(lv_obj);
-    lv_img_set_src(trunk_obj, &trunk);
-    lv_obj_align(trunk_obj, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_set_style_img_recolor(trunk_obj, RED_OFF, 0);
-    lv_obj_set_style_img_recolor_opa(trunk_obj, LV_OPA_100, 0);
+    // trunk_obj = lv_img_create(lv_obj);
+    // lv_img_set_src(trunk_obj, &trunk);
+    // lv_obj_align(trunk_obj, LV_ALIGN_BOTTOM_MID, 0, 0);
+    // lv_obj_set_style_img_recolor(trunk_obj, RED_OFF, 0);
+    // lv_obj_set_style_opa(trunk_obj, LV_OPA_100, 0);
 
     headlights_obj = lv_img_create(lv_obj);
     lv_img_set_src(headlights_obj, &headlights);
     lv_obj_align(headlights_obj, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_set_style_img_recolor(headlights_obj, RED_OFF, 0);
+    lv_obj_set_style_img_recolor(headlights_obj, AMBER_ON, 0);
     lv_obj_set_style_img_recolor_opa(headlights_obj, LV_OPA_100, 0);
+    lv_obj_set_style_opa(headlights_obj, LV_OPA_0, 0);
     
-    sunroof_obj = lv_img_create(lv_obj);
-    lv_img_set_src(sunroof_obj, &sunroof);
-    lv_obj_align(sunroof_obj, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_set_style_img_recolor(sunroof_obj, RED_OFF, 0);
-    lv_obj_set_style_img_recolor_opa(sunroof_obj, LV_OPA_100, 0);
+    // sunroof_obj = lv_img_create(lv_obj);
+    // lv_img_set_src(sunroof_obj, &sunroof);
+    // lv_obj_align(sunroof_obj, LV_ALIGN_BOTTOM_MID, 0, 0);
+    // lv_obj_set_style_img_recolor(sunroof_obj, RED_OFF, 0);
+    // lv_obj_set_style_opa(sunroof_obj, LV_OPA_100, 0);
     
-    door_left_obj = lv_img_create(lv_obj);
-    lv_img_set_src(door_left_obj, &door_left);
-    lv_obj_align(door_left_obj, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_set_style_img_recolor(door_left_obj, RED_OFF, 0);
-    lv_obj_set_style_img_recolor_opa(door_left_obj, LV_OPA_100, 0);
+    // door_left_obj = lv_img_create(lv_obj);
+    // lv_img_set_src(door_left_obj, &door_left);
+    // lv_obj_align(door_left_obj, LV_ALIGN_BOTTOM_MID, 0, 0);
+    // lv_obj_set_style_img_recolor(door_left_obj, RED_OFF, 0);
+    // lv_obj_set_style_opa(door_left_obj, LV_OPA_100, 0);
     
-    door_right_obj = lv_img_create(lv_obj);
-    lv_img_set_src(door_right_obj, &door_right);
-    lv_obj_align(door_right_obj, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_set_style_img_recolor(door_right_obj, RED_OFF, 0);
-    lv_obj_set_style_img_recolor_opa(door_right_obj, LV_OPA_100, 0);
+    // door_right_obj = lv_img_create(lv_obj);
+    // lv_img_set_src(door_right_obj, &door_right);
+    // lv_obj_align(door_right_obj, LV_ALIGN_BOTTOM_MID, 0, 0);
+    // lv_obj_set_style_img_recolor(door_right_obj, RED_OFF, 0);
+    // lv_obj_set_style_opa(door_right_obj, LV_OPA_100, 0);
     
     gas_cap_obj = lv_img_create(lv_obj);
     lv_img_set_src(gas_cap_obj, &gas_cap);
     lv_obj_align(gas_cap_obj, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_set_style_img_recolor(gas_cap_obj, RED_OFF, 0);
     lv_obj_set_style_img_recolor_opa(gas_cap_obj, LV_OPA_100, 0);
+    lv_obj_set_style_opa(gas_cap_obj, LV_OPA_0, 0);
 
     foglights_obj = lv_img_create(lv_obj);
     lv_img_set_src(foglights_obj, &foglights);
     lv_obj_align(foglights_obj, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_set_style_img_recolor(foglights_obj, RED_OFF, 0);
     lv_obj_set_style_img_recolor_opa(foglights_obj, LV_OPA_100, 0);
+    lv_obj_set_style_opa(foglights_obj, LV_OPA_0, 0);
 
     DASH_FONT(RAJDHANI_SEMIBOLD, 18);
     handbrake = lv_label_create(lv_obj);

@@ -26,7 +26,7 @@
 
 #define GREEN_ON lv_color_hsv_to_rgb(130, 100, 100)
 #define GREEN_HALF lv_color_hsv_to_rgb(125, 100, 50)
-#define GREEN_OFF lv_color_hsv_to_rgb(120, 100, 5)
+#define GREEN_OFF lv_color_hsv_to_rgb(120, 100, 4)
 
 #define WHITE_ON lv_color_hsv_to_rgb(0, 0, 100)
 #define WHITE_HALF lv_color_hsv_to_rgb(0, 0, 50)
@@ -176,6 +176,7 @@ typedef struct dashboard_t {
     uint8_t right_turn_signal;
     uint8_t handbrake;
     uint8_t cruise;
+    uint8_t interior_light_level;
 
     uint8_t left_door;
     uint8_t right_door;
@@ -282,6 +283,7 @@ typedef struct dashboard_changed_t {
     uint8_t right_turn_signal;
     uint8_t handbrake;
     uint8_t cruise;
+    uint8_t interior_light_level;
 
     uint8_t left_door;
     uint8_t right_door;

@@ -61,6 +61,8 @@ static void buffer_write(uint8_t * buffer, buffer_length_t length) {
     // get_changed()->activity |= ACTIVITY_ERROR;
 }
 
+TaskHandle_t rb_flusher_task;
+
 static void rb_flusher(void * parameter) {
     while (true) {
         for (int i = 0; i < NUM_BUFFERS; i++) {
@@ -83,13 +85,13 @@ static void rb_flusher(void * parameter) {
     }
 }
 
-void sd_card_init() {
+bool sd_card_init() {
     SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
     // // delay(100);
 	pthread_mutex_init(&log_file_mutex, NULL);
     if (!sd.begin(SD_CS, SD_SCK_MHZ(10))) {
         add_message("SD Card Mount Failed");
-        return;
+        return false;
     }
     // uint8_t cardType = sd.cardType();
 
@@ -133,10 +135,37 @@ void sd_card_init() {
         5000, // Stack size in bytes. This seems enough for it not to crash.
         NULL, // Parameter passed as input of the task.
         1, // Priority of the task.
-        NULL, // Task handle.
+        &rb_flusher_task, // Task handle.
         1);
 
     sd_card_logf("%08.3f CXX R53 Custom Dash by Jack Humbert\n", xTaskGetTickCount() / 1000.0);
+    return true;
+}
+
+void stop_logging(void) {
+    vTaskDelete(rb_flusher_task);
+    for (int i = active_buffer + 1; i != active_buffer; i = (i + 1) % NUM_BUFFERS) {
+        // if (file_buffer_length[i] && pthread_mutex_trylock(&buffer_mutex[i]) == 0) {
+        if (file_buffer_length[i]) {
+            pthread_mutex_lock(&buffer_mutex[i]);
+            if (log_file.write(file_buffer[i], file_buffer_length[i]) == file_buffer_length[i]) {
+                // log_file.flush();
+            } else {
+                // add_message_fmt("Logging error: %02X", log_file.getError());
+                // Serial.printf("Logging error: %02X\n", log_file.getError());
+                get_changed()->activity |= ACTIVITY_ERROR;
+            }
+            file_buffer_length[i] = 0;
+            pthread_mutex_unlock(&buffer_mutex[i]);
+        }
+    }
+    set_log_filename("");
+    if (log_file.close()) {
+        SPI.end();
+        add_message_fmt("Closed: %s", log_filename);
+    } else {
+        add_message("Error closing log file");
+    }
 }
 
 void sd_card_logf(const char * format, ...) {

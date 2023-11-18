@@ -1,6 +1,6 @@
 #include "accel.hpp"
 
-#define ACCEL_SIZE 71
+#define ACCEL_SIZE 61
 #define ACCEL_INDIC_SIZE 7
 
 void Accel::update(void) {
@@ -14,13 +14,10 @@ void Accel::update(void) {
 Accel::Accel(lv_obj_t * parent) {
     lv_obj = lv_obj_create(parent);
     lv_obj_set_style_bg_color(lv_obj, AMBER_OFF, 0);
-    lv_obj_set_style_radius(lv_obj, 5, 0);
-    lv_obj_set_style_pad_all(lv_obj, 0, 0);
+    // lv_obj_set_style_radius(lv_obj, 5, 0);
+    lv_obj_set_style_radius(lv_obj, LV_RADIUS_CIRCLE, 0);
     lv_obj_set_size(lv_obj, ACCEL_SIZE, ACCEL_SIZE);
-    lv_obj_set_scrollbar_mode(lv_obj, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_set_scroll_dir(lv_obj, LV_DIR_NONE);
-    lv_obj_set_style_border_width(lv_obj, 0, 0);
-    lv_obj_align(lv_obj, LV_ALIGN_TOP_RIGHT, -10, 190);
+    lv_obj_align(lv_obj, LV_ALIGN_BOTTOM_RIGHT, -118, -122);
 
     static lv_style_t style_line;
     lv_style_init(&style_line);
@@ -49,7 +46,7 @@ Accel::Accel(lv_obj_t * parent) {
     lv_obj_set_size(center, ACCEL_INDIC_SIZE, ACCEL_INDIC_SIZE);
     lv_obj_set_style_border_width(center, 0, 0);
     lv_obj_set_style_bg_color(center, IMPORTANT_TEXT, 0);
-    lv_obj_set_style_radius(center, ACCEL_INDIC_SIZE, 0);
+    lv_obj_set_style_radius(center, LV_RADIUS_CIRCLE, 0);
     lv_obj_set_style_pad_all(center, 0, 0);
     lv_obj_align(center, LV_ALIGN_CENTER, 0, 0);
 }

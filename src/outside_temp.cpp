@@ -19,5 +19,5 @@ OutsideTemp::OutsideTemp(lv_obj_t * parent) {
     lv_obj = lv_label_create(parent);
     lv_label_set_text(lv_obj, "--°F");
     lv_obj_add_style(lv_obj, &style, 0);
-    lv_obj_align(lv_obj, LV_ALIGN_TOP_RIGHT, -300, 160);
+    lv_obj_align(lv_obj, LV_ALIGN_TOP_RIGHT, -300, 150);
 }

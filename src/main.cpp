@@ -233,16 +233,18 @@ void screen_fade_cb(void * parameter) {
 };
 
 extern "C" void start_screen_fade(void) {
-    if (fade_active)
-        vTaskDelete(screen_fade_task);
-    xTaskCreatePinnedToCore(
-      screen_fade_cb, /* Function to implement the task */
-      "Screen Fade In", /* Name of the task */
-      1000,  /* Stack size in words */
-      NULL,  /* Task input parameter */
-      2,  /* Priority of the task */
-      &screen_fade_task,  /* Task handle. */
-      0); /* Core where the task should run */
+    uint8_t end_value = get_cache()->running_lights ? get_cache()->interior_light_level : 255;
+    gfx.setBrightness(end_value);
+    // if (fade_active)
+    //     vTaskDelete(screen_fade_task);
+    // xTaskCreatePinnedToCore(
+    //   screen_fade_cb, /* Function to implement the task */
+    //   "Screen Fade In", /* Name of the task */
+    //   1000,  /* Stack size in words */
+    //   NULL,  /* Task input parameter */
+    //   2,  /* Priority of the task */
+    //   &screen_fade_task,  /* Task handle. */
+    //   0); /* Core where the task should run */
 }
 
 // void timer_handler(void * _) {
@@ -385,7 +387,7 @@ void setup() {
     lv_group_set_default(g);
 
     dash_create(disp);
-    sd_card_init();
+    // sd_card_init();
 
     /*Initialize the input device driver*/
     static lv_indev_drv_t indev_drv;

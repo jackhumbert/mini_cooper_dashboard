@@ -35,7 +35,7 @@ OilTemp::OilTemp(lv_obj_t * parent) {
     lv_obj_align(lv_obj, LV_ALIGN_TOP_LEFT, 180, 316);
 
     lv_meter_scale_t * scale = lv_meter_add_scale(lv_obj);
-    lv_meter_set_scale_ticks(lv_obj, scale, 5, 3, 50, DASH_BACKGROUND);
+    lv_meter_set_scale_ticks(lv_obj, scale, 5, 2, 50, DASH_BACKGROUND);
     // lv_meter_set_scale_major_ticks(lv_obj, scale, 5, 3, 50, DASH_BACKGROUND, 20);
     lv_meter_set_scale_range(lv_obj, scale, 100, 320, 270, 135);
 

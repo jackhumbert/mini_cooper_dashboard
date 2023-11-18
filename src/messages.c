@@ -84,11 +84,12 @@ void add_message(const char * message) {
         return;
     }
 
-    DASH_FONT(FIRACODE_REGULAR, 12);
+    // DASH_FONT(FIRACODE_REGULAR, 12);
+    DASH_FONT(RAJDHANI_SEMIBOLD, 14);
 
     lv_obj_t * messages_label = lv_label_create(messages);
     lv_label_set_text(messages_label, message);
-    lv_obj_set_style_text_font(messages_label, FIRACODE_REGULAR_12, 0);
+    lv_obj_set_style_text_font(messages_label, RAJDHANI_SEMIBOLD_14, 0);
     lv_obj_set_style_text_color(messages_label, AMBER_ON, 0);
     lv_obj_set_width(messages_label, MESSAGES_WIDTH);
 

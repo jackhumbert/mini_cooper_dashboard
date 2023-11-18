@@ -4,5 +4,49 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"esp32-hal-psram.h": "c",
+			"sdkconfig.h": "c",
+			"array": "c",
+			"string_view": "c",
+			"initializer_list": "c",
+			"utility": "c",
+			"unistd.h": "c",
+			"coolant.h": "c",
+			"tach2.h": "c",
+			"clock.h": "c",
+			"speed.h": "c",
+			"car_view.h": "c",
+			"oil.h": "c",
+			"effect.h": "c",
+			"messages.h": "c",
+			"new": "cpp",
+			"adafruit_tinyusb.h": "c",
+			"adafruit_usbh_cdc.h": "c",
+			"hardwareserial.h": "c",
+			"*.tcc": "cpp",
+			"deque": "cpp",
+			"list": "cpp",
+			"string": "cpp",
+			"unordered_map": "cpp",
+			"unordered_set": "cpp",
+			"vector": "cpp",
+			"optional": "c",
+			"istream": "c",
+			"ostream": "c",
+			"ratio": "c",
+			"system_error": "c",
+			"functional": "c",
+			"tuple": "c",
+			"type_traits": "c",
+			"chrono": "c",
+			"cmath": "c",
+			"lv_draw_arc.h": "c",
+			"random": "c",
+			"can.h": "c",
+			"cstdio": "c",
+			"fstream": "cpp"
+		}
+	}
 }

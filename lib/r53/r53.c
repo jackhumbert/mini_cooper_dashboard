@@ -2633,20 +2633,12 @@ int decode_can_0x61f_InteriorLightLevel(const can_obj_r53_h_t *o, uint8_t *out) 
 	assert(o);
 	assert(out);
 	uint8_t rval = (uint8_t)(o->can_0x61f_x61F.InteriorLightLevel);
-	if (rval <= 1) {
-		*out = rval;
-		return 0;
-	} else {
-		*out = (uint8_t)0;
-		return -1;
-	}
+	*out = rval;
+	return 0;
 }
 
 int encode_can_0x61f_InteriorLightLevel(can_obj_r53_h_t *o, uint8_t in) {
 	assert(o);
-	o->can_0x61f_x61F.InteriorLightLevel = 0;
-	if (in > 1)
-		return -1;
 	o->can_0x61f_x61F.InteriorLightLevel = in;
 	return 0;
 }

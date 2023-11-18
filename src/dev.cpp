@@ -26,7 +26,7 @@ static int list_logs() {
 static int set_time(uint8_t * data) {
     rtc.setTime(*(time_t*)data);
     add_message(rtc.getTime("%A, %B %d %Y %H:%M:%S").c_str());
-    get_dash()->running_clock = rtc.getHour() * 3600 + rtc.getMinute() * 60 + rtc.getSecond();
+    get_dash()->running_clock = rtc.getHour() * 60 + rtc.getMinute();
     get_changed()->running_clock = 1;
     return 0;
 }

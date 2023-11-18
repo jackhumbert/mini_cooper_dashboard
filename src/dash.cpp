@@ -10,7 +10,7 @@ extern "C"
 #include "tach3.hpp"
 #include "tach4.hpp"
 #include "speed.hpp"
-#include "clock.h"
+#include "clock.hpp"
 #include "outside_temp.hpp"
 #include "car_view.hpp"
 #include "turn_signal.h"
@@ -24,6 +24,7 @@ extern "C"
 #include "sd_card.h"
 #include "activity.h"
 #include "accel.hpp"
+#include "odometer.hpp"
 
 extern void start_screen_fade(void);
 
@@ -82,6 +83,27 @@ static void toggle_events(lv_event_t * e) {
     }
 }
 
+lv_obj_t * logging_label;
+
+static void toggle_logging(lv_event_t * e) {
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t * obj = lv_event_get_target(e);
+
+    if(code == LV_EVENT_CLICKED) {
+        if (events) { 
+            if (sd_card_init()) {
+                events = false;
+                lv_label_set_text(logging_label, "Disable Logging");
+            } else {
+                lv_obj_clear_state(obj, LV_STATE_CHECKED);
+            }
+        } else {
+            stop_logging();
+            lv_label_set_text(logging_label, "Enable Logging");
+        }
+    }
+}
+
 lv_obj_t * dash_create(lv_disp_t * disp) {
 	pthread_mutex_init(&dashboard.mutex, NULL);
     theme_init();
@@ -96,10 +118,7 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
 
     widgets.push_back(new Tach4(canvas));
     widgets.push_back(new Speed(canvas));
-
-    lv_obj_t * clock = clock_create(canvas);
-    lv_obj_align(clock, LV_ALIGN_TOP_LEFT, 300, 160);
-
+    widgets.push_back(new Clock(canvas));
     widgets.push_back(new OutsideTemp(canvas));
 
     lv_obj_t * turn_left = turn_signal_left_create(canvas);
@@ -114,9 +133,10 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     widgets.push_back(new Coolant(canvas));
     widgets.push_back(new Fuel(canvas));
     widgets.push_back(new Accel(canvas));
+    widgets.push_back(new Odometer(canvas));
 
     lv_obj_t * messages_view = messages_create(canvas);
-    lv_obj_align(messages_view, LV_ALIGN_TOP_LEFT, 10, 10);
+    lv_obj_align(messages_view, LV_ALIGN_TOP_LEFT, 5, 5);
 
 
 
@@ -151,7 +171,6 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     // widgets.push_back(new BitTable(cont, &dashboard_queued.x61F, 0x61F, &dashboard.x61F));
 
 
-    DASH_FONT(RAJDHANI_SEMIBOLD, 16);
 // {
 //     lv_obj_t * msg_dump = lv_btn_create(canvas);
 //     lv_obj_add_event_cb(msg_dump, manually_log_event, LV_EVENT_ALL, NULL);
@@ -174,13 +193,22 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
 {
     lv_obj_t * msg_clea = lv_btn_create(canvas);
     lv_obj_add_flag(msg_clea, LV_OBJ_FLAG_CHECKABLE);
-    lv_obj_add_event_cb(msg_clea, toggle_events, LV_EVENT_ALL, NULL);
-    lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -10, 140);
+    lv_obj_add_event_cb(msg_clea, toggle_logging, LV_EVENT_ALL, NULL);
+    lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -5, 50);
 
-    lv_obj_t * label = lv_label_create(msg_clea);
-    lv_obj_set_style_text_font(label, RAJDHANI_SEMIBOLD_16, 0);
-    lv_label_set_text(label, "Toggle Updates");
+    logging_label = lv_label_create(msg_clea);
+    lv_label_set_text(logging_label, "Enable Logging");
 }
+
+// {
+//     lv_obj_t * msg_clea = lv_btn_create(canvas);
+//     lv_obj_add_flag(msg_clea, LV_OBJ_FLAG_CHECKABLE);
+//     lv_obj_add_event_cb(msg_clea, toggle_events, LV_EVENT_ALL, NULL);
+//     lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -5, 80);
+
+//     lv_obj_t * label = lv_label_create(msg_clea);
+//     lv_label_set_text(label, "Toggle Updates");
+// }
 
     activity_create(canvas);
 
@@ -228,9 +256,6 @@ void dash_loop(void) {
                     add_message_fmt("Current Consumption: %0.1f mpg", dashboard_cache.custom_value / 10.0);
                     break;
             }
-        }
-        if (dashboard_queued.running_clock) {
-            clock_update();
         }
         turn_signal_update();
         if (dashboard_queued.running_lights) {

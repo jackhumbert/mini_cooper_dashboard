@@ -32,7 +32,7 @@ Coolant::Coolant(lv_obj_t * parent) {
 
     /*Add a scale first*/
     lv_meter_scale_t * scale = lv_meter_add_scale(meter);
-    lv_meter_set_scale_ticks(meter, scale, 5, 3, 50, DASH_BACKGROUND);
+    lv_meter_set_scale_ticks(meter, scale, 5, 2, 50, DASH_BACKGROUND);
     // lv_meter_set_scale_major_ticks(meter, scale, 5, 3, 50, DASH_BACKGROUND, 20);
     lv_meter_set_scale_range(meter, scale, 30, 250, 270, 135);
 

@@ -11,4 +11,5 @@
     extern const unsigned char name##_TTF[]; \
     extern const size_t name##_TTF_SIZE; \
     static lv_font_t * name##_##size; \
-    name##_##size = tiny_ttf_create_data(name##_TTF, name##_TTF_SIZE, size * 1.26)
+    if (! name##_##size ) \
+        name##_##size = tiny_ttf_create_data(name##_TTF, name##_TTF_SIZE, size * 1.26)

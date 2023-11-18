@@ -37,7 +37,7 @@ Speed::Speed(lv_obj_t * parent) {
     lv_obj_set_style_grid_column_dsc_array(lv_obj, col_dsc, 0);
     lv_obj_set_style_grid_row_dsc_array(lv_obj, row_dsc, 0);
     lv_obj_set_size(lv_obj, 200, 115 + 20);
-    lv_obj_align(lv_obj, LV_ALIGN_TOP_MID, 0, 20);
+    lv_obj_align(lv_obj, LV_ALIGN_TOP_MID, 0, 15);
     // lv_obj_center(lv_obj);
     // lv_obj_align(lv_obj, LV_ALIGN_CENTER, 0, 0);
 
