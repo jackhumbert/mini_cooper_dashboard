@@ -46,7 +46,8 @@
 			"random": "c",
 			"can.h": "c",
 			"cstdio": "c",
-			"fstream": "cpp"
+			"fstream": "cpp",
+			"thread": "cpp"
 		}
 	}
 }

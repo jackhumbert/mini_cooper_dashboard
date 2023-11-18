@@ -332,10 +332,18 @@
 #define LV_ATTRIBUTE_TICK_INC
 
 /*Define a custom attribute to `lv_timer_handler` function*/
-#define LV_ATTRIBUTE_TIMER_HANDLER IRAM_ATTR
+#if DASH_SIMULATION
+    #define LV_ATTRIBUTE_TIMER_HANDLER
+#else
+    #define LV_ATTRIBUTE_TIMER_HANDLER IRAM_ATTR
+#endif
 
 /*Define a custom attribute to `lv_disp_flush_ready` function*/
-#define LV_ATTRIBUTE_FLUSH_READY IRAM_ATTR
+#if DASH_SIMULATION
+    #define LV_ATTRIBUTE_FLUSH_READY
+#else
+    #define LV_ATTRIBUTE_FLUSH_READY IRAM_ATTR
+#endif
 
 /*Required alignment size for buffers*/
 #define LV_ATTRIBUTE_MEM_ALIGN_SIZE 1

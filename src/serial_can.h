@@ -1,7 +1,11 @@
 #ifndef __SERIAL_CAN_MODULE_H__
 #define __SERIAL_CAN_MODULE_H__
 // ID3 ID2 ID1 ID0 EXT RTR DTA0 DTA1 DTA2 DTA3 DTA4 DTA5 DTA6 DTA7
-#include <Arduino.h>
+#if DASH_SIMULATION
+    #include <stdlib.h>
+#else
+    #include <Arduino.h>
+#endif
 #define uchar unsigned char
 
 

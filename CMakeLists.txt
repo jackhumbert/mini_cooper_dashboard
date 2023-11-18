@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.16)
 
 # set(CMAKE_SYSTEM_NAME Generic)
 
-project(r53_dash C)
+project(r53_dash C CXX)
 
 # idf_build_process("esp32s3")
 
@@ -19,8 +19,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib/r53)
 INCLUDE_DIRECTORIES(/opt/homebrew/include/)
-INCLUDE_DIRECTORIES(/opt/homebrew/opt/freetype/include/freetype2)
+# INCLUDE_DIRECTORIES(/opt/homebrew/opt/freetype/include/freetype2)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/.pio/libdeps/esp32-s3-devkitc-1-myboard/tiny_ttf/include)
 
 LINK_DIRECTORIES(/opt/homebrew/lib)
@@ -37,10 +38,24 @@ set(LV_CONF_PATH
 add_subdirectory(.pio/libdeps/esp32-s3-devkitc-1-myboard/lvgl/)
 add_subdirectory(lib/lv_drivers/)
 
+file(GLOB_RECURSE SIM_INCLUDES "simulation/*.h" )
+file(GLOB_RECURSE SIM_SOURCES "simulation/*.c*" )
 file(GLOB_RECURSE INCLUDES "src/*.h" )
 file(GLOB_RECURSE SOURCES "src/*.c" )
+file(GLOB_RECURSE CPP_SOURCES "src/*.cpp" )
 file(GLOB TINY_TTF_INCLUDES ".pio/libdeps/esp32-s3-devkitc-1-myboard/tiny_ttf/include/*")
 file(GLOB TINY_TTF_SOURCES ".pio/libdeps/esp32-s3-devkitc-1-myboard/tiny_ttf/src/*")
+
+list(REMOVE_ITEM INCLUDES 
+    ${PROJECT_SOURCE_DIR}/src/serial_can.h
+    ${PROJECT_SOURCE_DIR}/src/sd_card.h
+)
+list(REMOVE_ITEM CPP_SOURCES 
+    ${PROJECT_SOURCE_DIR}/src/main.cpp
+    ${PROJECT_SOURCE_DIR}/src/serial_can.cpp
+    ${PROJECT_SOURCE_DIR}/src/sd_card.cpp
+    ${PROJECT_SOURCE_DIR}/src/dev.cpp
+)
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(CMAKE_CXX_FLAGS "-O3")
@@ -49,7 +64,7 @@ SET(CMAKE_CXX_FLAGS "-O3")
 find_package(SDL2)
 # find_package(Freetype)
 
-add_executable(simulation simulation/main.c ${SOURCES} ${INCLUDES} ${TINY_TTF_SOURCES} ${TINY_TTF_INCLUDES})
+add_executable(simulation ${SIM_SOURCES} ${SOURCES} ${CPP_SOURCES} ${INCLUDES} ${SIM_INCLUDES} ${TINY_TTF_SOURCES} ${TINY_TTF_INCLUDES} ${PROJECT_SOURCE_DIR}/lib/r53/r53.c)
 target_compile_definitions(simulation PUBLIC DASH_SIMULATION)
 target_link_libraries(simulation PRIVATE SDL2 Freetype m pthread lvgl::lvgl lvgl::drivers)
 

@@ -1,5 +1,6 @@
 #include "can.h"
 #include "messages.h"
+#include "dev.h"
 
 static can_obj_r53_h_t can_data;
 

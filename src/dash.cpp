@@ -33,7 +33,10 @@ extern void start_screen_fade(void);
 #endif
 
 #include "bit_table.hpp"
-#include <Arduino.h>
+
+#if not DASH_SIMULATION
+    #include <Arduino.h>
+#endif
 #include <vector>
 
 static dashboard_t dashboard;
@@ -98,6 +101,7 @@ static void toggle_logging(lv_event_t * e) {
                 lv_obj_clear_state(obj, LV_STATE_CHECKED);
             }
         } else {
+            events = true;
             stop_logging();
             lv_label_set_text(logging_label, "Enable Logging");
         }

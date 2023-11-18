@@ -1,4 +1,4 @@
-#include "dash.h"
+// #include "dash.h"
 
-void setup_effect(lv_obj_t * canvas);
-void update_effect(void);
+// void setup_effect(lv_obj_t * canvas);
+// void update_effect(void);

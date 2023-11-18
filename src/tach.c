@@ -69,7 +69,7 @@ static void set_value(void * indic, int32_t v) {
     if (rpm_red) {
         lv_meter_set_indicator_end_value(meter, rpm_red, MAX(v, REDLINE));
     }
-    update_effect();
+    // update_effect();
 }
 
 lv_obj_t * tach_create(lv_obj_t * canvas) {

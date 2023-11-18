@@ -9,8 +9,15 @@
 #include "lv_drivers/sdl/sdl.h"
 #include "dash.h"
 #include <stdio.h>
+#include "dev.h"
+#include "sd_card.h"
 
 static void hal_init(void);
+
+#define DISPLAY_BUFFER_SIZE 800 * 480 / 4
+
+extern "C" void start_screen_fade(void) { }
+extern "C" void stop_logging(void) { }
 
 int main(int argc, char **argv)
 {
@@ -22,28 +29,6 @@ int main(int argc, char **argv)
   /*Initialize LVGL*/
   lv_init();
 
-  /*Initialize the HAL (display, input devices, tick) for LVGL*/
-  hal_init();
-    dash();
-
-  while(1) {
-      /* Periodically call the lv_task handler.
-       * It could be done in a timer interrupt or an OS task too.*/
-      lv_timer_handler();
-      // usleep(5 * 1000);
-  }
-
-  return 0;
-}
-
-#define DISPLAY_BUFFER_SIZE 800 * 480 / 4
-
-/**
- * Initialize the Hardware Abstraction Layer (HAL) for the LVGL graphics
- * library
- */
-static void hal_init(void)
-{
   /* Use the 'monitor' driver which creates window on PC's monitor to simulate a display*/
   sdl_init();
 
@@ -98,4 +83,15 @@ static void hal_init(void)
   // lv_obj_t * cursor_obj = lv_img_create(lv_scr_act()); /*Create an image object for the cursor */
   // lv_img_set_src(cursor_obj, &mouse_cursor_icon);           /*Set the image source*/
   // lv_indev_set_cursor(mouse_indev, cursor_obj);             /*Connect the image  object to the driver*/
+  dash_create(disp);
+
+  while(1) {
+      /* Periodically call the lv_task handler.
+       * It could be done in a timer interrupt or an OS task too.*/
+      lv_timer_handler_run_in_period(5);
+      dash_loop();
+      // usleep(5 * 1000);
+  }
+
+  return 0;
 }

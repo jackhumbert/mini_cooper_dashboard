@@ -1,7 +1,6 @@
 #include "clock.hpp"
 #include "time.h"
 #include <sys/time.h>
-#include <ESP32Time.h>
 #include "messages.h"
 
 #define SEC_PER_DAY   86400
@@ -11,7 +10,11 @@
 static lv_obj_t * time_label;
 static bool overflow;
 long offset = -18000;
-extern ESP32Time rtc;
+
+#if not DASH_SIMULATION
+  #include <ESP32Time.h>
+  extern ESP32Time rtc;
+#endif
 
 // eventually expose a ui to change this via Preferences, and account for uint16_t overflow
 static uint64_t epoch_offset = 1700229360 - 9903 * 60;
@@ -19,27 +22,27 @@ static uint64_t epoch_offset = 1700229360 - 9903 * 60;
 
 void Clock::update(void) {
     if (get_queued()->running_clock) {
-      int day = rtc.getDayofYear();
-      rtc.setTime(epoch_offset + get_cache()->running_clock * 60);
-      if (day != rtc.getDayofYear()) {
-        add_message(rtc.getTime("%A, %B %d %Y").c_str());
-      }
-      // running_clock is in minutes
-      // uint16_t corrected = get_dash()->running_clock + minute_offset;
-      // uint16_t corrected = rtc.getHour() * 60 + rtc.getMinute();
-      // int hour = corrected / 60 % 24;
-      // int min = corrected % 60;
+      #if DASH_SIMULATION
+        uint16_t corrected = get_dash()->running_clock + epoch_offset;
+        int hour = corrected / 60 % 24;
+        int min = corrected % 60;
 
-      // bool pm =  hour >= 12;
+        bool pm =  hour >= 12;
 
-      // if (hour > 12) {
-      //   hour -= 12;
-      // } else if (hour == 0) {
-      //   hour += 12;
-      // }
-
-      // lv_label_set_text_fmt(lv_obj, "%d:%02d %s", hour, min, pm ? "PM" : "AM");
-      lv_label_set_text_fmt(lv_obj, "%d:%02d %s", rtc.getHour(false), rtc.getMinute(), rtc.getAmPm().c_str());
+        if (hour > 12) {
+          hour -= 12;
+        } else if (hour == 0) {
+          hour += 12;
+        }
+        lv_label_set_text_fmt(lv_obj, "%d:%02d %s", hour, min, pm ? "PM" : "AM");
+      #else
+        int day = rtc.getDayofYear();
+        rtc.setTime(epoch_offset + get_cache()->running_clock * 60);
+        if (day != rtc.getDayofYear()) {
+          add_message(rtc.getTime("%A, %B %d %Y").c_str());
+        }
+        lv_label_set_text_fmt(lv_obj, "%d:%02d %s", rtc.getHour(false), rtc.getMinute(), rtc.getAmPm().c_str());
+      #endif
     }
 }
 

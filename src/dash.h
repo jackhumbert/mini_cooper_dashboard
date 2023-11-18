@@ -36,6 +36,10 @@
 #define DASH_BACKGROUND lv_color_hex3(0x000000)
 // #define DASH_BACKGROUND lv_color_hex3(0x0F0100)
 
+#if DASH_SIMULATION
+    #define xTaskGetTickCount() 0
+#endif
+
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 

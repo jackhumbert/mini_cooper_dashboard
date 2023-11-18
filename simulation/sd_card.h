@@ -3,7 +3,7 @@ extern "C"
 {
 #endif
 
-int dev_process(unsigned short id, unsigned char * data);
+bool sd_card_init(void);
 
 #ifdef __cplusplus
 } // extern "C"

@@ -2,7 +2,11 @@
 
 #include "serial_can.h"
 // #include <SoftwareSerial.h>
-#include <HardwareSerial.h>
+#if DASH_SIMULATION
+    #include <stdlib.h>
+#else
+    #include <HardwareSerial.h>
+#endif
 #include "sd_card.h"
 #include "dash.h"
 

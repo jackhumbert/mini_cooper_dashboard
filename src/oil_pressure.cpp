@@ -8,7 +8,7 @@ void OilPressure::update(void) {
             value = (uint16_t)round(get_dash()->oil_pressure * 0.14503263234);
             lv_label_set_text_fmt(label, "%d psi", value);
         } else {
-            lv_label_set_text_fmt(label, "- psi", value);
+            lv_label_set_text(label, "- psi");
         }
         lv_meter_set_indicator_end_value(lv_obj, indicator, value);
     }

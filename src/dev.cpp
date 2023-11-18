@@ -1,5 +1,4 @@
 #include "dev.h"
-#include <Arduino.h>
 #include "sd_card.h"
 #include <ESP32Time.h>
 #include "messages.h"
