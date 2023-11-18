@@ -36,11 +36,11 @@ OilPressure::OilPressure(lv_obj_t * parent) {
     lv_obj_align(lv_obj, LV_ALIGN_TOP_LEFT, 41, 357);
 
     lv_meter_scale_t * scale = lv_meter_add_scale(lv_obj);
-    lv_meter_set_scale_ticks(lv_obj, scale, 5, 3, 50, lv_color_black());
-    // lv_meter_set_scale_major_ticks(lv_obj, scale, 5, 3, 50, lv_color_black(), 20);
+    lv_meter_set_scale_ticks(lv_obj, scale, 5, 3, 50, DASH_BACKGROUND);
+    // lv_meter_set_scale_major_ticks(lv_obj, scale, 5, 3, 50, DASH_BACKGROUND, 20);
     lv_meter_set_scale_range(lv_obj, scale, 0, 70, 270, 135);
 
-    // lv_obj_set_style_text_color(lv_obj, lv_color_black(), 0);
+    // lv_obj_set_style_text_color(lv_obj, DASH_BACKGROUND, 0);
     lv_obj_set_style_text_opa(lv_obj, 0, 0);
 
     lv_meter_indicator_t * rpm_normal_bg = lv_meter_add_arc(lv_obj, scale, GAUGE_WIDTH, AMBER_OFF, -1);

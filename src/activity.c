@@ -18,26 +18,26 @@ static void activity_failure_callback(void * indic, int32_t v) {
 }
 
 void activity_update(uint8_t activity) {
-    if (activity & ACTIVITY_SUCCESS) {
-        lv_anim_start(&s_a);
-    }
-    if (activity & ACTIVITY_ERROR) {
-        lv_anim_start(&f_a);
-    }
     // if (activity & ACTIVITY_SUCCESS) {
-    //     success_brightness = 255;
-    // } else {
-    //     success_brightness = success_brightness * 0.95;
+    //     lv_anim_start(&s_a);
     // }
     // if (activity & ACTIVITY_ERROR) {
-    //     failure_brightness = 255;
-    // } else {
-    //     failure_brightness = failure_brightness * 0.95;
+    //     lv_anim_start(&f_a);
     // }
-    // if (lv_led_get_brightness(success_led) != success_brightness)
-    //     lv_led_set_brightness(success_led, success_brightness);
-    // if (lv_led_get_brightness(failure_led) != failure_brightness)
-    //     lv_led_set_brightness(failure_led, failure_brightness);
+    if (activity & ACTIVITY_SUCCESS) {
+        success_brightness = 255;
+    } else {
+        success_brightness = success_brightness * 0.95;
+    }
+    if (activity & ACTIVITY_ERROR) {
+        failure_brightness = 255;
+    } else {
+        failure_brightness = failure_brightness * 0.95;
+    }
+    if (lv_led_get_brightness(success_led) != success_brightness)
+        lv_led_set_brightness(success_led, success_brightness);
+    if (lv_led_get_brightness(failure_led) != failure_brightness)
+        lv_led_set_brightness(failure_led, failure_brightness);
 }
 
 void activity_create(lv_obj_t * parent) {

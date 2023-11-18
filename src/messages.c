@@ -5,7 +5,7 @@
 #define MESSAGES_WIDTH 280
 #define MESSAGES_HEIGHT 240
 #define MESSAGE_LIFETIME 30000
-#define MESSAGE_FADE_OUT 300
+#define MESSAGE_FADE_OUT 200
 
 
 static lv_obj_t * messages;

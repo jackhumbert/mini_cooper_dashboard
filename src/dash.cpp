@@ -8,6 +8,7 @@ extern "C"
 #include "tach.h"
 #include "tach2.h"
 #include "tach3.hpp"
+#include "tach4.hpp"
 #include "speed.hpp"
 #include "clock.h"
 #include "outside_temp.hpp"
@@ -86,14 +87,14 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     theme_init();
 
     // slightly red screen bg
-    // lv_obj_set_style_bg_color(lv_scr_act(), lv_color_hex3(0x0F0100), 0);
-    lv_obj_set_style_bg_color(lv_scr_act(), lv_color_black(), 0);
+    lv_obj_set_style_bg_color(lv_scr_act(), DASH_BACKGROUND, 0);
+    // lv_obj_set_style_bg_color(lv_scr_act(), lv_color_black(), 0);
     lv_obj_set_scrollbar_mode(lv_scr_act(), LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_scroll_dir(lv_scr_act(), LV_DIR_NONE);
 
     canvas = lv_scr_act();
 
-    widgets.push_back(new Tach(canvas));
+    widgets.push_back(new Tach4(canvas));
     widgets.push_back(new Speed(canvas));
 
     lv_obj_t * clock = clock_create(canvas);
@@ -182,6 +183,12 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
 }
 
     activity_create(canvas);
+
+    // memset(&dashboard_changed, 1, sizeof(dashboard_changed_t));
+    // dashboard_queued.running_lights = 0;
+    // dashboard_queued.activity = 0;
+    // dashboard_queued.x610 = 0;
+    // dashboard_queued.custom_value = 0;
 
     // setup_effect(canvas);
     return canvas;

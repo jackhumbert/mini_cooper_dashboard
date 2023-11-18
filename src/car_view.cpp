@@ -123,7 +123,7 @@ CarView::CarView(lv_obj_t * parent) {
     lv_obj_set_style_img_recolor(foglights_obj, RED_OFF, 0);
     lv_obj_set_style_img_recolor_opa(foglights_obj, LV_OPA_100, 0);
 
-    DASH_FONT(RAJDHANI_SEMIBOLD, 16);
+    DASH_FONT(RAJDHANI_SEMIBOLD, 18);
     handbrake = lv_label_create(lv_obj);
     lv_obj_set_size(handbrake, 120, 25);
     lv_obj_set_style_text_align(handbrake, LV_TEXT_ALIGN_CENTER, 0);
@@ -132,9 +132,9 @@ CarView::CarView(lv_obj_t * parent) {
     lv_obj_set_style_bg_opa(handbrake, LV_OPA_100, 0);
     lv_obj_set_style_radius(handbrake, 8, 0);
     lv_label_set_text(handbrake, "BRAKE");
-    lv_obj_set_style_text_font(handbrake, RAJDHANI_SEMIBOLD_16, 0);
+    lv_obj_set_style_text_font(handbrake, RAJDHANI_SEMIBOLD_18, 0);
     lv_obj_set_style_text_color(handbrake, lv_color_black(), 0);
-    lv_obj_set_style_pad_top(handbrake, 4, 0);
+    lv_obj_set_style_pad_top(handbrake, 3, 0);
 
     // abs
     LV_IMG_DECLARE(slice12);

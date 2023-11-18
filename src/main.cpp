@@ -3,11 +3,11 @@
 
 // DISPLAY
 
-#define DISPLAY_BUFFER_SIZE 800 * 480 / 4
+#define DISPLAY_BUFFER_SIZE 800 * 160
 // #define DISPLAY_BUFFER_SIZE (unsigned int)((800 * 480) * 0.40)
 
 static lv_disp_draw_buf_t draw_buf;
-static lv_color_t disp_draw_buf[DISPLAY_BUFFER_SIZE];
+DMA_ATTR static lv_color_t disp_draw_buf[DISPLAY_BUFFER_SIZE];
 static lv_color_t * disp_draw_buf2 = NULL;
 // static lv_color_t disp_draw_buf2[DISPLAY_BUFFER_SIZE];
 
@@ -219,7 +219,7 @@ void screen_fade_cb(void * parameter) {
     fade_active = true;
     unsigned long start = millis();
     uint8_t start_value = gfx.getBrightness();
-    uint8_t end_value = get_dash()->running_lights ? 64 : 255;
+    uint8_t end_value = get_cache()->running_lights ? 64 : 255;
     while (millis() - start < (SCREEN_FADE_TIME * 1000)) {
         unsigned long time_diff = millis() - start;
         uint32_t value = round(pow(time_diff / (SCREEN_FADE_TIME * 1000.0), 2) * (end_value - start_value) + start_value);
@@ -356,7 +356,7 @@ void setup() {
     start_screen_fade();
 
     lv_init();
-    lv_log_register_print_cb(my_log_cb);
+    // lv_log_register_print_cb(my_log_cb);
 
     screenWidth = gfx.width();
     screenHeight = gfx.height();

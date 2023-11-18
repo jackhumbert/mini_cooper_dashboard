@@ -864,6 +864,10 @@ static int pack_can_0x316_x316_DME1(can_obj_r53_h_t *o, uint64_t *data) {
 	x = ((uint16_t)(o->can_0x316_x316_DME1.RPM)) & 0xffff;
 	x <<= 16; 
 	i |= x;
+	/* RPM_Alt: start-bit 16, length 16, endianess intel, scaling 0.125, offset 0 */
+	x = ((uint16_t)(o->can_0x316_x316_DME1.RPM_Alt)) & 0xffff;
+	x <<= 16; 
+	i |= x;
 	/* Key: start-bit 0, length 1, endianess intel, scaling 1, offset 0 */
 	x = ((uint8_t)(o->can_0x316_x316_DME1.Key)) & 0x1;
 	i |= x;
@@ -886,6 +890,9 @@ static int unpack_can_0x316_x316_DME1(can_obj_r53_h_t *o, uint64_t data, uint8_t
 	/* RPM: start-bit 16, length 16, endianess intel, scaling 0.156, offset 0 */
 	x = (i >> 16) & 0xffff;
 	o->can_0x316_x316_DME1.RPM = x;
+	/* RPM_Alt: start-bit 16, length 16, endianess intel, scaling 0.125, offset 0 */
+	x = (i >> 16) & 0xffff;
+	o->can_0x316_x316_DME1.RPM_Alt = x;
 	/* Key: start-bit 0, length 1, endianess intel, scaling 1, offset 0 */
 	x = i & 0x1;
 	o->can_0x316_x316_DME1.Key = x;
@@ -910,6 +917,22 @@ int encode_can_0x316_RPM(can_obj_r53_h_t *o, double in) {
 	assert(o);
 	in *= 6.41026;
 	o->can_0x316_x316_DME1.RPM = in;
+	return 0;
+}
+
+int decode_can_0x316_RPM_Alt(const can_obj_r53_h_t *o, double *out) {
+	assert(o);
+	assert(out);
+	double rval = (double)(o->can_0x316_x316_DME1.RPM_Alt);
+	rval *= 0.125;
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x316_RPM_Alt(can_obj_r53_h_t *o, double in) {
+	assert(o);
+	in *= 8;
+	o->can_0x316_x316_DME1.RPM_Alt = in;
 	return 0;
 }
 
@@ -946,6 +969,7 @@ int print_can_0x316_x316_DME1(const can_obj_r53_h_t *o, FILE *output) {
 	assert(output);
 	int r = 0;
 	r = print_helper(r, fprintf(output, "RPM = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.RPM)));
+	r = print_helper(r, fprintf(output, "RPM_Alt = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.RPM_Alt)));
 	r = print_helper(r, fprintf(output, "Key = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.Key)));
 	r = print_helper(r, fprintf(output, "AC_Clutch = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.AC_Clutch)));
 	return r;

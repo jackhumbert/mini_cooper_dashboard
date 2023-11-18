@@ -102,6 +102,7 @@ typedef PREPACK struct {
 
 typedef PREPACK struct {
 	uint16_t RPM; /* scaling 0.2, offset 0.0, units none  */
+	uint16_t RPM_Alt; /* scaling 0.1, offset 0.0, units none  */
 	uint8_t Key; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t AC_Clutch; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x316_x316_DME1_t;
@@ -372,6 +373,8 @@ int encode_can_0x1f8_Unk2(can_obj_r53_h_t *o, uint8_t in);
 
 int decode_can_0x316_RPM(const can_obj_r53_h_t *o, double *out);
 int encode_can_0x316_RPM(can_obj_r53_h_t *o, double in);
+int decode_can_0x316_RPM_Alt(const can_obj_r53_h_t *o, double *out);
+int encode_can_0x316_RPM_Alt(can_obj_r53_h_t *o, double in);
 int decode_can_0x316_Key(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x316_Key(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x316_AC_Clutch(const can_obj_r53_h_t *o, uint8_t *out);

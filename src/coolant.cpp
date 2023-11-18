@@ -2,7 +2,7 @@
 
 void Coolant::update() {
     if (get_queued()->engine_temp) {
-        uint16_t temp = round(get_cache()->engine_temp * 9 / 5.0 + 32);
+        uint16_t temp = round(get_cache()->engine_temp * 9.0 / 5.0 + 32);
         lv_meter_set_indicator_end_value(meter, indicator, temp);
         lv_label_set_text_fmt(label, "%d°F", temp);
     }
@@ -32,11 +32,11 @@ Coolant::Coolant(lv_obj_t * parent) {
 
     /*Add a scale first*/
     lv_meter_scale_t * scale = lv_meter_add_scale(meter);
-    lv_meter_set_scale_ticks(meter, scale, 5, 3, 50, lv_color_black());
-    // lv_meter_set_scale_major_ticks(meter, scale, 5, 3, 50, lv_color_black(), 20);
+    lv_meter_set_scale_ticks(meter, scale, 5, 3, 50, DASH_BACKGROUND);
+    // lv_meter_set_scale_major_ticks(meter, scale, 5, 3, 50, DASH_BACKGROUND, 20);
     lv_meter_set_scale_range(meter, scale, 30, 250, 270, 135);
 
-    // lv_obj_set_style_text_color(meter, lv_color_black(), 0);
+    // lv_obj_set_style_text_color(meter, DASH_BACKGROUND, 0);
     lv_obj_set_style_text_opa(meter, 0, 0);
 
     lv_meter_indicator_t * rpm_normal_bg = lv_meter_add_arc(meter, scale, GAUGE_WIDTH, AMBER_OFF, -1);

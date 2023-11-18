@@ -33,6 +33,8 @@
 #define WHITE_OFF lv_color_hsv_to_rgb(0, 0, 8)
 
 #define IMPORTANT_TEXT WHITE_ON
+#define DASH_BACKGROUND lv_color_hex3(0x000000)
+// #define DASH_BACKGROUND lv_color_hex3(0x0F0100)
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
@@ -119,7 +121,8 @@ typedef struct dashboard_t {
     // 0x1F8
     uint8_t brake_pressure;
 
-    double rpm;
+    double rpm_fp;
+    uint16_t rpm;
     uint8_t torque_loss_of_consumers;
     uint8_t torque_after_interventions;
     uint8_t torque_before_interventions;
@@ -130,7 +133,8 @@ typedef struct dashboard_t {
 
     uint8_t driver_desired_torque;
     uint8_t throttle_position;
-    double engine_temp;
+    double engine_temp_fp;
+    uint16_t engine_temp;
     uint8_t cycling_number;
     double atmospheric_pressure;  
     uint8_t brake_light_switch_error; 

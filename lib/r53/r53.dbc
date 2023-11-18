@@ -37,6 +37,7 @@ BO_ 790 x316_DME1: 8 DME_Etc
    SG_ RPM : 16|16@1+ (0.156,0) [0|0] "" DME_Etc
    SG_ Key : 0|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ AC_Clutch : 6|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ RPM_Alt : 16|16@1+ (0.125,0) [0|0] "" DME_Etc
 
 BO_ 809 x329_DME2: 8 DME_Etc
    SG_ Engine_Temp : 8|8@1+ (0.75,-48.373) [0|0] "deg_c" DME_Etc

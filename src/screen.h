@@ -59,9 +59,9 @@ public:
       cfg.hsync_back_porch  = 40;
       
       cfg.vsync_polarity    = 0;
-      cfg.vsync_front_porch = 1;
-      cfg.vsync_pulse_width = 31;
-      cfg.vsync_back_porch  = 13;
+      cfg.vsync_front_porch = 13;
+      cfg.vsync_pulse_width = 1;
+      cfg.vsync_back_porch  = 31;
 
       cfg.pclk_active_neg   = 1;
       cfg.de_idle_high      = 0;

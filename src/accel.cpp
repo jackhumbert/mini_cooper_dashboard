@@ -1,6 +1,6 @@
 #include "accel.hpp"
 
-#define ACCEL_SIZE 70
+#define ACCEL_SIZE 71
 
 void Accel::update(void) {
     if (get_queued()->lateral_force || get_queued()->forward_force) {
@@ -45,10 +45,10 @@ Accel::Accel(lv_obj_t * parent) {
     lv_obj_align(hor, LV_ALIGN_TOP_LEFT, 0, 0);
 
     center = lv_obj_create(lv_obj);
-    lv_obj_set_size(center, 10, 10);
+    lv_obj_set_size(center, 11, 11);
     lv_obj_set_style_border_width(center, 0, 0);
-    lv_obj_set_style_bg_color(center, AMBER_ON, 0);
-    lv_obj_set_style_radius(center, 10, 0);
+    lv_obj_set_style_bg_color(center, IMPORTANT_TEXT, 0);
+    lv_obj_set_style_radius(center, 11, 0);
     lv_obj_set_style_pad_all(center, 0, 0);
     lv_obj_align(center, LV_ALIGN_CENTER, 0, 0);
 }
