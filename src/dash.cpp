@@ -124,13 +124,6 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     widgets.push_back(new Speed(canvas));
     widgets.push_back(new Clock(canvas));
     widgets.push_back(new OutsideTemp(canvas));
-
-    lv_obj_t * turn_left = turn_signal_left_create(canvas);
-    lv_obj_align(turn_left, LV_ALIGN_TOP_LEFT, 295 - 24, 308 - 40);
-
-    lv_obj_t * turn_right = turn_signal_right_create(canvas);
-    lv_obj_align(turn_right, LV_ALIGN_TOP_RIGHT, -(295 - 24), 308 - 40);
-
     widgets.push_back(new CarView(canvas));
     widgets.push_back(new OilPressure(canvas));
     widgets.push_back(new OilTemp(canvas));
@@ -138,6 +131,12 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     widgets.push_back(new Fuel(canvas));
     widgets.push_back(new Accel(canvas));
     widgets.push_back(new Odometer(canvas));
+
+    lv_obj_t * turn_left = turn_signal_left_create(canvas);
+    lv_obj_align(turn_left, LV_ALIGN_TOP_LEFT, 295 - 24, 308 - 40);
+
+    lv_obj_t * turn_right = turn_signal_right_create(canvas);
+    lv_obj_align(turn_right, LV_ALIGN_TOP_RIGHT, -(295 - 24), 308 - 40);
 
     lv_obj_t * messages_view = messages_create(canvas);
     lv_obj_align(messages_view, LV_ALIGN_TOP_LEFT, 5, 5);

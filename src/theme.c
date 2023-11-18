@@ -20,7 +20,7 @@ static void apply_theme_cb(lv_theme_t * th, lv_obj_t * obj) {
 }
 
 void theme_init() {
-    DASH_FONT(RAJDHANI_SEMIBOLD, 16);
+    DASH_FONT(RAJDHANI_MEDIUM, 16);
 
     lv_style_init(&style_obj);
     lv_style_set_border_width(&style_obj, 0);
@@ -31,7 +31,7 @@ void theme_init() {
     lv_style_init(&style_btn);
     lv_style_set_bg_color(&style_btn, AMBER_ON);
     lv_style_set_text_color(&style_btn, lv_color_black());
-    lv_style_set_text_font(&style_btn, RAJDHANI_SEMIBOLD_16);
+    lv_style_set_text_font(&style_btn, RAJDHANI_MEDIUM_16);
     lv_style_set_pad_top(&style_btn, 6);
     lv_style_set_pad_bottom(&style_btn, 4);
     lv_style_set_pad_hor(&style_btn, 12);

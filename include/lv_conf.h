@@ -494,7 +494,7 @@
 
 #define LV_USE_BTNMATRIX  1
 
-#define LV_USE_CANVAS     0
+#define LV_USE_CANVAS     1
 
 #define LV_USE_CHECKBOX   1
 
