@@ -1,6 +1,7 @@
 #include "accel.hpp"
 
 #define ACCEL_SIZE 71
+#define ACCEL_INDIC_SIZE 7
 
 void Accel::update(void) {
     if (get_queued()->lateral_force || get_queued()->forward_force) {
@@ -19,7 +20,7 @@ Accel::Accel(lv_obj_t * parent) {
     lv_obj_set_scrollbar_mode(lv_obj, LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_scroll_dir(lv_obj, LV_DIR_NONE);
     lv_obj_set_style_border_width(lv_obj, 0, 0);
-    lv_obj_align(lv_obj, LV_ALIGN_TOP_RIGHT, -10, 200);
+    lv_obj_align(lv_obj, LV_ALIGN_TOP_RIGHT, -10, 190);
 
     static lv_style_t style_line;
     lv_style_init(&style_line);
@@ -45,10 +46,10 @@ Accel::Accel(lv_obj_t * parent) {
     lv_obj_align(hor, LV_ALIGN_TOP_LEFT, 0, 0);
 
     center = lv_obj_create(lv_obj);
-    lv_obj_set_size(center, 11, 11);
+    lv_obj_set_size(center, ACCEL_INDIC_SIZE, ACCEL_INDIC_SIZE);
     lv_obj_set_style_border_width(center, 0, 0);
     lv_obj_set_style_bg_color(center, IMPORTANT_TEXT, 0);
-    lv_obj_set_style_radius(center, 11, 0);
+    lv_obj_set_style_radius(center, ACCEL_INDIC_SIZE, 0);
     lv_obj_set_style_pad_all(center, 0, 0);
     lv_obj_align(center, LV_ALIGN_CENTER, 0, 0);
 }

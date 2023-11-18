@@ -175,7 +175,7 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     lv_obj_t * msg_clea = lv_btn_create(canvas);
     lv_obj_add_flag(msg_clea, LV_OBJ_FLAG_CHECKABLE);
     lv_obj_add_event_cb(msg_clea, toggle_events, LV_EVENT_ALL, NULL);
-    lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -10, 150);
+    lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -10, 140);
 
     lv_obj_t * label = lv_label_create(msg_clea);
     lv_obj_set_style_text_font(label, RAJDHANI_SEMIBOLD_16, 0);
