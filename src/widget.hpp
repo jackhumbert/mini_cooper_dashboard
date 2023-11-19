@@ -5,6 +5,7 @@
 class Widget {
 public:
     Widget();
+    virtual ~Widget();
     virtual void update(void) = 0;
 
     lv_obj_t * lv_obj;

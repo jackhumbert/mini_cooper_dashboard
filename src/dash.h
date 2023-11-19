@@ -2,6 +2,7 @@
 
 #include "lvgl.h"
 #include "font.h"
+#include "theme.h"
 
 #include <math.h>
 #include <pthread.h>

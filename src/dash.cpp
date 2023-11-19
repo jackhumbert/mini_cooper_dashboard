@@ -38,13 +38,14 @@ extern void start_screen_fade(void);
     #include <Arduino.h>
 #endif
 #include <vector>
+#include <memory>
 
 static dashboard_t dashboard;
 static dashboard_t dashboard_cache;
 static dashboard_changed_t dashboard_changed;
 static dashboard_changed_t dashboard_queued;
 static lv_obj_t * canvas;
-std::vector<Widget*> widgets;
+std::vector<std::unique_ptr<Widget>> widgets;
 
 dashboard_t * get_dash(void) {
     return &dashboard;
@@ -86,7 +87,17 @@ static void toggle_events(lv_event_t * e) {
     }
 }
 
+static void change_theme(lv_event_t * e) {
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t * obj = lv_event_get_target(e);
+
+    if(code == LV_EVENT_CLICKED) {
+        apply_day_theme();
+    }
+}
+
 lv_obj_t * logging_label;
+static Tach4 * tach;
 
 static void toggle_logging(lv_event_t * e) {
     lv_event_code_t code = lv_event_get_code(e);
@@ -94,6 +105,8 @@ static void toggle_logging(lv_event_t * e) {
 
     if(code == LV_EVENT_CLICKED) {
         if (events) { 
+            widgets.erase(widgets.begin());
+            // tach->~Tach4();
             if (sd_card_init()) {
                 events = false;
                 lv_label_set_text(logging_label, "Disable Logging");
@@ -120,17 +133,18 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
 
     canvas = lv_scr_act();
 
-    widgets.push_back(new Tach4(canvas));
-    widgets.push_back(new Speed(canvas));
-    widgets.push_back(new Clock(canvas));
-    widgets.push_back(new OutsideTemp(canvas));
-    widgets.push_back(new CarView(canvas));
-    widgets.push_back(new OilPressure(canvas));
-    widgets.push_back(new OilTemp(canvas));
-    widgets.push_back(new Coolant(canvas));
-    widgets.push_back(new Fuel(canvas));
-    widgets.push_back(new Accel(canvas));
-    widgets.push_back(new Odometer(canvas));
+    // tach = new Tach4(canvas);
+    widgets.push_back(std::unique_ptr<Widget>(new Tach4(canvas)));
+    widgets.push_back(std::unique_ptr<Widget>(new Speed(canvas)));
+    widgets.push_back(std::unique_ptr<Widget>(new Clock(canvas)));
+    widgets.push_back(std::unique_ptr<Widget>(new OutsideTemp(canvas)));
+    widgets.push_back(std::unique_ptr<Widget>(new CarView(canvas)));
+    widgets.push_back(std::unique_ptr<Widget>(new OilPressure(canvas)));
+    widgets.push_back(std::unique_ptr<Widget>(new OilTemp(canvas)));
+    widgets.push_back(std::unique_ptr<Widget>(new Coolant(canvas)));
+    widgets.push_back(std::unique_ptr<Widget>(new Fuel(canvas)));
+    widgets.push_back(std::unique_ptr<Widget>(new Accel(canvas)));
+    widgets.push_back(std::unique_ptr<Widget>(new Odometer(canvas)));
 
     lv_obj_t * turn_left = turn_signal_left_create(canvas);
     lv_obj_align(turn_left, LV_ALIGN_TOP_LEFT, 295 - 24, 308 - 40);
@@ -203,15 +217,15 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     lv_label_set_text(logging_label, "Enable Logging");
 }
 
-// {
-//     lv_obj_t * msg_clea = lv_btn_create(canvas);
-//     lv_obj_add_flag(msg_clea, LV_OBJ_FLAG_CHECKABLE);
-//     lv_obj_add_event_cb(msg_clea, toggle_events, LV_EVENT_ALL, NULL);
-//     lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -5, 80);
+{
+    lv_obj_t * msg_clea = lv_btn_create(canvas);
+    lv_obj_add_flag(msg_clea, LV_OBJ_FLAG_CHECKABLE);
+    lv_obj_add_event_cb(msg_clea, change_theme, LV_EVENT_ALL, NULL);
+    lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -5, 80);
 
-//     lv_obj_t * label = lv_label_create(msg_clea);
-//     lv_label_set_text(label, "Toggle Updates");
-// }
+    lv_obj_t * label = lv_label_create(msg_clea);
+    lv_label_set_text(label, "Change Theme");
+}
 
     activity_create(canvas);
 
@@ -233,7 +247,7 @@ void dash_loop(void) {
 	pthread_mutex_unlock(&get_dash()->mutex);
 
     if (events) {
-        for (auto widget : widgets) {
+        for (auto &widget : widgets) {
             widget->update();
         }
         if (dashboard_queued.x610) {

@@ -97,6 +97,22 @@ static void indicator_draw(lv_event_t * e) {
         arc_dsc.color = RED_HALF;
         lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER + 3, redline_angle, 66 + 180 + 48);
 
+        // static lv_draw_line_dsc_t line_dsc;
+        // lv_draw_line_dsc_init(&line_dsc);
+        // line_dsc.color = RED_HALF;
+        // line_dsc.width = 1;
+
+        // lv_point_t start_red = {
+        //     .x = (lv_coord_t)round(arc_center.x + redline_x_comp * (INDIC_RADIUS_INNER + 2)),
+        //     .y = (lv_coord_t)round(arc_center.y + redline_y_comp * (INDIC_RADIUS_INNER + 2)),
+        // };
+
+        // lv_point_t end_red = {
+        //     .x = (lv_coord_t)round(arc_center.x + redline_x_comp * (INDIC_RADIUS_INNER - 21)),
+        //     .y = (lv_coord_t)round(arc_center.y + redline_y_comp * (INDIC_RADIUS_INNER - 21)),
+        // };
+
+        // lv_draw_line(ctx, &line_dsc, &start_red, &end_red);
 
         for (int i = 0; i < 9; i++) {
             // dashes

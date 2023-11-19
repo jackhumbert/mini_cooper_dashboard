@@ -17,7 +17,6 @@ static void hal_init(void);
 #define DISPLAY_BUFFER_SIZE 800 * 480 / 4
 
 extern "C" void start_screen_fade(void) { }
-extern "C" void stop_logging(void) { }
 
 int main(int argc, char **argv)
 {

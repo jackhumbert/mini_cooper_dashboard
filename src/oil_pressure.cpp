@@ -54,19 +54,20 @@ OilPressure::OilPressure(lv_obj_t * parent) {
     DASH_FONT(RAJDHANI_REGULAR, 24);
 
     label = lv_label_create(lv_obj);
+    lv_obj_add_style(label, &dash_style_value, 0);
     lv_obj_align(label, LV_ALIGN_CENTER, 0, -4);
     lv_obj_set_style_text_font(label, RAJDHANI_REGULAR_24, 0);
     lv_label_set_text(label, "- psi");
-    lv_obj_set_style_text_color(label, IMPORTANT_TEXT, 0);
+    // lv_obj_set_style_text_color(label, IMPORTANT_TEXT, 0);
     lv_obj_set_style_text_opa(label, 255, 0);
 
     DASH_FONT(RAJDHANI_SEMIBOLD, 14);
 
     lv_obj_t * description = lv_label_create(lv_obj);
+    lv_obj_add_style(description, &dash_style_label, 0);
     lv_obj_align(description, LV_ALIGN_CENTER, 0, 14);
     lv_obj_set_style_text_font(description, RAJDHANI_SEMIBOLD_14, 0);
     lv_label_set_text(description, "Oil Press.");
-    lv_obj_set_style_text_color(description, AMBER_HALF, 0);
     lv_obj_set_style_text_opa(description, 255, 0);
 
 
