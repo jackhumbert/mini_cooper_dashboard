@@ -75,7 +75,9 @@
 			"stdexcept": "cpp",
 			"streambuf": "cpp",
 			"cinttypes": "cpp",
-			"typeinfo": "cpp"
+			"typeinfo": "cpp",
+			"lv_obj.h": "c",
+			"iostream": "cpp"
 		}
 	}
 }

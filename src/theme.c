@@ -6,6 +6,8 @@ static lv_style_t style_btn;
 static lv_theme_t day_theme;
 lv_style_t dash_style_value;
 lv_style_t dash_style_label;
+lv_style_t dash_style_gauge;
+lv_style_t dash_style_gauge_bg;
 
 static void apply_theme_cb(lv_theme_t * th, lv_obj_t * obj) {
     LV_UNUSED(th);
@@ -45,9 +47,17 @@ void theme_init() {
 
     lv_style_init(&dash_style_label);
     lv_style_set_text_color(&dash_style_label, AMBER_HALF);
+    lv_style_set_text_opa(&dash_style_label, 255);
 
     lv_style_init(&dash_style_value);
     lv_style_set_text_color(&dash_style_value, IMPORTANT_TEXT);
+    lv_style_set_text_opa(&dash_style_value, 255);
+
+    lv_style_init(&dash_style_gauge);
+    lv_style_set_arc_color(&dash_style_gauge, AMBER_ON);
+
+    lv_style_init(&dash_style_gauge_bg);
+    lv_style_set_arc_color(&dash_style_gauge_bg, AMBER_OFF);
     
     lv_theme_t * th_act = lv_disp_get_theme(NULL);
     day_theme = *th_act;
@@ -66,8 +76,13 @@ void apply_day_theme(void) {
     is_day_theme = !is_day_theme;
     if (is_day_theme) {
         lv_style_set_text_color(&dash_style_label, AMBER_HALF);
+        lv_style_set_arc_color(&dash_style_gauge, AMBER_ON);
+        lv_style_set_arc_color(&dash_style_gauge_bg, AMBER_OFF);
     } else {
-        lv_style_set_text_color(&dash_style_label, IMPORTANT_TEXT);
+        lv_style_set_text_color(&dash_style_label, AMBER_ON);
+        lv_style_set_arc_color(&dash_style_gauge, IMPORTANT_TEXT);
+        lv_style_set_arc_color(&dash_style_gauge_bg, AMBER_HALF);
     }
     lv_obj_refresh_style(lv_scr_act(), LV_PART_ANY, LV_STYLE_PROP_ANY);
+    lv_obj_invalidate(lv_scr_act());
 }

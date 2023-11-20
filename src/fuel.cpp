@@ -7,6 +7,21 @@ void Fuel::update(void) {
     }
 }
 
+static void indicator_draw(lv_event_t * e) {
+	lv_event_code_t code = lv_event_get_code(e);
+	lv_obj_draw_part_dsc_t *dsc = (lv_obj_draw_part_dsc_t *)lv_event_get_draw_part_dsc(e);
+    Fuel * t = (Fuel*)lv_event_get_user_data(e);
+	
+	if (code == LV_EVENT_DRAW_PART_BEGIN) {
+        if (dsc->sub_part_ptr == t->background) {
+            lv_style_get_prop(&dash_style_gauge_bg, LV_STYLE_ARC_COLOR, (lv_style_value_t*)&dsc->arc_dsc->color);
+        }
+        if (dsc->sub_part_ptr == t->indicator) {
+            lv_style_get_prop(&dash_style_gauge, LV_STYLE_ARC_COLOR, (lv_style_value_t*)&dsc->arc_dsc->color);
+        }
+    }
+}
+
 Fuel::Fuel(lv_obj_t * parent) {
 
     lv_obj = lv_obj_create(parent);
@@ -34,16 +49,19 @@ Fuel::Fuel(lv_obj_t * parent) {
     // lv_obj_set_style_text_color(meter, DASH_BACKGROUND, 0);
     lv_obj_set_style_text_opa(meter, 0, 0);
 
-    lv_meter_indicator_t * rpm_normal_bg = lv_meter_add_arc(meter, scale, GAUGE_WIDTH, AMBER_OFF, -1);
-    lv_meter_set_indicator_start_value(meter, rpm_normal_bg, 0);
-    lv_meter_set_indicator_end_value(meter, rpm_normal_bg, TANK_SIZE_GALLONS * 10);
+    background = lv_meter_add_arc(meter, scale, GAUGE_WIDTH, AMBER_OFF, -1);
+    lv_meter_set_indicator_start_value(meter, background, 0);
+    lv_meter_set_indicator_end_value(meter, background, TANK_SIZE_GALLONS * 10);
 
     indicator = lv_meter_add_arc(meter, scale, GAUGE_WIDTH, AMBER_ON, -1);
     lv_meter_set_indicator_start_value(meter, indicator, 0);
 
+    lv_obj_add_event_cb(meter, indicator_draw, LV_EVENT_DRAW_PART_BEGIN, this);
+
     DASH_FONT(RAJDHANI_REGULAR, 24);
 
     label = lv_label_create(meter);
+    lv_obj_add_style(label, &dash_style_value, 0);
     // lv_obj_align(label, LV_ALIGN_RIGHT_MID, 0, 133);
     lv_obj_set_style_text_font(label, RAJDHANI_REGULAR_24, 0);
     lv_label_set_text(label, "-");
@@ -54,11 +72,10 @@ Fuel::Fuel(lv_obj_t * parent) {
     DASH_FONT(RAJDHANI_SEMIBOLD, 14);
 
     lv_obj_t * description = lv_label_create(lv_obj);
+    lv_obj_add_style(description, &dash_style_label, 0);
     lv_obj_align(description, LV_ALIGN_CENTER, 0, 14);
     lv_obj_set_style_text_font(description, RAJDHANI_SEMIBOLD_14, 0);
     lv_label_set_text(description, "Fuel");
-    lv_obj_set_style_text_color(description, AMBER_HALF, 0);
-    lv_obj_set_style_text_opa(description, 255, 0);
 
 
 }

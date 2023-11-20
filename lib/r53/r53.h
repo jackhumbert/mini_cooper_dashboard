@@ -102,7 +102,6 @@ typedef PREPACK struct {
 
 typedef PREPACK struct {
 	uint16_t RPM; /* scaling 0.2, offset 0.0, units none  */
-	uint16_t RPM_Alt; /* scaling 0.1, offset 0.0, units none  */
 	uint8_t Key; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t AC_Clutch; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x316_x316_DME1_t;
@@ -115,6 +114,7 @@ typedef PREPACK struct {
 
 typedef PREPACK struct {
 	uint16_t Unk0; /* scaling 1.0, offset 0.0, units none  */
+	uint16_t Unk2; /* scaling 1.0, offset 0.0, units none  */
 	uint16_t Unk4; /* scaling 1.0, offset 0.0, units none  */
 	uint16_t Unk6; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x336_x336_t;
@@ -122,6 +122,7 @@ typedef PREPACK struct {
 typedef PREPACK struct {
 	uint8_t Unk1; /* scaling 1.0, offset 0.0, units none  */
 	int8_t Unk3; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t unk40; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Unk56; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x501_x501_t;
 
@@ -160,11 +161,12 @@ typedef PREPACK struct {
 
 typedef PREPACK struct {
 	uint16_t Odometer; /* scaling 10.0, offset 0.0, units none  */
-	uint16_t Running_Clock; /* scaling 1.0, offset 0.0, units Seconds  */
+	uint16_t Running_Clock; /* scaling 1.0, offset 0.0, units minutes  */
 	uint8_t Fuel_Level; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Unk40; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Unk46; /* scaling 1.0, offset 0.0, units none  */
 	int8_t Unk52; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t LowFuelLight; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x613_x613_Instrument_Cluster_t;
 
 typedef PREPACK struct {
@@ -373,8 +375,6 @@ int encode_can_0x1f8_Unk2(can_obj_r53_h_t *o, uint8_t in);
 
 int decode_can_0x316_RPM(const can_obj_r53_h_t *o, double *out);
 int encode_can_0x316_RPM(can_obj_r53_h_t *o, double in);
-int decode_can_0x316_RPM_Alt(const can_obj_r53_h_t *o, double *out);
-int encode_can_0x316_RPM_Alt(can_obj_r53_h_t *o, double in);
 int decode_can_0x316_Key(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x316_Key(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x316_AC_Clutch(const can_obj_r53_h_t *o, uint8_t *out);
@@ -391,6 +391,8 @@ int encode_can_0x329_Throttle_Position(can_obj_r53_h_t *o, uint8_t in);
 
 int decode_can_0x336_Unk0(const can_obj_r53_h_t *o, uint16_t *out);
 int encode_can_0x336_Unk0(can_obj_r53_h_t *o, uint16_t in);
+int decode_can_0x336_Unk2(const can_obj_r53_h_t *o, uint16_t *out);
+int encode_can_0x336_Unk2(can_obj_r53_h_t *o, uint16_t in);
 int decode_can_0x336_Unk4(const can_obj_r53_h_t *o, uint16_t *out);
 int encode_can_0x336_Unk4(can_obj_r53_h_t *o, uint16_t in);
 int decode_can_0x336_Unk6(const can_obj_r53_h_t *o, uint16_t *out);
@@ -401,6 +403,8 @@ int decode_can_0x501_Unk1(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x501_Unk1(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x501_Unk3(const can_obj_r53_h_t *o, int8_t *out);
 int encode_can_0x501_Unk3(can_obj_r53_h_t *o, int8_t in);
+int decode_can_0x501_unk40(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x501_unk40(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x501_Unk56(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x501_Unk56(can_obj_r53_h_t *o, uint8_t in);
 
@@ -471,6 +475,8 @@ int decode_can_0x613_Unk46(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x613_Unk46(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x613_Unk52(const can_obj_r53_h_t *o, int8_t *out);
 int encode_can_0x613_Unk52(can_obj_r53_h_t *o, int8_t in);
+int decode_can_0x613_LowFuelLight(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x613_LowFuelLight(can_obj_r53_h_t *o, uint8_t in);
 
 
 int decode_can_0x615_OutsideTemp(const can_obj_r53_h_t *o, int8_t *out);

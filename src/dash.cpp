@@ -9,6 +9,7 @@ extern "C"
 #include "tach2.h"
 #include "tach3.hpp"
 #include "tach4.hpp"
+#include "tach5.hpp"
 #include "speed.hpp"
 #include "clock.hpp"
 #include "outside_temp.hpp"
@@ -105,7 +106,7 @@ static void toggle_logging(lv_event_t * e) {
 
     if(code == LV_EVENT_CLICKED) {
         if (events) { 
-            widgets.erase(widgets.begin());
+            // widgets.erase(widgets.begin());
             // tach->~Tach4();
             if (sd_card_init()) {
                 events = false;
@@ -125,16 +126,14 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
 	pthread_mutex_init(&dashboard.mutex, NULL);
     theme_init();
 
-    // slightly red screen bg
     lv_obj_set_style_bg_color(lv_scr_act(), DASH_BACKGROUND, 0);
-    // lv_obj_set_style_bg_color(lv_scr_act(), lv_color_black(), 0);
     lv_obj_set_scrollbar_mode(lv_scr_act(), LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_scroll_dir(lv_scr_act(), LV_DIR_NONE);
 
     canvas = lv_scr_act();
 
     // tach = new Tach4(canvas);
-    widgets.push_back(std::unique_ptr<Widget>(new Tach4(canvas)));
+    widgets.push_back(std::unique_ptr<Widget>(Tach5::create(canvas)));
     widgets.push_back(std::unique_ptr<Widget>(new Speed(canvas)));
     widgets.push_back(std::unique_ptr<Widget>(new Clock(canvas)));
     widgets.push_back(std::unique_ptr<Widget>(new OutsideTemp(canvas)));
@@ -221,7 +220,7 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     lv_obj_t * msg_clea = lv_btn_create(canvas);
     lv_obj_add_flag(msg_clea, LV_OBJ_FLAG_CHECKABLE);
     lv_obj_add_event_cb(msg_clea, change_theme, LV_EVENT_ALL, NULL);
-    lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -5, 80);
+    lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -5, 85);
 
     lv_obj_t * label = lv_label_create(msg_clea);
     lv_label_set_text(label, "Change Theme");

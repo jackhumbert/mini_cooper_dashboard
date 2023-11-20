@@ -1,4 +1,9 @@
-#include "tach4.hpp"
+#include "tach5.hpp"
+#include <new>
+#include <iostream>
+
+
+#define MY_CLASS (const lv_obj_class_t*)&lv_class
 
 #define INDIC_RADIUS (1850 / 2)
 #define INDIC_RADIUS_OUTER (INDIC_RADIUS + 10)
@@ -11,12 +16,31 @@
 
 #define sin_d(x) sin((x) * 3.1415 / 180)
 
-static lv_point_t line_points[10];
+static lv_point_t line_point;
 
 static float x_comp = -0.5;
 static float y_comp = -0.5;
 
-void Tach4::update(void) {
+Tach5::Tach5(lv_obj_t * parent) : Widget(parent) {
+    lv_obj_class_init_obj(this);
+}
+
+Tach5 * Tach5::create(lv_obj_t * parent) {
+    LV_TRACE_OBJ_CREATE("Creating object with %p class on %p parent", (void *)class_p, (void *)parent);
+    Tach5 * obj = (Tach5 *)lv_mem_alloc(sizeof(Tach5));
+    if(obj == NULL) return NULL;
+    lv_memset_00(obj, sizeof(Tach5));
+
+    new (obj) Tach5(parent);
+    return obj;
+}
+
+static lv_point_t arc_center = {
+    .x = INDIC_X, 
+    .y = INDIC_ABS_Y + INDIC_RADIUS_INNER - 25,
+};
+
+void Tach5::update(void) {
     // if (get_queued()->rpm) {
     //     if (get_cache()->rpm > REDLINE) {
     //         // if (!animation_active) {
@@ -31,32 +55,15 @@ void Tach4::update(void) {
     //         indicator->type_data.arc.color = AMBER_ON;
     //     }
     if (get_queued()->rpm) {
-
-        float end = 66 + 180 + 48 * get_cache()->rpm / 8000.0;
-        x_comp = sin_d(end + 90);
-        y_comp = sin_d(end);
-
-        lv_coord_t x = INDIC_X + (x_comp * (INDIC_RADIUS_INNER));
-        lv_coord_t y = INDIC_Y + INDIC_RADIUS + (y_comp * (INDIC_RADIUS_INNER));
-        if (line_points[1].x != x || line_points[1].y != y) {
-            // lv_area_t area = {
-            //     .x1 = 0,
-            //     .y1 = INDIC_ABS_Y + 165,
-            //     .x2 = LV_MAX(line_points[1].x, x),
-            //     .y2 = LV_MAX(line_points[1].y, y)
-            // };
-            line_points[1].x = x;
-            line_points[1].y = y;
-            // lv_obj_invalidate_area(lv_obj, &area);
-            lv_line_set_points(lv_obj, line_points, 2);
-        }
+        float initial = this->end_angle;
+        this->end_angle = this->start_angle + 48 * get_cache()->rpm / 8000.0;
+        x_comp = sin_d(this->end_angle + 90);
+        y_comp = sin_d(this->end_angle);
+        lv_area_t area;
+        lv_draw_arc_get_area(arc_center.x, arc_center.y, INDIC_RADIUS_INNER, LV_MIN(floor(initial), floor(end_angle)), LV_MAX(ceil(initial), ceil(end_angle)), 20, false, &area);
+        lv_obj_invalidate_area(this, &area);
     }
 }
-
-static lv_point_t arc_center = {
-    .x = INDIC_X, 
-    .y = INDIC_ABS_Y + INDIC_RADIUS_INNER - 25,
-};
 
 static lv_draw_mask_line_param_t line_mask_param;
 static int16_t line_mask_id;
@@ -68,52 +75,70 @@ static float redline_angle = 66 + 180 + 48 * REDLINE / 8000.0;
 static float redline_x_comp;
 static float redline_y_comp;
 
-static void indicator_draw(lv_event_t * e) {
-	lv_event_code_t code = lv_event_get_code(e);
-	lv_draw_ctx_t *ctx = (lv_draw_ctx_t *)lv_event_get_param(e);
-	
-	if (code == LV_EVENT_DRAW_MAIN_BEGIN) {
+void Tach5::construct(const lv_obj_class_t * cls) {
+    lv_obj_set_size(this, 800, 165);
+    lv_obj_align(this, LV_ALIGN_CENTER, 0, 0);
+    // lv_obj_set_style_bg_color(this, lv_color_white(), 0);
+    lv_obj_add_style(this, &dash_style_gauge, LV_PART_INDICATOR);
+    lv_obj_add_style(this, &dash_style_gauge_bg, LV_PART_MAIN);
 
-        float end = 66 + 180 + 48 * get_cache()->rpm / 8000.0;
+    this->start_angle = 66 + 180;
+    this->end_angle = 66 + 180;
+    x_comp = sin_d(this->end_angle + 90);
+    y_comp = sin_d(this->end_angle);
+
+    line_point.x = INDIC_X + (x_comp * (INDIC_RADIUS_INNER));
+    line_point.y = INDIC_Y + INDIC_RADIUS + (y_comp * (INDIC_RADIUS_INNER));
+
+    for (int i = 0; i < 9; i++) {
+        float end = this->start_angle + 48 * i / 8.0;
+        x_comps[i] = sin_d(end + 90);
+        y_comps[i] = sin_d(end);
+    }
+    float end = this->start_angle + 48 * REDLINE / 8000.0;
+    redline_x_comp = sin_d(end + 90);
+    redline_y_comp = sin_d(end);
+
+    // this->update();
+}
+
+void Tach5::destruct(const lv_obj_class_t * cls) {
+
+}
+void Tach5::event(const lv_obj_class_t * cls, lv_event_t * event) {
+    lv_res_t res = lv_obj_event_base(this->class_p, event);
+    if(res != LV_RES_OK) return;
+
+	lv_event_code_t code = lv_event_get_code(event);
+	
+	if (code == LV_EVENT_DRAW_MAIN) {
+        lv_draw_ctx_t *ctx = lv_event_get_draw_ctx(event);
+
+        lv_area_t scale_area;
+        lv_obj_get_content_coords(this, &scale_area);
 
         // background arc
         static lv_draw_arc_dsc_t arc_dsc;
         lv_draw_arc_dsc_init(&arc_dsc);
         // arc_dsc.color = AMBER_OFF;
-        lv_style_get_prop(&dash_style_gauge_bg, LV_STYLE_ARC_COLOR, (lv_style_value_t*)&arc_dsc.color);
+        // lv_style_get_prop(&dash_style_gauge_bg, LV_STYLE_ARC_COLOR, (lv_style_value_t*)&arc_dsc.color);
+        arc_dsc.color = lv_obj_get_style_arc_color(this, LV_PART_MAIN);
         arc_dsc.width = 20;
 
-        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER, end, redline_angle);
+        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER, this->end_angle, redline_angle);
 
         arc_dsc.color = RED_OFF;
-        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER, redline_angle, 66 + 180 + 48);
+        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER, redline_angle, this->start_angle + 48);
 
         // top line
         lv_draw_arc_dsc_init(&arc_dsc);
         arc_dsc.color = AMBER_HALF;
         arc_dsc.width = 1;
 
-        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER + 3, 66 + 180, redline_angle);
+        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER + 3, this->start_angle, redline_angle);
 
         arc_dsc.color = RED_HALF;
-        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER + 3, redline_angle, 66 + 180 + 48);
-
-        // static lv_draw_line_dsc_t line_dsc;
-        // lv_draw_line_dsc_init(&line_dsc);
-        // line_dsc.color = RED_HALF;
-        // line_dsc.width = 1;
-
-        // lv_point_t start_red = {
-        //     .x = (lv_coord_t)round(arc_center.x + redline_x_comp * (INDIC_RADIUS_INNER + 2)),
-        //     .y = (lv_coord_t)round(arc_center.y + redline_y_comp * (INDIC_RADIUS_INNER + 2)),
-        // };
-
-        // lv_point_t end_red = {
-        //     .x = (lv_coord_t)round(arc_center.x + redline_x_comp * (INDIC_RADIUS_INNER - 21)),
-        //     .y = (lv_coord_t)round(arc_center.y + redline_y_comp * (INDIC_RADIUS_INNER - 21)),
-        // };
-
-        // lv_draw_line(ctx, &line_dsc, &start_red, &end_red);
+        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER + 3, redline_angle, this->start_angle + 48);
 
         for (int i = 0; i < 9; i++) {
             // dashes
@@ -163,15 +188,14 @@ static void indicator_draw(lv_event_t * e) {
         static lv_draw_arc_dsc_t arc_dsc2;
         lv_draw_arc_dsc_init(&arc_dsc2);
         // arc_dsc2.color = AMBER_ON;
-        lv_style_get_prop(&dash_style_gauge, LV_STYLE_ARC_COLOR, (lv_style_value_t*)&arc_dsc2.color);
-        arc_dsc2.start_angle = 66 + 180;
-        arc_dsc2.end_angle = end + 1;
+        // lv_style_get_prop(&dash_style_gauge, LV_STYLE_ARC_COLOR, (lv_style_value_t*)&arc_dsc2.color);
+        arc_dsc2.color = lv_obj_get_style_arc_color(this, LV_PART_INDICATOR);
         arc_dsc2.width = 20;
 
-        lv_draw_arc(ctx, &arc_dsc2, &arc_center, INDIC_RADIUS_INNER, 66 + 180, end + 1);
-    }
+        lv_event_send(this, LV_EVENT_DRAW_PART_BEGIN, &arc_dsc2);
+        lv_draw_arc(ctx, &arc_dsc2, &arc_center, INDIC_RADIUS_INNER, this->start_angle, this->end_angle + 1);
+        lv_event_send(this, LV_EVENT_DRAW_PART_END, &arc_dsc2);
 
-	if (code == LV_EVENT_DRAW_MAIN_END) {
         lv_draw_mask_free_param(&line_mask_param);
         lv_draw_mask_remove_id(line_mask_id);
 
@@ -196,47 +220,22 @@ static void indicator_draw(lv_event_t * e) {
             lv_draw_line(ctx, &line_dsc, &start, &end);
         }
 
+        lv_coord_t r_edge = lv_area_get_width(&scale_area) / 2;
+        lv_point_t scale_center;
+        scale_center.x = scale_area.x1 + r_edge;
+        scale_center.y = scale_area.y1 + r_edge;
+
+        lv_draw_rect_dsc_t mid_dsc;
+        lv_draw_rect_dsc_init(&mid_dsc);
+        lv_obj_init_draw_rect_dsc(this, LV_PART_INDICATOR, &mid_dsc);
+        lv_coord_t w = lv_obj_get_style_width(this, LV_PART_INDICATOR) / 2;
+        lv_coord_t h = lv_obj_get_style_height(this, LV_PART_INDICATOR) / 2;
+        lv_area_t nm_cord;
+        nm_cord.x1 = scale_center.x - w;
+        nm_cord.y1 = scale_center.y - h;
+        nm_cord.x2 = scale_center.x + w;
+        nm_cord.y2 = scale_center.y + h;
+        lv_draw_rect(ctx, &mid_dsc, &nm_cord);
+
     }
-
-}
-
-Tach4::Tach4(lv_obj_t * parent) {
-
-    float end = 66 + 180;
-    x_comp = sin_d(end + 90);
-    y_comp = sin_d(end);
-
-    line_points[0].x = INDIC_X + (x_comp * (INDIC_RADIUS_INNER));
-    line_points[0].y = INDIC_Y + INDIC_RADIUS + (y_comp * (INDIC_RADIUS_INNER));
-
-    line_points[1].x = INDIC_X + (x_comp * (INDIC_RADIUS_INNER));
-    line_points[1].y = INDIC_Y + INDIC_RADIUS + (y_comp * (INDIC_RADIUS_INNER));
-
-    for (int i = 0; i < 9; i++) {
-        end = 66 + 180 + 48 * i / 8.0;
-        x_comps[i] = sin_d(end + 90);
-        y_comps[i] = sin_d(end);
-    }
-    end = 66 + 180 + 48 * REDLINE / 8000.0;
-    redline_x_comp = sin_d(end + 90);
-    redline_y_comp = sin_d(end);
-
-    /*Create style*/
-    static lv_style_t style_line;
-    lv_style_init(&style_line);
-    lv_style_set_line_width(&style_line, 0);
-    // lv_style_set_bg_color(&style_line, AMBER_ON);
-    lv_style_set_line_color(&style_line, AMBER_ON);
-    lv_style_set_line_rounded(&style_line, false);
-
-    lv_obj = lv_line_create(parent);
-    lv_obj_set_size(lv_obj, 800, 165);
-    lv_obj_align(lv_obj, LV_ALIGN_TOP_MID, 0, INDIC_ABS_Y);
-    lv_line_set_points(lv_obj, line_points, 2);
-    lv_obj_add_style(lv_obj, &style_line, 0);
-    lv_obj_add_event_cb(lv_obj, indicator_draw, LV_EVENT_DRAW_MAIN_BEGIN, this);
-    lv_obj_add_event_cb(lv_obj, indicator_draw, LV_EVENT_DRAW_MAIN_END, this);
-    lv_obj_center(lv_obj);
-
-    update();
 }

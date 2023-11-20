@@ -68,7 +68,11 @@ add_executable(simulation ${SIM_SOURCES} ${SOURCES} ${CPP_SOURCES} ${INCLUDES} $
 target_compile_definitions(simulation PUBLIC DASH_SIMULATION)
 target_link_libraries(simulation PRIVATE SDL2 Freetype m pthread lvgl::lvgl lvgl::drivers)
 
-add_custom_target(simulation_run COMMAND $<TARGET_FILE:simulation> WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} DEPENDS simulation)
+add_custom_target(simulation_run 
+    COMMAND $<TARGET_FILE:simulation> 
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} 
+    DEPENDS simulation
+    VERBATIM)
 
 if(NOT EXISTS "${PROJECT_SOURCE_DIR}/src/assets/fonts.c") 
     include(bin2h.cmake)
@@ -82,7 +86,12 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/src/assets/fonts.c")
     endforeach()
 endif()
 
-add_custom_target(r53 COMMAND ../dbcc/dbcc r53.dbc WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/lib/r53 SOURCES lib/r53/r53.dbc BYPRODUCTS lib/r53/r53.c lib/r53/r53.h)
+add_custom_target(r53
+    COMMAND ../dbcc/dbcc r53.dbc 
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/lib/r53 
+    SOURCES lib/r53/r53.dbc 
+    BYPRODUCTS lib/r53/r53.c lib/r53/r53.h
+)
 
 
 # include_directories(${SDL2_INCLUDE_DIRS})

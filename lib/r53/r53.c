@@ -864,10 +864,6 @@ static int pack_can_0x316_x316_DME1(can_obj_r53_h_t *o, uint64_t *data) {
 	x = ((uint16_t)(o->can_0x316_x316_DME1.RPM)) & 0xffff;
 	x <<= 16; 
 	i |= x;
-	/* RPM_Alt: start-bit 16, length 16, endianess intel, scaling 0.125, offset 0 */
-	x = ((uint16_t)(o->can_0x316_x316_DME1.RPM_Alt)) & 0xffff;
-	x <<= 16; 
-	i |= x;
 	/* Key: start-bit 0, length 1, endianess intel, scaling 1, offset 0 */
 	x = ((uint8_t)(o->can_0x316_x316_DME1.Key)) & 0x1;
 	i |= x;
@@ -890,9 +886,6 @@ static int unpack_can_0x316_x316_DME1(can_obj_r53_h_t *o, uint64_t data, uint8_t
 	/* RPM: start-bit 16, length 16, endianess intel, scaling 0.156, offset 0 */
 	x = (i >> 16) & 0xffff;
 	o->can_0x316_x316_DME1.RPM = x;
-	/* RPM_Alt: start-bit 16, length 16, endianess intel, scaling 0.125, offset 0 */
-	x = (i >> 16) & 0xffff;
-	o->can_0x316_x316_DME1.RPM_Alt = x;
 	/* Key: start-bit 0, length 1, endianess intel, scaling 1, offset 0 */
 	x = i & 0x1;
 	o->can_0x316_x316_DME1.Key = x;
@@ -917,22 +910,6 @@ int encode_can_0x316_RPM(can_obj_r53_h_t *o, double in) {
 	assert(o);
 	in *= 6.41026;
 	o->can_0x316_x316_DME1.RPM = in;
-	return 0;
-}
-
-int decode_can_0x316_RPM_Alt(const can_obj_r53_h_t *o, double *out) {
-	assert(o);
-	assert(out);
-	double rval = (double)(o->can_0x316_x316_DME1.RPM_Alt);
-	rval *= 0.125;
-	*out = rval;
-	return 0;
-}
-
-int encode_can_0x316_RPM_Alt(can_obj_r53_h_t *o, double in) {
-	assert(o);
-	in *= 8;
-	o->can_0x316_x316_DME1.RPM_Alt = in;
 	return 0;
 }
 
@@ -969,7 +946,6 @@ int print_can_0x316_x316_DME1(const can_obj_r53_h_t *o, FILE *output) {
 	assert(output);
 	int r = 0;
 	r = print_helper(r, fprintf(output, "RPM = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.RPM)));
-	r = print_helper(r, fprintf(output, "RPM_Alt = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.RPM_Alt)));
 	r = print_helper(r, fprintf(output, "Key = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.Key)));
 	r = print_helper(r, fprintf(output, "AC_Clutch = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.AC_Clutch)));
 	return r;
@@ -1081,6 +1057,10 @@ static int pack_can_0x336_x336(can_obj_r53_h_t *o, uint64_t *data) {
 	/* Unk0: start-bit 0, length 16, endianess intel, scaling 1, offset 0 */
 	x = ((uint16_t)(o->can_0x336_x336.Unk0)) & 0xffff;
 	i |= x;
+	/* Unk2: start-bit 16, length 16, endianess intel, scaling 1, offset 0 */
+	x = ((uint16_t)(o->can_0x336_x336.Unk2)) & 0xffff;
+	x <<= 16; 
+	i |= x;
 	/* Unk4: start-bit 32, length 16, endianess intel, scaling 1, offset 0 */
 	x = ((uint16_t)(o->can_0x336_x336.Unk4)) & 0xffff;
 	x <<= 32; 
@@ -1104,6 +1084,9 @@ static int unpack_can_0x336_x336(can_obj_r53_h_t *o, uint64_t data, uint8_t dlc,
 	/* Unk0: start-bit 0, length 16, endianess intel, scaling 1, offset 0 */
 	x = i & 0xffff;
 	o->can_0x336_x336.Unk0 = x;
+	/* Unk2: start-bit 16, length 16, endianess intel, scaling 1, offset 0 */
+	x = (i >> 16) & 0xffff;
+	o->can_0x336_x336.Unk2 = x;
 	/* Unk4: start-bit 32, length 16, endianess intel, scaling 1, offset 0 */
 	x = (i >> 32) & 0xffff;
 	o->can_0x336_x336.Unk4 = x;
@@ -1134,6 +1117,20 @@ int encode_can_0x336_Unk0(can_obj_r53_h_t *o, uint16_t in) {
 	if (in > 1)
 		return -1;
 	o->can_0x336_x336.Unk0 = in;
+	return 0;
+}
+
+int decode_can_0x336_Unk2(const can_obj_r53_h_t *o, uint16_t *out) {
+	assert(o);
+	assert(out);
+	uint16_t rval = (uint16_t)(o->can_0x336_x336.Unk2);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x336_Unk2(can_obj_r53_h_t *o, uint16_t in) {
+	assert(o);
+	o->can_0x336_x336.Unk2 = in;
 	return 0;
 }
 
@@ -1170,6 +1167,7 @@ int print_can_0x336_x336(const can_obj_r53_h_t *o, FILE *output) {
 	assert(output);
 	int r = 0;
 	r = print_helper(r, fprintf(output, "Unk0 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk0)));
+	r = print_helper(r, fprintf(output, "Unk2 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk2)));
 	r = print_helper(r, fprintf(output, "Unk4 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk4)));
 	r = print_helper(r, fprintf(output, "Unk6 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk6)));
 	return r;
@@ -1187,6 +1185,10 @@ static int pack_can_0x501_x501(can_obj_r53_h_t *o, uint64_t *data) {
 	/* Unk3: start-bit 24, length 8, endianess intel, scaling 1, offset 0 */
 	x = ((uint8_t)(o->can_0x501_x501.Unk3)) & 0xff;
 	x <<= 24; 
+	i |= x;
+	/* unk40: start-bit 40, length 8, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x501_x501.unk40)) & 0xff;
+	x <<= 40; 
 	i |= x;
 	/* Unk56: start-bit 56, length 1, endianess intel, scaling 1, offset 0 */
 	x = ((uint8_t)(o->can_0x501_x501.Unk56)) & 0x1;
@@ -1210,6 +1212,9 @@ static int unpack_can_0x501_x501(can_obj_r53_h_t *o, uint64_t data, uint8_t dlc,
 	/* Unk3: start-bit 24, length 8, endianess intel, scaling 1, offset 0 */
 	x = (i >> 24) & 0xff;
 	o->can_0x501_x501.Unk3 = x;
+	/* unk40: start-bit 40, length 8, endianess intel, scaling 1, offset 0 */
+	x = (i >> 40) & 0xff;
+	o->can_0x501_x501.unk40 = x;
 	/* Unk56: start-bit 56, length 1, endianess intel, scaling 1, offset 0 */
 	x = (i >> 56) & 0x1;
 	o->can_0x501_x501.Unk56 = x;
@@ -1264,6 +1269,20 @@ int encode_can_0x501_Unk3(can_obj_r53_h_t *o, int8_t in) {
 	return 0;
 }
 
+int decode_can_0x501_unk40(const can_obj_r53_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x501_x501.unk40);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x501_unk40(can_obj_r53_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x501_x501.unk40 = in;
+	return 0;
+}
+
 int decode_can_0x501_Unk56(const can_obj_r53_h_t *o, uint8_t *out) {
 	assert(o);
 	assert(out);
@@ -1284,6 +1303,7 @@ int print_can_0x501_x501(const can_obj_r53_h_t *o, FILE *output) {
 	int r = 0;
 	r = print_helper(r, fprintf(output, "Unk1 = (wire: %.0f)\n", (double)(o->can_0x501_x501.Unk1)));
 	r = print_helper(r, fprintf(output, "Unk3 = (wire: %.0f)\n", (double)(o->can_0x501_x501.Unk3)));
+	r = print_helper(r, fprintf(output, "unk40 = (wire: %.0f)\n", (double)(o->can_0x501_x501.unk40)));
 	r = print_helper(r, fprintf(output, "Unk56 = (wire: %.0f)\n", (double)(o->can_0x501_x501.Unk56)));
 	return r;
 }
@@ -1942,8 +1962,8 @@ static int pack_can_0x613_x613_Instrument_Cluster(can_obj_r53_h_t *o, uint64_t *
 	x = ((uint16_t)(o->can_0x613_x613_Instrument_Cluster.Running_Clock)) & 0xffff;
 	x <<= 24; 
 	i |= x;
-	/* Fuel_Level: start-bit 16, length 8, endianess intel, scaling 1, offset 0 */
-	x = ((uint8_t)(o->can_0x613_x613_Instrument_Cluster.Fuel_Level)) & 0xff;
+	/* Fuel_Level: start-bit 16, length 7, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x613_x613_Instrument_Cluster.Fuel_Level)) & 0x7f;
 	x <<= 16; 
 	i |= x;
 	/* Unk40: start-bit 40, length 6, endianess intel, scaling 1, offset 0 */
@@ -1957,6 +1977,10 @@ static int pack_can_0x613_x613_Instrument_Cluster(can_obj_r53_h_t *o, uint64_t *
 	/* Unk52: start-bit 52, length 4, endianess intel, scaling 1, offset 0 */
 	x = ((uint8_t)(o->can_0x613_x613_Instrument_Cluster.Unk52)) & 0xf;
 	x <<= 52; 
+	i |= x;
+	/* LowFuelLight: start-bit 23, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x613_x613_Instrument_Cluster.LowFuelLight)) & 0x1;
+	x <<= 23; 
 	i |= x;
 	*data = (i);
 	o->can_0x613_x613_Instrument_Cluster_tx = 1;
@@ -1976,8 +2000,8 @@ static int unpack_can_0x613_x613_Instrument_Cluster(can_obj_r53_h_t *o, uint64_t
 	/* Running_Clock: start-bit 24, length 16, endianess intel, scaling 1, offset 0 */
 	x = (i >> 24) & 0xffff;
 	o->can_0x613_x613_Instrument_Cluster.Running_Clock = x;
-	/* Fuel_Level: start-bit 16, length 8, endianess intel, scaling 1, offset 0 */
-	x = (i >> 16) & 0xff;
+	/* Fuel_Level: start-bit 16, length 7, endianess intel, scaling 1, offset 0 */
+	x = (i >> 16) & 0x7f;
 	o->can_0x613_x613_Instrument_Cluster.Fuel_Level = x;
 	/* Unk40: start-bit 40, length 6, endianess intel, scaling 1, offset 0 */
 	x = (i >> 40) & 0x3f;
@@ -1989,6 +2013,9 @@ static int unpack_can_0x613_x613_Instrument_Cluster(can_obj_r53_h_t *o, uint64_t
 	x = (i >> 52) & 0xf;
 	x = (x & 0x8) ? (x | 0xf0) : x; 
 	o->can_0x613_x613_Instrument_Cluster.Unk52 = x;
+	/* LowFuelLight: start-bit 23, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 23) & 0x1;
+	o->can_0x613_x613_Instrument_Cluster.LowFuelLight = x;
 	o->can_0x613_x613_Instrument_Cluster_rx = 1;
 	o->can_0x613_x613_Instrument_Cluster_time_stamp_rx = time_stamp;
 	return 8;
@@ -2106,6 +2133,20 @@ int encode_can_0x613_Unk52(can_obj_r53_h_t *o, int8_t in) {
 	return 0;
 }
 
+int decode_can_0x613_LowFuelLight(const can_obj_r53_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x613_x613_Instrument_Cluster.LowFuelLight);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x613_LowFuelLight(can_obj_r53_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x613_x613_Instrument_Cluster.LowFuelLight = in;
+	return 0;
+}
+
 int print_can_0x613_x613_Instrument_Cluster(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
@@ -2116,6 +2157,7 @@ int print_can_0x613_x613_Instrument_Cluster(const can_obj_r53_h_t *o, FILE *outp
 	r = print_helper(r, fprintf(output, "Unk40 = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Unk40)));
 	r = print_helper(r, fprintf(output, "Unk46 = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Unk46)));
 	r = print_helper(r, fprintf(output, "Unk52 = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Unk52)));
+	r = print_helper(r, fprintf(output, "LowFuelLight = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.LowFuelLight)));
 	return r;
 }
 

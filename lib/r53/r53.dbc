@@ -37,7 +37,6 @@ BO_ 790 x316_DME1: 8 DME_Etc
    SG_ RPM : 16|16@1+ (0.156,0) [0|0] "" DME_Etc
    SG_ Key : 0|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ AC_Clutch : 6|1@1+ (1,0) [0|0] "" Vector__XXX
-   SG_ RPM_Alt : 16|16@1+ (0.125,0) [0|0] "" DME_Etc
 
 BO_ 809 x329_DME2: 8 DME_Etc
    SG_ Engine_Temp : 8|8@1+ (0.75,-48.373) [0|0] "deg_c" DME_Etc
@@ -69,11 +68,12 @@ BO_ 1349 x545_DME4: 8 DME_Etc
 
 BO_ 1555 x613_Instrument_Cluster: 8 DME_Etc
    SG_ Odometer : 0|16@1+ (10,0) [0|0] "" Vector__XXX
-   SG_ Fuel_Level : 16|8@1+ (1,0) [0|0] "" Vector__XXX
-   SG_ Running_Clock : 24|16@1+ (1,0) [0|0] "Seconds" DME_Etc
+   SG_ Fuel_Level : 16|7@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ Running_Clock : 24|16@1+ (1,0) [0|0] "minutes" DME_Etc
    SG_ Unk40 : 40|6@1+ (1,0) [0|1] "" Vector__XXX
    SG_ Unk52 : 52|4@1- (1,0) [0|1] "" Vector__XXX
    SG_ Unk46 : 46|6@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ LowFuelLight : 23|1@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 496 x1F0_ABS_1: 8 DME_Etc
    SG_ Wheel_1_Left_Front_Speed : 0|12@1+ (0.0625,0) [0|0] "" Vector__XXX
@@ -157,6 +157,7 @@ BO_ 822 x336: 8 DME_Etc
    SG_ Unk0 : 0|16@1+ (1,0) [0|1] "" Vector__XXX
    SG_ Unk4 : 32|16@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Unk6 : 48|16@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ Unk2 : 16|16@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 504 x1F8: 8 DME_Etc
    SG_ Unk2 : 16|8@1+ (1,0) [0|1] "" Vector__XXX
@@ -169,6 +170,7 @@ BO_ 1281 x501: 8 DME_Etc
    SG_ Unk1 : 8|8@1+ (1,0) [0|1] "" Vector__XXX
    SG_ Unk3 : 24|8@1- (1,0) [0|1] "" Vector__XXX
    SG_ Unk56 : 56|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ unk40 : 40|8@1+ (1,0) [0|0] "" Vector__XXX
 
 BA_DEF_ BO_ "GenMsgBackgroundColor" STRING ;
 BA_DEF_ BO_ "GenMsgForegroundColor" STRING ;
@@ -217,7 +219,7 @@ BA_DEF_DEF_ "matchingcriteria" 0;
 BA_DEF_DEF_ "filterlabeling" 0;
 BA_DEF_DEF_ "matchingcriteria" 0;
 BA_DEF_DEF_ "filterlabeling" false;
-CM_ BO_ 822 "Check control";
+CM_ BO_ 822 "Values seem to be engine-related";
 VAL_ 790 Key 0 "Off" 1 "On";
 VAL_ 790 AC_Clutch 0 "Off" 1 "On";
 VAL_ 1349 Charge_Light 0 "Off" 1 "On";
