@@ -114,9 +114,12 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 // get_changed()->x613 = 1;
                 decode_can_0x613_Fuel_Level(&can_data, &get_dash()->fuel_level);
                 update_changed(fuel_level);
+                decode_can_0x613_LowFuelLight(&can_data, &get_dash()->low_fuel_light);
+                update_changed(low_fuel_light);
                 decode_can_0x613_Running_Clock(&can_data, &get_dash()->running_clock);
                 update_changed(running_clock);
-                decode_can_0x613_Odometer(&can_data, &get_dash()->odometer);
+                decode_can_0x613_Odometer(&can_data, &get_dash()->odometer_fp);
+                get_dash()->odometer = get_dash()->odometer_fp;
                 update_changed(odometer);
                 return 0;
             case 0x615:

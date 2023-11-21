@@ -2,8 +2,17 @@
 
 void Fuel::update(void) {
     if (get_queued()->fuel_level) {
-        lv_label_set_text_fmt(label, "%0.2f", get_dash()->fuel_level / 3.785);
-        lv_meter_set_indicator_end_value(meter, indicator, get_dash()->fuel_level / 3.785 * 10);
+        lv_label_set_text_fmt(label, "%0.2f", get_cache()->fuel_level / 3.785);
+        lv_meter_set_indicator_end_value(meter, indicator, get_cache()->fuel_level / 3.785 * 10);
+    }
+    if (get_queued()->low_fuel_light) {
+        if (get_cache()->low_fuel_light) {
+            lv_obj_add_state(meter, LV_STATE_USER_1);
+            lv_obj_refresh_style(meter, LV_PART_ANY, LV_STYLE_PROP_ANY);
+        } else {
+            lv_obj_clear_state(meter, LV_STATE_USER_1);
+            lv_obj_refresh_style(meter, LV_PART_ANY, LV_STYLE_PROP_ANY);
+        }
     }
 }
 
@@ -14,10 +23,18 @@ static void indicator_draw(lv_event_t * e) {
 	
 	if (code == LV_EVENT_DRAW_PART_BEGIN) {
         if (dsc->sub_part_ptr == t->background) {
-            lv_style_get_prop(&dash_style_gauge_bg, LV_STYLE_ARC_COLOR, (lv_style_value_t*)&dsc->arc_dsc->color);
+            if (lv_obj_has_state(t->meter, LV_STATE_USER_1)) {
+                lv_style_get_prop(&dash_style_red_gauge_bg, LV_STYLE_ARC_COLOR, (lv_style_value_t*)&dsc->arc_dsc->color);
+            } else {
+                lv_style_get_prop(&dash_style_gauge_bg, LV_STYLE_ARC_COLOR, (lv_style_value_t*)&dsc->arc_dsc->color);
+            }
         }
         if (dsc->sub_part_ptr == t->indicator) {
-            lv_style_get_prop(&dash_style_gauge, LV_STYLE_ARC_COLOR, (lv_style_value_t*)&dsc->arc_dsc->color);
+            if (lv_obj_has_state(t->meter, LV_STATE_USER_1)) {
+                lv_style_get_prop(&dash_style_red_gauge, LV_STYLE_ARC_COLOR, (lv_style_value_t*)&dsc->arc_dsc->color);
+            } else {
+                lv_style_get_prop(&dash_style_gauge, LV_STYLE_ARC_COLOR, (lv_style_value_t*)&dsc->arc_dsc->color);
+            }
         }
     }
 }
@@ -36,6 +53,7 @@ Fuel::Fuel(lv_obj_t * parent) {
     /*Remove the circle from the middle*/
     lv_obj_remove_style(meter, NULL, LV_PART_INDICATOR);
     lv_obj_remove_style(meter, NULL, LV_PART_MAIN);
+    // lv_obj_add_style(meter, &dash_style_gauge, LV_PART_MAIN);
     // lv_obj_set_style_blend_mode(meter, LV_BLEND_MODE_ADDITIVE, 0);
     lv_obj_align(meter, LV_ALIGN_TOP_MID, 0, 0);
     lv_obj_set_size(meter, GAUGE_SIZE);

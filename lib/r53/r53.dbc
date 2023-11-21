@@ -39,7 +39,7 @@ BO_ 790 x316_DME1: 8 DME_Etc
    SG_ AC_Clutch : 6|1@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 809 x329_DME2: 8 DME_Etc
-   SG_ Engine_Temp : 8|8@1+ (0.75,-48.373) [0|0] "deg_c" DME_Etc
+   SG_ Engine_Temp : 8|8@1+ (0.75,-48.373) [0|0] "deg_c" Vector__XXX
    SG_ Throttle_Position : 40|8@1+ (1,0) [0|0] "%" DME_Etc
    SG_ Cycling_Number : 0|8@1+ (1,0) [0|0] "" DME_Etc
 
@@ -91,7 +91,7 @@ BO_ 501 x1F5_Steering_Angle_Sensor: 8 DME_Etc
    SG_ unk40 : 40|1@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 339 ASC_1: 8 DME_Etc
-   SG_ Speed : 11|13@1+ (0.0625,0) [0|0] "" DME_Etc
+   SG_ Speed : 11|13@1+ (0.0625,-0.625) [0|0] "" DME_Etc
    SG_ Brake_Pedal_Pressed : 4|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Tyre_Pressure_Set : 0|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Unk4 : 40|8@1+ (1,0) [0|0] "" Vector__XXX
@@ -175,6 +175,8 @@ BO_ 1281 x501: 8 DME_Etc
 BA_DEF_ BO_ "GenMsgBackgroundColor" STRING ;
 BA_DEF_ BO_ "GenMsgForegroundColor" STRING ;
 BA_DEF_ BO_ "isj1939dbc" INT 0 0;
+BA_DEF_ BO_ "matchingcriteria" INT 0 0;
+BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_DEF_ BO_ "matchingcriteria" INT 0 0;
 BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_DEF_ BO_ "matchingcriteria" INT 0 0;

@@ -164,9 +164,11 @@ typedef struct dashboard_t {
     double oil_pressure;
 
     // 0x613
-    double odometer;
+    double odometer_fp;
+    uint64_t odometer;
     uint16_t running_clock;
     uint8_t fuel_level;
+    uint8_t low_fuel_light;
 
     int8_t outside_temp;
     uint8_t hood;
@@ -273,6 +275,7 @@ typedef struct dashboard_changed_t {
     uint8_t odometer;
     uint8_t running_clock;
     uint8_t fuel_level;
+    uint8_t low_fuel_light;
     uint8_t oil_pressure;
 
     uint8_t outside_temp;

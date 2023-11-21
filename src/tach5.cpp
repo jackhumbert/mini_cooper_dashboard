@@ -13,6 +13,8 @@
 #define INDIC_ABS_Y 250
 // overshoot makes the line more accurate, since it'll be rounded to a pixel when drawn
 #define INDIC_OVERSHOOT 40
+#define INDIC_ANGLE_WIDTH 50
+#define INDIC_START_ANGLE ((90 - INDIC_ANGLE_WIDTH / 2) + 180)
 
 #define sin_d(x) sin((x) * 3.1415 / 180)
 
@@ -56,7 +58,7 @@ void Tach5::update(void) {
     //     }
     if (get_queued()->rpm) {
         float initial = this->end_angle;
-        this->end_angle = this->start_angle + 48 * get_cache()->rpm / 8000.0;
+        this->end_angle = this->start_angle + INDIC_ANGLE_WIDTH * get_cache()->rpm / 8000.0;
         x_comp = sin_d(this->end_angle + 90);
         y_comp = sin_d(this->end_angle);
         lv_area_t area;
@@ -71,19 +73,19 @@ static int16_t line_mask_id;
 static float x_comps[9];
 static float y_comps[9];
 
-static float redline_angle = 66 + 180 + 48 * REDLINE / 8000.0;
+static float redline_angle = INDIC_START_ANGLE + INDIC_ANGLE_WIDTH * REDLINE / 8000.0;
 static float redline_x_comp;
 static float redline_y_comp;
 
 void Tach5::construct(const lv_obj_class_t * cls) {
-    lv_obj_set_size(this, 800, 165);
+    lv_obj_set_size(this, 800, 175);
     lv_obj_align(this, LV_ALIGN_CENTER, 0, 0);
     // lv_obj_set_style_bg_color(this, lv_color_white(), 0);
     lv_obj_add_style(this, &dash_style_gauge, LV_PART_INDICATOR);
     lv_obj_add_style(this, &dash_style_gauge_bg, LV_PART_MAIN);
 
-    this->start_angle = 66 + 180;
-    this->end_angle = 66 + 180;
+    this->start_angle = INDIC_START_ANGLE;
+    this->end_angle = this->start_angle;
     x_comp = sin_d(this->end_angle + 90);
     y_comp = sin_d(this->end_angle);
 
@@ -91,11 +93,11 @@ void Tach5::construct(const lv_obj_class_t * cls) {
     line_point.y = INDIC_Y + INDIC_RADIUS + (y_comp * (INDIC_RADIUS_INNER));
 
     for (int i = 0; i < 9; i++) {
-        float end = this->start_angle + 48 * i / 8.0;
+        float end = this->start_angle + INDIC_ANGLE_WIDTH * i / 8.0;
         x_comps[i] = sin_d(end + 90);
         y_comps[i] = sin_d(end);
     }
-    float end = this->start_angle + 48 * REDLINE / 8000.0;
+    float end = this->start_angle + INDIC_ANGLE_WIDTH * REDLINE / 8000.0;
     redline_x_comp = sin_d(end + 90);
     redline_y_comp = sin_d(end);
 
@@ -128,7 +130,7 @@ void Tach5::event(const lv_obj_class_t * cls, lv_event_t * event) {
         lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER, this->end_angle, redline_angle);
 
         arc_dsc.color = RED_OFF;
-        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER, redline_angle, this->start_angle + 48);
+        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER, redline_angle, this->start_angle + INDIC_ANGLE_WIDTH);
 
         // top line
         lv_draw_arc_dsc_init(&arc_dsc);
@@ -138,7 +140,7 @@ void Tach5::event(const lv_obj_class_t * cls, lv_event_t * event) {
         lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER + 3, this->start_angle, redline_angle);
 
         arc_dsc.color = RED_HALF;
-        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER + 3, redline_angle, this->start_angle + 48);
+        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER + 3, redline_angle, this->start_angle + INDIC_ANGLE_WIDTH);
 
         for (int i = 0; i < 9; i++) {
             // dashes

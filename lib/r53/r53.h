@@ -56,7 +56,7 @@ typedef enum {
 #define CAN_ID_X61F (1567) /* 0x61f */
 
 typedef PREPACK struct {
-	uint16_t Speed; /* scaling 0.1, offset 0.0, units none  */
+	uint16_t Speed; /* scaling 0.1, offset -0.6, units none  */
 	uint8_t Unk4; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Brake_Pedal_Pressed; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t unk6; /* scaling 1.0, offset 0.0, units none  */

@@ -256,6 +256,8 @@ void send_log(int fd, const char * log_name) {
     return;
   }
 
+  int64_t initial = -1;
+
   while((read = getline(&line, &len, file)) != -1) {
     int cursor = 0;
     uint64_t seconds = strtol(&line[cursor], NULL, 10);
@@ -263,6 +265,9 @@ void send_log(int fd, const char * log_name) {
       cursor++;
     cursor++;
     uint64_t miliseconds = strtol(&line[cursor], NULL, 10) + seconds * 1000;
+    if (initial == -1) {
+      initial = miliseconds;
+    }
     // printf("Waiting %lld miliseconds - now %lld\n", miliseconds, millis());
     while (line[cursor] != ' ')
       cursor++;
@@ -277,8 +282,8 @@ void send_log(int fd, const char * log_name) {
         b_s[1] = line[cursor++];
         command[index++] = strtol(b_s, NULL, 16);
       } 
-      if (miliseconds > millis())
-        delay(miliseconds - millis());
+      if (miliseconds > (millis() + initial))
+        delay(miliseconds - (millis() + initial));
       write_port(fd, command, index);
       printf("%08.3f R11 ", miliseconds / 1000.0);
       if (index == 12) {

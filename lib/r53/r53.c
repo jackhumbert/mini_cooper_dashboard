@@ -21,7 +21,7 @@ static int pack_can_0x153_ASC_1(can_obj_r53_h_t *o, uint64_t *data) {
 	assert(data);
 	register uint64_t x;
 	register uint64_t i = 0;
-	/* Speed: start-bit 11, length 13, endianess intel, scaling 0.0625, offset 0 */
+	/* Speed: start-bit 11, length 13, endianess intel, scaling 0.0625, offset -0.625 */
 	x = ((uint16_t)(o->can_0x153_ASC_1.Speed)) & 0x1fff;
 	x <<= 11; 
 	i |= x;
@@ -80,7 +80,7 @@ static int unpack_can_0x153_ASC_1(can_obj_r53_h_t *o, uint64_t data, uint8_t dlc
 	register uint64_t i = (data);
 	if (dlc < 8)
 		return -1;
-	/* Speed: start-bit 11, length 13, endianess intel, scaling 0.0625, offset 0 */
+	/* Speed: start-bit 11, length 13, endianess intel, scaling 0.0625, offset -0.625 */
 	x = (i >> 11) & 0x1fff;
 	o->can_0x153_ASC_1.Speed = x;
 	/* Unk4: start-bit 40, length 8, endianess intel, scaling 1, offset 0 */
@@ -126,12 +126,14 @@ int decode_can_0x153_Speed(const can_obj_r53_h_t *o, double *out) {
 	assert(out);
 	double rval = (double)(o->can_0x153_ASC_1.Speed);
 	rval *= 0.0625;
+	rval += -0.625;
 	*out = rval;
 	return 0;
 }
 
 int encode_can_0x153_Speed(can_obj_r53_h_t *o, double in) {
 	assert(o);
+	in += 0.625;
 	in *= 16;
 	o->can_0x153_ASC_1.Speed = in;
 	return 0;
