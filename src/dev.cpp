@@ -3,14 +3,13 @@
 #include <ESP32Time.h>
 #include "messages.h"
 #include "dash.h"
-#include <SdFat.h>
+#include <SD.h>
 
 ESP32Time rtc(-18000);  // offset in seconds GMT+1
-extern SdFat sd;
 
 static int list_logs() {
     char number_buffer[8];
-    FsFile number_file = sd.open("/log_number.txt", O_RDONLY);
+    File number_file = SD.open("/log_number.txt", "r", true);
     long log_number = 0;
     if (number_file.size()) {
         number_file.readBytes(number_buffer, number_file.size());

@@ -1,8 +1,7 @@
 #include "sd_card.h"
 #include <SPI.h>
 #include "messages.h"
-#include <SdFat.h>
-#include <RingBuf.h>
+#include <SD.h>
 
 // SD CARD
 
@@ -14,10 +13,8 @@
 
 static char log_filename[20];
 
-static FsFile log_file;
+static File log_file;
 static pthread_mutex_t log_file_mutex;
-
-SdFat sd;
 
 #define NUM_BUFFERS 4
 #define FILE_BUFFER_LENGTH 512
@@ -55,7 +52,7 @@ static void buffer_write(uint8_t * buffer, buffer_length_t length) {
                 return;
             }
         }
-        vTaskDelay(1);
+        // vTaskDelay(1);
     }
     // Serial.println("Buffers are full or busy");
     // get_changed()->activity |= ACTIVITY_ERROR;
@@ -64,16 +61,17 @@ static void buffer_write(uint8_t * buffer, buffer_length_t length) {
 TaskHandle_t rb_flusher_task;
 
 static void rb_flusher(void * parameter) {
+    int i = 0;
     while (true) {
-        for (int i = 0; i < NUM_BUFFERS; i++) {
+        for (i = 0; i < NUM_BUFFERS; i++) {
             // if (file_buffer_length[i] && pthread_mutex_trylock(&buffer_mutex[i]) == 0) {
             if (file_buffer_length[i] == FILE_BUFFER_LENGTH) {
                 pthread_mutex_lock(&buffer_mutex[i]);
                 if (log_file.write(file_buffer[i], file_buffer_length[i]) == file_buffer_length[i]) {
                     log_file.flush();
                 } else {
-                    // add_message_fmt("Logging error: %02X", log_file.getError());
-                    // Serial.printf("Logging error: %02X\n", log_file.getError());
+                    // add_message_fmt("Logging error: %02X", log_file.getWriteError());
+                    Serial.printf("Logging error: %02X\n", log_file.getWriteError());
                     get_changed()->activity |= ACTIVITY_ERROR;
                 }
                 file_buffer_length[i] = 0;
@@ -89,7 +87,7 @@ bool sd_card_init() {
     SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
     // // delay(100);
 	pthread_mutex_init(&log_file_mutex, NULL);
-    if (!sd.begin(SD_CS, SD_SCK_MHZ(10))) {
+    if (!SD.begin()) {
         add_message("SD Card Mount Failed");
         return false;
     }
@@ -103,15 +101,15 @@ bool sd_card_init() {
     // add_message_fmt("SD Card Size: %lluMB", cardSize);
 
     char number_buffer[8];
-    FsFile number_file = sd.open("/log_number.txt", O_RDWR | O_CREAT);
+    File number_file = SD.open("/log_number.txt", FILE_READ);
     long log_number = 0;
     if (number_file.size()) {
         number_file.readBytes(number_buffer, number_file.size());
         log_number = strtol(number_buffer, NULL, 10) + 1;
     }
 
-    number_file.seek(0);
-    number_file.truncate();
+    number_file.close();
+    number_file = SD.open("/log_number.txt", FILE_WRITE);
     number_file.printf("%d", log_number);
     number_file.close();
     
@@ -119,7 +117,7 @@ bool sd_card_init() {
 
     add_message_fmt("Log file: %s", log_filename);
     set_log_filename(log_filename);
-    log_file = sd.open(log_filename, O_WRONLY | O_CREAT | O_TRUNC);
+    log_file = SD.open(log_filename, FILE_WRITE, true);
     // log_file.preAllocate(10 * 25000 * 60);
 
     for (int i = 0; i < NUM_BUFFERS; i++) {
@@ -132,7 +130,7 @@ bool sd_card_init() {
     xTaskCreatePinnedToCore(
         rb_flusher, // Task function.
         "writeTask", // String with name of task.
-        5000, // Stack size in bytes. This seems enough for it not to crash.
+        10000, // Stack size in bytes. This seems enough for it not to crash.
         NULL, // Parameter passed as input of the task.
         1, // Priority of the task.
         &rb_flusher_task, // Task handle.
@@ -160,12 +158,9 @@ void stop_logging(void) {
         }
     }
     set_log_filename("");
-    if (log_file.close()) {
-        SPI.end();
-        add_message_fmt("Closed: %s", log_filename);
-    } else {
-        add_message("Error closing log file");
-    }
+    log_file.close();
+    SPI.end();
+    add_message_fmt("Closed: %s", log_filename);
 }
 
 void sd_card_logf(const char * format, ...) {
@@ -221,9 +216,9 @@ int sd_card_get_log(unsigned char * data) {
     sprintf(filename, "/log_%08llu.crtd", *(uint64_t*)data);
 
     // pthread_mutex_lock(&log_file_mutex);
-    if (sd.exists(filename)) {
+    if (SD.exists(filename)) {
         add_message_fmt("Dumping %s", filename);
-        FsFile file = sd.open(filename, O_RDONLY);
+        File file = SD.open(filename, "r");
         Serial.printf("%08lX\n", file.size());
         // could get file info too
         // file.getLastWrite();

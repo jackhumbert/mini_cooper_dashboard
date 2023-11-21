@@ -21,6 +21,7 @@ static lv_color_t * disp_draw_buf2 = NULL;
 #include "sd_card.h"
 #include "can.h"
 #include "serial_can.h"
+#include "screen_brightness.hpp"
 
 Serial_CAN can;
 
@@ -146,7 +147,7 @@ uint32_t get_id(uint8_t * data) {
 
 static int hangers = 0;
 
-void CAN_Task_loop(void * parameter) {
+void CAN_Task_loop(void * p) {
     while (true) {
         int avail = Serial.available();
         if (avail >= 12) {
@@ -210,43 +211,6 @@ const char* ntpServer = "pool.ntp.org";
 const long  gmtOffset_sec = 0;
 const int   daylightOffset_sec = 3600;
 
-#define SCREEN_FADE_TIME 2
-
-TaskHandle_t screen_fade_task;
-static bool fade_active;
-
-void screen_fade_cb(void * parameter) {
-    fade_active = true;
-    unsigned long start = millis();
-    uint8_t start_value = gfx.getBrightness();
-    uint8_t end_value = get_cache()->running_lights ? 64 : 255;
-    while (millis() - start < (SCREEN_FADE_TIME * 1000)) {
-        unsigned long time_diff = millis() - start;
-        uint32_t value = round(pow(time_diff / (SCREEN_FADE_TIME * 1000.0), 2) * (end_value - start_value) + start_value);
-        // uint32_t value = round(time_diff / (SCREEN_FADE_TIME * 1000.0) * (get_dash()->lights ? 10 : 255));
-        // add_message_fmt("brightness: %d", value);
-        gfx.setBrightness(value);
-    }
-    gfx.setBrightness(end_value);
-    fade_active = false;
-    vTaskDelete(screen_fade_task);
-};
-
-extern "C" void start_screen_fade(void) {
-    uint8_t end_value = get_cache()->running_lights ? get_cache()->interior_light_level : 255;
-    gfx.setBrightness(end_value);
-    // if (fade_active)
-    //     vTaskDelete(screen_fade_task);
-    // xTaskCreatePinnedToCore(
-    //   screen_fade_cb, /* Function to implement the task */
-    //   "Screen Fade In", /* Name of the task */
-    //   1000,  /* Stack size in words */
-    //   NULL,  /* Task input parameter */
-    //   2,  /* Priority of the task */
-    //   &screen_fade_task,  /* Task handle. */
-    //   0); /* Core where the task should run */
-}
-
 // void timer_handler(void * _) {
 //     while (true) {
 //         lv_timer_handler_run_in_period(5);
@@ -254,7 +218,42 @@ extern "C" void start_screen_fade(void) {
 //     }
 // }
 
+#include "driver/uart.h"
+
+void serial_error(hardwareSerial_error_t error) {
+    switch(error) {
+        case UART_FIFO_OVF:
+            get_changed()->activity |= ACTIVITY_ERROR;
+            // Serial.printf("FIFO Overflow. Consider adding Hardware Flow Control to your Application.\n");
+            break;
+        case UART_BUFFER_FULL:
+            get_changed()->activity |= ACTIVITY_ERROR;
+            // Serial.printf("Buffer Full. Consider increasing your buffer size of your Application.\n");
+            break;
+        case UART_BREAK:
+            get_changed()->activity |= ACTIVITY_ERROR;
+            // Serial.printf("RX break.\n");
+            break;
+        case UART_PARITY_ERR:
+            get_changed()->activity |= ACTIVITY_ERROR;
+            // Serial.printf("parity error.\n");
+            break;
+        case UART_FRAME_ERR:
+            get_changed()->activity |= ACTIVITY_ERROR;
+            // Serial.printf("frame error.\n");
+            break;
+        default:
+            get_changed()->activity |= ACTIVITY_ERROR;
+            // Serial.printf("unknown event type %d.\n", error);
+            break;
+    }
+}
+
 void setup_can() {
+    // Serial.setRxFIFOFull(12);
+    Serial.setRxBufferSize(1 << 15);
+    // Serial.onReceive(CAN_Task_loop, false);
+    Serial.onReceiveError(serial_error);
     can.begin(Serial, 115200);
 
     xTaskCreatePinnedToCore(
@@ -355,7 +354,7 @@ void setup() {
     gfx.setColorDepth(16); 
     gfx.clearDisplay();
 
-    start_screen_fade();
+    ScreenBrightness::fade_in();
 
     lv_init();
     // lv_log_register_print_cb(my_log_cb);

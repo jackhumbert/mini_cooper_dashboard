@@ -26,6 +26,7 @@ extern "C"
 #include "activity.h"
 #include "accel.hpp"
 #include "odometer.hpp"
+#include "screen_brightness.hpp"
 
 extern void start_screen_fade(void);
 
@@ -97,6 +98,16 @@ static void change_theme(lv_event_t * e) {
     }
 }
 
+static void reset_serial(lv_event_t * e) {
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t * obj = lv_event_get_target(e);
+
+    if(code == LV_EVENT_CLICKED) {
+        Serial.end();
+        Serial.begin(115200);
+    }
+}
+
 lv_obj_t * logging_label;
 static Tach4 * tach;
 
@@ -144,6 +155,7 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     widgets.push_back(std::unique_ptr<Widget>(new Fuel(canvas)));
     widgets.push_back(std::unique_ptr<Widget>(new Accel(canvas)));
     widgets.push_back(std::unique_ptr<Widget>(new Odometer(canvas)));
+    widgets.push_back(std::unique_ptr<Widget>(new ScreenBrightness()));
 
     lv_obj_t * turn_left = turn_signal_left_create(canvas);
     lv_obj_align(turn_left, LV_ALIGN_TOP_LEFT, 295 - 24, 308 - 40);
@@ -226,6 +238,15 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     lv_label_set_text(label, "Change Theme");
 }
 
+{
+    lv_obj_t * msg_clea = lv_btn_create(canvas);
+    lv_obj_add_event_cb(msg_clea, reset_serial, LV_EVENT_ALL, NULL);
+    lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -5, 130);
+
+    lv_obj_t * label = lv_label_create(msg_clea);
+    lv_label_set_text(label, "Reset Serial");
+}
+
     activity_create(canvas);
 
     // memset(&dashboard_changed, 1, sizeof(dashboard_changed_t));
@@ -245,7 +266,7 @@ void dash_loop(void) {
     memset(&dashboard_changed, 0, sizeof(dashboard_changed_t));
 	pthread_mutex_unlock(&get_dash()->mutex);
 
-    if (events) {
+    if (events || true) {
         for (auto &widget : widgets) {
             widget->update();
         }
@@ -274,9 +295,6 @@ void dash_loop(void) {
             }
         }
         turn_signal_update();
-        if (dashboard_queued.running_lights) {
-            start_screen_fade();
-        }
     }
     activity_update(dashboard_queued.activity);
 }
