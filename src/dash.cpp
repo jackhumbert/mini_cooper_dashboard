@@ -108,8 +108,16 @@ static void reset_serial(lv_event_t * e) {
     }
 }
 
+static void playback_latest(lv_event_t * e) {
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t * obj = lv_event_get_target(e);
+
+    if(code == LV_EVENT_CLICKED) {
+        playback_latest_log();
+    }
+}
+
 lv_obj_t * logging_label;
-static Tach4 * tach;
 
 static void toggle_logging(lv_event_t * e) {
     lv_event_code_t code = lv_event_get_code(e);
@@ -240,11 +248,12 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
 
 {
     lv_obj_t * msg_clea = lv_btn_create(canvas);
-    lv_obj_add_event_cb(msg_clea, reset_serial, LV_EVENT_ALL, NULL);
+    lv_obj_add_flag(msg_clea, LV_OBJ_FLAG_CHECKABLE);
+    lv_obj_add_event_cb(msg_clea, playback_latest, LV_EVENT_ALL, NULL);
     lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -5, 130);
 
     lv_obj_t * label = lv_label_create(msg_clea);
-    lv_label_set_text(label, "Reset Serial");
+    lv_label_set_text(label, "Playback Latest");
 }
 
     activity_create(canvas);

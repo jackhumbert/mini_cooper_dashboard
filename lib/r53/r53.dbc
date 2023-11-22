@@ -42,6 +42,7 @@ BO_ 809 x329_DME2: 8 DME_Etc
    SG_ Engine_Temp : 8|8@1+ (0.75,-48.373) [0|0] "deg_c" Vector__XXX
    SG_ Throttle_Position : 40|8@1+ (1,0) [0|0] "%" DME_Etc
    SG_ Cycling_Number : 0|8@1+ (1,0) [0|0] "" DME_Etc
+   SG_ CruiseActive : 51|1@1+ (1,0) [0|0] "" DME_Etc
 
 BO_ 1557 x615: 8 DME_Etc
    SG_ OutsideTemp : 24|8@1- (1,0) [0|0] "deg_c" DME_Etc
@@ -67,7 +68,7 @@ BO_ 1349 x545_DME4: 8 DME_Etc
    SG_ Unk7 : 56|8@1+ (1,0) [0|0] "" DME_Etc
 
 BO_ 1555 x613_Instrument_Cluster: 8 DME_Etc
-   SG_ Odometer : 0|16@1+ (10,0) [0|0] "" Vector__XXX
+   SG_ OdometerTens : 0|16@1+ (10,0) [0|0] "" Vector__XXX
    SG_ Fuel_Level : 16|7@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Running_Clock : 24|16@1+ (1,0) [0|0] "minutes" DME_Etc
    SG_ Unk40 : 40|6@1+ (1,0) [0|1] "" Vector__XXX
@@ -152,6 +153,9 @@ BO_ 1562 x61A: 8 DME_Etc
    SG_ SyncClockNotRunning : 24|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ unk27 : 27|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ CustomValue : 40|16@1+ (1,0) [0|65555] "" Vector__XXX
+   SG_ OdometerOnes : 0|19@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ OdometerTenths : 24|7@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ Unk4 : 32|8@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 822 x336: 8 DME_Etc
    SG_ Unk0 : 0|16@1+ (1,0) [0|1] "" Vector__XXX
@@ -175,6 +179,8 @@ BO_ 1281 x501: 8 DME_Etc
 BA_DEF_ BO_ "GenMsgBackgroundColor" STRING ;
 BA_DEF_ BO_ "GenMsgForegroundColor" STRING ;
 BA_DEF_ BO_ "isj1939dbc" INT 0 0;
+BA_DEF_ BO_ "matchingcriteria" INT 0 0;
+BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_DEF_ BO_ "matchingcriteria" INT 0 0;
 BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_DEF_ BO_ "matchingcriteria" INT 0 0;

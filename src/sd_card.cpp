@@ -2,6 +2,7 @@
 #include <SPI.h>
 #include "messages.h"
 #include <SD.h>
+#include "can.h"
 
 // SD CARD
 
@@ -83,14 +84,18 @@ static void rb_flusher(void * parameter) {
     }
 }
 
+bool sd_mounted = false;
+
 bool sd_card_init() {
-    SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
-    // // delay(100);
-	pthread_mutex_init(&log_file_mutex, NULL);
-    if (!SD.begin()) {
-        add_message("SD Card Mount Failed");
-        return false;
+    if (!sd_mounted) {
+        SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
+        pthread_mutex_init(&log_file_mutex, NULL);
+        if (!SD.begin()) {
+            add_message("SD Card Mount Failed");
+            return false;
+        }
     }
+    sd_mounted = true;
     // uint8_t cardType = sd.cardType();
 
     // if (cardType == CARD_NONE) {
@@ -232,5 +237,104 @@ int sd_card_get_log(unsigned char * data) {
         add_message_fmt("Couldn't find %s", filename);
         // pthread_mutex_unlock(&log_file_mutex);
         return -1;
+    }
+}
+
+TaskHandle_t playback_task;
+File playback_log_file;
+
+void playback_latest_log_task(void * _) {
+    if (!sd_mounted) {
+        SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
+        if (!SD.begin()) {
+            add_message("SD Card Mount Failed");
+            return;
+        }
+    }
+    sd_mounted = true;
+
+    static char filename[20];
+    char number_buffer[8];
+    File number_file = SD.open("/log_number.txt", FILE_READ);
+    long log_number = 0;
+    if (number_file.size()) {
+        number_file.readBytes(number_buffer, number_file.size());
+        log_number = strtol(number_buffer, NULL, 10);
+    }
+
+    number_file.close();
+    
+    sprintf(filename, "/log_%08ld.crtd", log_number);
+
+    add_message_fmt("Playing back log: %s", filename);
+
+    if (playback_log_file)
+        playback_log_file.close();
+    playback_log_file = SD.open(filename, FILE_READ);
+    playback_log_file.seek(0);
+
+    uint8_t command[30] = {0};
+    ssize_t read;
+    int64_t initial = -1;
+    char line[48] = {0};
+    size_t len = 0;
+    uint64_t starting = millis();
+    
+    while (playback_log_file.available()) {
+        read = playback_log_file.readBytesUntil('\n', (uint8_t*)line, 48);
+        int cursor = 0;
+        uint64_t seconds = strtol(&line[cursor], NULL, 10);
+        while (line[cursor] != '.')
+            cursor++;
+        cursor++;
+        uint64_t miliseconds = strtol(&line[cursor], NULL, 10) + seconds * 1000;
+        if (initial == -1) {
+            initial = miliseconds;
+        }
+        // printf("Waiting %lld miliseconds - now %lld\n", miliseconds, millis());
+        while (line[cursor] != ' ')
+            cursor++;
+        if (line[cursor+1] == 'R' && line[cursor+2] == '1' && line[cursor+3] == '1') {
+            cursor += 4;
+            uint8_t index = 0;
+            while (line[cursor] != '\n') {
+                if (line[cursor] == ' ')
+                    cursor++; // skip spaces
+                char b_s[3] = { 0 };
+                b_s[0] = line[cursor++];
+                b_s[1] = line[cursor++];
+                command[index++] = strtol(b_s, NULL, 16);
+            } 
+            if ((starting + miliseconds) > (millis() + initial))
+                delay((starting + miliseconds) - (millis() + initial));
+            if (index = 12) {            
+                // Serial.printf("%02X%02X%02X%02X %02X %02X %02X %02X %02X %02X %02X %02X\n", command[0], command[1], command[2], command[3], command[4], command[5], command[6], command[7], command[8], command[9], command[10], command[11]);
+                process_packet(command);
+            }
+        } else {
+            // printf("%s", line);
+        }
+        vTaskDelay(1);
+    }
+
+    playback_log_file.close();
+    SD.end();
+    SPI.end();
+    vTaskDelete(NULL);
+}
+
+void playback_latest_log(void) {
+    if (playback_task) {
+        vTaskDelete(playback_task);
+        playback_task = NULL;
+    } else {
+        xTaskCreatePinnedToCore(
+            playback_latest_log_task, // Task function.
+            "playback", // String with name of task.
+            10000, // Stack size in bytes. This seems enough for it not to crash.
+            NULL, // Parameter passed as input of the task.
+            1, // Priority of the task.
+            &playback_task, // Task handle.
+            0);
     }
 }

@@ -969,6 +969,10 @@ static int pack_can_0x329_x329_DME2(can_obj_r53_h_t *o, uint64_t *data) {
 	x = ((uint8_t)(o->can_0x329_x329_DME2.Throttle_Position)) & 0xff;
 	x <<= 40; 
 	i |= x;
+	/* CruiseActive: start-bit 51, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x329_x329_DME2.CruiseActive)) & 0x1;
+	x <<= 51; 
+	i |= x;
 	*data = (i);
 	o->can_0x329_x329_DME2_tx = 1;
 	return 8;
@@ -990,6 +994,9 @@ static int unpack_can_0x329_x329_DME2(can_obj_r53_h_t *o, uint64_t data, uint8_t
 	/* Throttle_Position: start-bit 40, length 8, endianess intel, scaling 1, offset 0 */
 	x = (i >> 40) & 0xff;
 	o->can_0x329_x329_DME2.Throttle_Position = x;
+	/* CruiseActive: start-bit 51, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 51) & 0x1;
+	o->can_0x329_x329_DME2.CruiseActive = x;
 	o->can_0x329_x329_DME2_rx = 1;
 	o->can_0x329_x329_DME2_time_stamp_rx = time_stamp;
 	return 8;
@@ -1041,6 +1048,20 @@ int encode_can_0x329_Throttle_Position(can_obj_r53_h_t *o, uint8_t in) {
 	return 0;
 }
 
+int decode_can_0x329_CruiseActive(const can_obj_r53_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x329_x329_DME2.CruiseActive);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x329_CruiseActive(can_obj_r53_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x329_x329_DME2.CruiseActive = in;
+	return 0;
+}
+
 int print_can_0x329_x329_DME2(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
@@ -1048,6 +1069,7 @@ int print_can_0x329_x329_DME2(const can_obj_r53_h_t *o, FILE *output) {
 	r = print_helper(r, fprintf(output, "Cycling_Number = (wire: %.0f)\n", (double)(o->can_0x329_x329_DME2.Cycling_Number)));
 	r = print_helper(r, fprintf(output, "Engine_Temp = (wire: %.0f)\n", (double)(o->can_0x329_x329_DME2.Engine_Temp)));
 	r = print_helper(r, fprintf(output, "Throttle_Position = (wire: %.0f)\n", (double)(o->can_0x329_x329_DME2.Throttle_Position)));
+	r = print_helper(r, fprintf(output, "CruiseActive = (wire: %.0f)\n", (double)(o->can_0x329_x329_DME2.CruiseActive)));
 	return r;
 }
 
@@ -1957,8 +1979,8 @@ static int pack_can_0x613_x613_Instrument_Cluster(can_obj_r53_h_t *o, uint64_t *
 	assert(data);
 	register uint64_t x;
 	register uint64_t i = 0;
-	/* Odometer: start-bit 0, length 16, endianess intel, scaling 10, offset 0 */
-	x = ((uint16_t)(o->can_0x613_x613_Instrument_Cluster.Odometer)) & 0xffff;
+	/* OdometerTens: start-bit 0, length 16, endianess intel, scaling 10, offset 0 */
+	x = ((uint16_t)(o->can_0x613_x613_Instrument_Cluster.OdometerTens)) & 0xffff;
 	i |= x;
 	/* Running_Clock: start-bit 24, length 16, endianess intel, scaling 1, offset 0 */
 	x = ((uint16_t)(o->can_0x613_x613_Instrument_Cluster.Running_Clock)) & 0xffff;
@@ -1996,9 +2018,9 @@ static int unpack_can_0x613_x613_Instrument_Cluster(can_obj_r53_h_t *o, uint64_t
 	register uint64_t i = (data);
 	if (dlc < 8)
 		return -1;
-	/* Odometer: start-bit 0, length 16, endianess intel, scaling 10, offset 0 */
+	/* OdometerTens: start-bit 0, length 16, endianess intel, scaling 10, offset 0 */
 	x = i & 0xffff;
-	o->can_0x613_x613_Instrument_Cluster.Odometer = x;
+	o->can_0x613_x613_Instrument_Cluster.OdometerTens = x;
 	/* Running_Clock: start-bit 24, length 16, endianess intel, scaling 1, offset 0 */
 	x = (i >> 24) & 0xffff;
 	o->can_0x613_x613_Instrument_Cluster.Running_Clock = x;
@@ -2023,19 +2045,19 @@ static int unpack_can_0x613_x613_Instrument_Cluster(can_obj_r53_h_t *o, uint64_t
 	return 8;
 }
 
-int decode_can_0x613_Odometer(const can_obj_r53_h_t *o, double *out) {
+int decode_can_0x613_OdometerTens(const can_obj_r53_h_t *o, double *out) {
 	assert(o);
 	assert(out);
-	double rval = (double)(o->can_0x613_x613_Instrument_Cluster.Odometer);
+	double rval = (double)(o->can_0x613_x613_Instrument_Cluster.OdometerTens);
 	rval *= 10;
 	*out = rval;
 	return 0;
 }
 
-int encode_can_0x613_Odometer(can_obj_r53_h_t *o, double in) {
+int encode_can_0x613_OdometerTens(can_obj_r53_h_t *o, double in) {
 	assert(o);
 	in *= 0.1;
-	o->can_0x613_x613_Instrument_Cluster.Odometer = in;
+	o->can_0x613_x613_Instrument_Cluster.OdometerTens = in;
 	return 0;
 }
 
@@ -2153,7 +2175,7 @@ int print_can_0x613_x613_Instrument_Cluster(const can_obj_r53_h_t *o, FILE *outp
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "Odometer = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Odometer)));
+	r = print_helper(r, fprintf(output, "OdometerTens = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.OdometerTens)));
 	r = print_helper(r, fprintf(output, "Running_Clock = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Running_Clock)));
 	r = print_helper(r, fprintf(output, "Fuel_Level = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Fuel_Level)));
 	r = print_helper(r, fprintf(output, "Unk40 = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Unk40)));
@@ -2368,13 +2390,28 @@ static int pack_can_0x61a_x61A(can_obj_r53_h_t *o, uint64_t *data) {
 	assert(data);
 	register uint64_t x;
 	register uint64_t i = 0;
+	/* OdometerOnes: start-bit 0, length 19, endianess intel, scaling 1, offset 0 */
+	x = ((uint32_t)(o->can_0x61a_x61A.OdometerOnes)) & 0x7ffff;
+	i |= x;
 	/* CustomValue: start-bit 40, length 16, endianess intel, scaling 1, offset 0 */
 	x = ((uint16_t)(o->can_0x61a_x61A.CustomValue)) & 0xffff;
 	x <<= 40; 
 	i |= x;
+	/* Unk4: start-bit 32, length 8, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x61a_x61A.Unk4)) & 0xff;
+	x <<= 32; 
+	i |= x;
+	/* OdometerTenths: start-bit 24, length 7, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x61a_x61A.OdometerTenths)) & 0x7f;
+	x <<= 24; 
+	i |= x;
 	/* StalkState: start-bit 56, length 4, endianess intel, scaling 1, offset 0 */
 	x = ((uint8_t)(o->can_0x61a_x61A.StalkState)) & 0xf;
 	x <<= 56; 
+	i |= x;
+	/* unk63: start-bit 63, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x61a_x61A.unk63)) & 0x1;
+	x <<= 63; 
 	i |= x;
 	/* SyncClockNotRunning: start-bit 24, length 1, endianess intel, scaling 1, offset 0 */
 	x = ((uint8_t)(o->can_0x61a_x61A.SyncClockNotRunning)) & 0x1;
@@ -2388,10 +2425,6 @@ static int pack_can_0x61a_x61A(can_obj_r53_h_t *o, uint64_t *data) {
 	x = ((uint8_t)(o->can_0x61a_x61A.SyncClockRunning)) & 0x1;
 	x <<= 31; 
 	i |= x;
-	/* unk63: start-bit 63, length 1, endianess intel, scaling 1, offset 0 */
-	x = ((uint8_t)(o->can_0x61a_x61A.unk63)) & 0x1;
-	x <<= 63; 
-	i |= x;
 	*data = (i);
 	o->can_0x61a_x61A_tx = 1;
 	return 8;
@@ -2404,12 +2437,24 @@ static int unpack_can_0x61a_x61A(can_obj_r53_h_t *o, uint64_t data, uint8_t dlc,
 	register uint64_t i = (data);
 	if (dlc < 8)
 		return -1;
+	/* OdometerOnes: start-bit 0, length 19, endianess intel, scaling 1, offset 0 */
+	x = i & 0x7ffff;
+	o->can_0x61a_x61A.OdometerOnes = x;
 	/* CustomValue: start-bit 40, length 16, endianess intel, scaling 1, offset 0 */
 	x = (i >> 40) & 0xffff;
 	o->can_0x61a_x61A.CustomValue = x;
+	/* Unk4: start-bit 32, length 8, endianess intel, scaling 1, offset 0 */
+	x = (i >> 32) & 0xff;
+	o->can_0x61a_x61A.Unk4 = x;
+	/* OdometerTenths: start-bit 24, length 7, endianess intel, scaling 1, offset 0 */
+	x = (i >> 24) & 0x7f;
+	o->can_0x61a_x61A.OdometerTenths = x;
 	/* StalkState: start-bit 56, length 4, endianess intel, scaling 1, offset 0 */
 	x = (i >> 56) & 0xf;
 	o->can_0x61a_x61A.StalkState = x;
+	/* unk63: start-bit 63, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 63) & 0x1;
+	o->can_0x61a_x61A.unk63 = x;
 	/* SyncClockNotRunning: start-bit 24, length 1, endianess intel, scaling 1, offset 0 */
 	x = (i >> 24) & 0x1;
 	o->can_0x61a_x61A.SyncClockNotRunning = x;
@@ -2419,12 +2464,23 @@ static int unpack_can_0x61a_x61A(can_obj_r53_h_t *o, uint64_t data, uint8_t dlc,
 	/* SyncClockRunning: start-bit 31, length 1, endianess intel, scaling 1, offset 0 */
 	x = (i >> 31) & 0x1;
 	o->can_0x61a_x61A.SyncClockRunning = x;
-	/* unk63: start-bit 63, length 1, endianess intel, scaling 1, offset 0 */
-	x = (i >> 63) & 0x1;
-	o->can_0x61a_x61A.unk63 = x;
 	o->can_0x61a_x61A_rx = 1;
 	o->can_0x61a_x61A_time_stamp_rx = time_stamp;
 	return 8;
+}
+
+int decode_can_0x61a_OdometerOnes(const can_obj_r53_h_t *o, uint32_t *out) {
+	assert(o);
+	assert(out);
+	uint32_t rval = (uint32_t)(o->can_0x61a_x61A.OdometerOnes);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x61a_OdometerOnes(can_obj_r53_h_t *o, uint32_t in) {
+	assert(o);
+	o->can_0x61a_x61A.OdometerOnes = in;
+	return 0;
 }
 
 int decode_can_0x61a_CustomValue(const can_obj_r53_h_t *o, uint16_t *out) {
@@ -2441,6 +2497,34 @@ int encode_can_0x61a_CustomValue(can_obj_r53_h_t *o, uint16_t in) {
 	return 0;
 }
 
+int decode_can_0x61a_Unk4(const can_obj_r53_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x61a_x61A.Unk4);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x61a_Unk4(can_obj_r53_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x61a_x61A.Unk4 = in;
+	return 0;
+}
+
+int decode_can_0x61a_OdometerTenths(const can_obj_r53_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x61a_x61A.OdometerTenths);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x61a_OdometerTenths(can_obj_r53_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x61a_x61A.OdometerTenths = in;
+	return 0;
+}
+
 int decode_can_0x61a_StalkState(const can_obj_r53_h_t *o, uint8_t *out) {
 	assert(o);
 	assert(out);
@@ -2452,6 +2536,20 @@ int decode_can_0x61a_StalkState(const can_obj_r53_h_t *o, uint8_t *out) {
 int encode_can_0x61a_StalkState(can_obj_r53_h_t *o, uint8_t in) {
 	assert(o);
 	o->can_0x61a_x61A.StalkState = in;
+	return 0;
+}
+
+int decode_can_0x61a_unk63(const can_obj_r53_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x61a_x61A.unk63);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x61a_unk63(can_obj_r53_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x61a_x61A.unk63 = in;
 	return 0;
 }
 
@@ -2497,30 +2595,19 @@ int encode_can_0x61a_SyncClockRunning(can_obj_r53_h_t *o, uint8_t in) {
 	return 0;
 }
 
-int decode_can_0x61a_unk63(const can_obj_r53_h_t *o, uint8_t *out) {
-	assert(o);
-	assert(out);
-	uint8_t rval = (uint8_t)(o->can_0x61a_x61A.unk63);
-	*out = rval;
-	return 0;
-}
-
-int encode_can_0x61a_unk63(can_obj_r53_h_t *o, uint8_t in) {
-	assert(o);
-	o->can_0x61a_x61A.unk63 = in;
-	return 0;
-}
-
 int print_can_0x61a_x61A(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
+	r = print_helper(r, fprintf(output, "OdometerOnes = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.OdometerOnes)));
 	r = print_helper(r, fprintf(output, "CustomValue = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.CustomValue)));
+	r = print_helper(r, fprintf(output, "Unk4 = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.Unk4)));
+	r = print_helper(r, fprintf(output, "OdometerTenths = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.OdometerTenths)));
 	r = print_helper(r, fprintf(output, "StalkState = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.StalkState)));
+	r = print_helper(r, fprintf(output, "unk63 = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.unk63)));
 	r = print_helper(r, fprintf(output, "SyncClockNotRunning = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.SyncClockNotRunning)));
 	r = print_helper(r, fprintf(output, "unk27 = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.unk27)));
 	r = print_helper(r, fprintf(output, "SyncClockRunning = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.SyncClockRunning)));
-	r = print_helper(r, fprintf(output, "unk63 = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.unk63)));
 	return r;
 }
 

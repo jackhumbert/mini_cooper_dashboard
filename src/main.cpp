@@ -38,6 +38,7 @@ static uint32_t screenHeight;
 // static lv_disp_drv_t disp_drv;
 
 #include "screen.h"
+#include <stdio.h>
 LGFX gfx;
 
 /* Display flushing */
@@ -86,10 +87,6 @@ int sd_card_log_printf(const char* format, va_list args) {
     return 0;
 }
 
-TaskHandle_t CAN_Task;
-
-static uint8_t process_buffer[12];
-
 static bool validate_id(uint32_t id) {
     return (id >= 0x153 && id <= 0xA00);
 }
@@ -103,37 +100,6 @@ static bool filter_id(uint32_t id) {
     return false;
 }
 
-TaskHandle_t process_packet_task;
-static uint8_t buffer[12 + 8];
-static uint8_t * packet_data;
-
-void process_packet(void * _) {
-    uint32_t id;
-    uint8_t * data = packet_data; 
-    // memcpy(data, process_buffer, 12);
-
-    for(int i=0; i<4; i++) {
-        id <<= 8;
-        id += data[i];
-    }
-                
-    sd_card_logf("%08.3f R11 %08X %02X %02X %02X %02X %02X %02X %02X %02X\n", 
-        xTaskGetTickCount() / 1000.0, id,
-        data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11]);
-
-    uint16_t can_id = id & 0xFFFF;
-    dbcc_time_stamp_t ts = (id >> 16) & 0xFFFF;
-
-    pthread_mutex_lock(&get_dash()->mutex);
-    if (decode_can_message(ts, can_id, (uint8_t*)data + 4) < 0) {
-        get_changed()->activity |= ACTIVITY_ERROR;
-        sd_card_logf("%08.3f CER Could not decode latest message\n", xTaskGetTickCount() / 1000.0);
-    } else {
-        get_changed()->activity |= ACTIVITY_SUCCESS;
-    }
-    pthread_mutex_unlock(&get_dash()->mutex);
-    // vTaskDelete(process_packet_task);
-}
 
 uint32_t get_id(uint8_t * data) {
     uint32_t id = 0;
@@ -145,7 +111,9 @@ uint32_t get_id(uint8_t * data) {
     return id;
 }
 
+static uint8_t buffer[12 + 8];
 static int hangers = 0;
+TaskHandle_t CAN_Task;
 
 void CAN_Task_loop(void * p) {
     while (true) {
@@ -165,21 +133,11 @@ void CAN_Task_loop(void * p) {
             }
 
             if (validate_id(get_id(buffer + offset))) {     
-                packet_data = buffer + offset;
-                id = get_id(packet_data);
+                id = get_id(buffer + offset);
                 if (filter_id(id)) {
                     continue;
                 }       
-                // memcpy(process_buffer, buffer, 12);
-                process_packet(NULL);
-                // xTaskCreatePinnedToCore(
-                //     process_packet, /* Function to implement the task */
-                //     "Process CAN packet", /* Name of the task */
-                //     5000,  /* Stack size in words */
-                //     NULL,  /* Task input parameter */
-                //     1,  /* Priority of the task */
-                //     &process_packet_task,  /* Task handle. */
-                //     1); /* Core where the task should run */
+                process_packet(buffer + offset);
             } else {
                 get_changed()->activity |= ACTIVITY_ERROR;
                 sd_card_logf("%08.3f CER %08X %02X %02X %02X %02X %02X %02X %02X %02X\n", 
@@ -202,6 +160,7 @@ void CAN_Task_loop(void * p) {
         vTaskDelay(1);
     }
 }
+
 
 #include <Wifi.h>
 const char* ssid     = "Samuel";

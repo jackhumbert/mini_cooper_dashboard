@@ -110,6 +110,7 @@ typedef PREPACK struct {
 	uint8_t Cycling_Number; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Engine_Temp; /* scaling 0.8, offset -48.4, units deg_c  */
 	uint8_t Throttle_Position; /* scaling 1.0, offset 0.0, units %  */
+	uint8_t CruiseActive; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x329_x329_DME2_t;
 
 typedef PREPACK struct {
@@ -160,7 +161,7 @@ typedef PREPACK struct {
 } POSTPACK can_0x610_x610_t;
 
 typedef PREPACK struct {
-	uint16_t Odometer; /* scaling 10.0, offset 0.0, units none  */
+	uint16_t OdometerTens; /* scaling 10.0, offset 0.0, units none  */
 	uint16_t Running_Clock; /* scaling 1.0, offset 0.0, units minutes  */
 	uint8_t Fuel_Level; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Unk40; /* scaling 1.0, offset 0.0, units none  */
@@ -182,12 +183,15 @@ typedef PREPACK struct {
 } POSTPACK can_0x618_x618_t;
 
 typedef PREPACK struct {
+	uint32_t OdometerOnes; /* scaling 1.0, offset 0.0, units none  */
 	uint16_t CustomValue; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t Unk4; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t OdometerTenths; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t StalkState; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t unk63; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t SyncClockNotRunning; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t unk27; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t SyncClockRunning; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t unk63; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x61a_x61A_t;
 
 typedef PREPACK struct {
@@ -387,6 +391,8 @@ int decode_can_0x329_Engine_Temp(const can_obj_r53_h_t *o, double *out);
 int encode_can_0x329_Engine_Temp(can_obj_r53_h_t *o, double in);
 int decode_can_0x329_Throttle_Position(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x329_Throttle_Position(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x329_CruiseActive(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x329_CruiseActive(can_obj_r53_h_t *o, uint8_t in);
 
 
 int decode_can_0x336_Unk0(const can_obj_r53_h_t *o, uint16_t *out);
@@ -463,8 +469,8 @@ int decode_can_0x610_VIN(const can_obj_r53_h_t *o, uint64_t *out);
 int encode_can_0x610_VIN(can_obj_r53_h_t *o, uint64_t in);
 
 
-int decode_can_0x613_Odometer(const can_obj_r53_h_t *o, double *out);
-int encode_can_0x613_Odometer(can_obj_r53_h_t *o, double in);
+int decode_can_0x613_OdometerTens(const can_obj_r53_h_t *o, double *out);
+int encode_can_0x613_OdometerTens(can_obj_r53_h_t *o, double in);
 int decode_can_0x613_Running_Clock(const can_obj_r53_h_t *o, uint16_t *out);
 int encode_can_0x613_Running_Clock(can_obj_r53_h_t *o, uint16_t in);
 int decode_can_0x613_Fuel_Level(const can_obj_r53_h_t *o, uint8_t *out);
@@ -495,18 +501,24 @@ int decode_can_0x618_Unk2(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x618_Unk2(can_obj_r53_h_t *o, uint8_t in);
 
 
+int decode_can_0x61a_OdometerOnes(const can_obj_r53_h_t *o, uint32_t *out);
+int encode_can_0x61a_OdometerOnes(can_obj_r53_h_t *o, uint32_t in);
 int decode_can_0x61a_CustomValue(const can_obj_r53_h_t *o, uint16_t *out);
 int encode_can_0x61a_CustomValue(can_obj_r53_h_t *o, uint16_t in);
+int decode_can_0x61a_Unk4(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x61a_Unk4(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x61a_OdometerTenths(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x61a_OdometerTenths(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x61a_StalkState(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x61a_StalkState(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x61a_unk63(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x61a_unk63(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x61a_SyncClockNotRunning(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x61a_SyncClockNotRunning(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x61a_unk27(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x61a_unk27(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x61a_SyncClockRunning(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x61a_SyncClockRunning(can_obj_r53_h_t *o, uint8_t in);
-int decode_can_0x61a_unk63(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x61a_unk63(can_obj_r53_h_t *o, uint8_t in);
 
 
 int decode_can_0x61f_InteriorLightLevel(const can_obj_r53_h_t *o, uint8_t *out);

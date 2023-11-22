@@ -2,8 +2,8 @@
 #include <Wire.h>
 
 #define ODO_SEGMENT_WIDTH 19
-#define ODOMETER_WIDTH (ODO_SEGMENT_WIDTH * 9)
-#define ODO_NUM_DECIMALS 2
+#define ODO_WIDTH (ODO_SEGMENT_WIDTH * ODO_SEGMENTS)
+#define ODO_NUM_DECIMALS 1
 
 float additional_km = 0;
 uint64_t last_measure = 0;
@@ -19,11 +19,13 @@ void Odometer::update(void) {
         additional_km = 0;
     }
     // km to mi
-    uint64_t decimiles = (get_cache()->odometer + additional_km) / 1.609 * pow(10, ODO_NUM_DECIMALS);
+    // uint64_t decimiles = (get_cache()->odometer + additional_km) / 1.609 * pow(10, ODO_NUM_DECIMALS);
+    // already miles
+    uint64_t decimiles = (get_cache()->odometer + additional_km / 1.609) * pow(10, ODO_NUM_DECIMALS);
     if (last_decimiles != decimiles ) {
         last_decimiles = decimiles;
         int max = 0;
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < ODO_SEGMENTS; i++) {
             if ((uint64_t) (decimiles / pow(10, i))) {
                 lv_label_set_text_fmt(numbers[i], "%d", (uint64_t)(decimiles / pow(10, i)) % 10);
                 lv_obj_set_style_border_width(numbers[i], 1, 0);
@@ -44,8 +46,9 @@ Odometer::Odometer(lv_obj_t * parent) {
     DASH_FONT(RAJDHANI_SEMIBOLD, 14);
 
     lv_obj = lv_obj_create(parent);
-    lv_obj_set_size(lv_obj, ODOMETER_WIDTH, 50);
+    lv_obj_set_size(lv_obj, ODO_WIDTH, 50);
     lv_obj_align(lv_obj, LV_ALIGN_TOP_RIGHT, -5, 198);
+    lv_obj_set_style_bg_opa(lv_obj, LV_OPA_0, 0);
 
     segments = lv_obj_create(lv_obj);
     lv_obj_align(segments, LV_ALIGN_TOP_RIGHT, 0, 0);
@@ -55,7 +58,7 @@ Odometer::Odometer(lv_obj_t * parent) {
     lv_obj_set_height(segments, 26);
     lv_obj_set_width(segments, ODO_SEGMENT_WIDTH * (ODO_NUM_DECIMALS + 1));
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < ODO_SEGMENTS; i++) {
         numbers[i] = lv_label_create(segments);
         lv_label_set_text(numbers[i], "");
         lv_obj_set_style_text_align(numbers[i], LV_TEXT_ALIGN_CENTER, 0);
@@ -85,7 +88,7 @@ Odometer::Odometer(lv_obj_t * parent) {
     lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_RIGHT, 0);
     lv_obj_set_style_text_font(label, RAJDHANI_SEMIBOLD_14, 0);
     lv_obj_set_style_text_color(label, AMBER_HALF, 0);
-    lv_obj_set_width(label, ODOMETER_WIDTH);
+    lv_obj_set_width(label, ODO_WIDTH);
     lv_obj_align(label, LV_ALIGN_BOTTOM_RIGHT, 0, 0);
 
     // static lv_style_t style;
@@ -97,7 +100,7 @@ Odometer::Odometer(lv_obj_t * parent) {
 
     // lv_obj_t * line = lv_obj_create(lv_obj);
     // lv_obj_remove_style_all(line);
-    // lv_obj_set_size(line, ODOMETER_WIDTH, 24 + 5);
+    // lv_obj_set_size(line, ODO_WIDTH, 24 + 5);
     // lv_obj_align(line, LV_ALIGN_TOP_MID, 0, 0);
     // lv_obj_add_style(line, &style, 0);
     last_measure = xTaskGetTickCount();

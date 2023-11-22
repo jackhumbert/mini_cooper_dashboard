@@ -2,6 +2,32 @@
 #include "messages.h"
 #include "dev.h"
 
+void process_packet(uint8_t * data) {
+    uint32_t id;
+
+    for(int i=0; i<4; i++) {
+        id <<= 8;
+        id += data[i];
+    }
+                
+    sd_card_logf("%08.3f R11 %08X %02X %02X %02X %02X %02X %02X %02X %02X\n", 
+        xTaskGetTickCount() / 1000.0, id,
+        data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11]);
+
+    uint16_t can_id = id & 0xFFFF;
+    dbcc_time_stamp_t ts = (id >> 16) & 0xFFFF;
+
+    pthread_mutex_lock(&get_dash()->mutex);
+    if (decode_can_message(ts, can_id, (uint8_t*)data + 4) < 0) {
+        get_changed()->activity |= ACTIVITY_ERROR;
+        sd_card_logf("%08.3f CER Could not decode latest message\n", xTaskGetTickCount() / 1000.0);
+    } else {
+        get_changed()->activity |= ACTIVITY_SUCCESS;
+    }
+    pthread_mutex_unlock(&get_dash()->mutex);
+    // vTaskDelete(process_packet_task);
+}
+
 static can_obj_r53_h_t can_data;
 
 static uint64_t u64_from_can_msg(const uint8_t m[8]) {
@@ -118,9 +144,9 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 update_changed(low_fuel_light);
                 decode_can_0x613_Running_Clock(&can_data, &get_dash()->running_clock);
                 update_changed(running_clock);
-                decode_can_0x613_Odometer(&can_data, &get_dash()->odometer_fp);
-                get_dash()->odometer = get_dash()->odometer_fp;
-                update_changed(odometer);
+                // decode_can_0x613_OdometerTens(&can_data, &get_dash()->odometer_fp);
+                // get_dash()->odometer = get_dash()->odometer_fp;
+                // update_changed(odometer);
                 return 0;
             case 0x615:
                 // get_dash()->x615 = *(uint64_t*)data;
@@ -143,6 +169,8 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 update_changed(custom_value);
                 decode_can_0x61a_StalkState(&can_data, (uint8_t*)&get_dash()->stalk_state);
                 update_changed(stalk_state);
+                decode_can_0x61a_OdometerOnes(&can_data, &get_dash()->odometer);
+                update_changed(odometer);
                 return 0;
             case 0x61F: 
                 // get_dash()->x61F = *(uint64_t*)data;

@@ -20,10 +20,11 @@ static void screen_fade_cb(void * parameter) {
     uint8_t end_value = get_cache()->running_lights ? get_cache()->interior_light_level * 4 : 255;
     while (millis() - start < (SCREEN_FADE_TIME * 1000)) {
         unsigned long time_diff = millis() - start;
-        uint32_t value = round(pow(time_diff / (SCREEN_FADE_TIME * 1000.0), 2) * (end_value - start_value) + start_value);
-        // uint32_t value = round(time_diff / (SCREEN_FADE_TIME * 1000.0) * (get_dash()->lights ? 10 : 255));
+        // uint32_t value = round(pow(time_diff / (SCREEN_FADE_TIME * 1000.0), 2) * (end_value - start_value) + start_value);
+        uint32_t value = round(time_diff / (SCREEN_FADE_TIME * 1000.0) * (end_value - start_value) + start_value);
         // add_message_fmt("brightness: %d", value);
         gfx.setBrightness(value);
+        vTaskDelay(1);
     }
     gfx.setBrightness(end_value);
     vTaskDelete(NULL);

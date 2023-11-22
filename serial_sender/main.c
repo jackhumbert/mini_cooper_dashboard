@@ -8,7 +8,6 @@
 //   specify the correct serial port.
  
 #include <fcntl.h>
-#include <stdio.h>
 #include <unistd.h>
 #include <stdint.h>
 #include <termios.h>

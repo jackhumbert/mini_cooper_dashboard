@@ -12,6 +12,8 @@ void sd_card_logf(const char * format, ...);
 int sd_card_get_log(unsigned char * data);
 void stop_logging(void);
 
+void playback_latest_log(void);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif
