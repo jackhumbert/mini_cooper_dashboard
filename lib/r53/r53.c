@@ -2191,8 +2191,8 @@ static int pack_can_0x615_x615(can_obj_r53_h_t *o, uint64_t *data) {
 	register uint64_t x;
 	register uint64_t m = 0;
 	register uint64_t i = 0;
-	/* OutsideTemp: start-bit 24, length 8, endianess intel, scaling 1, offset 0 */
-	x = ((uint8_t)(o->can_0x615_x615.OutsideTemp)) & 0xff;
+	/* OutsideTemp: start-bit 24, length 7, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x615_x615.OutsideTemp)) & 0x7f;
 	x <<= 24; 
 	i |= x;
 	/* AC_Status: start-bit 6, length 2, endianess intel, scaling 1, offset 0 */
@@ -2207,6 +2207,10 @@ static int pack_can_0x615_x615(can_obj_r53_h_t *o, uint64_t *data) {
 	x = ((uint8_t)(o->can_0x615_x615.Hood)) & 0x1;
 	x <<= 51; 
 	m |= x;
+	/* OutsideTempSign: start-bit 31, length 1, endianess intel, scaling 1, offset 0 */
+	x = ((uint8_t)(o->can_0x615_x615.OutsideTempSign)) & 0x1;
+	x <<= 31; 
+	i |= x;
 	/* Handbrake: start-bit 33, length 1, endianess motorola, scaling 1, offset 0 */
 	x = ((uint8_t)(o->can_0x615_x615.Handbrake)) & 0x1;
 	x <<= 25; 
@@ -2224,8 +2228,8 @@ static int unpack_can_0x615_x615(can_obj_r53_h_t *o, uint64_t data, uint8_t dlc,
 	register uint64_t i = (data);
 	if (dlc < 8)
 		return -1;
-	/* OutsideTemp: start-bit 24, length 8, endianess intel, scaling 1, offset 0 */
-	x = (i >> 24) & 0xff;
+	/* OutsideTemp: start-bit 24, length 7, endianess intel, scaling 1, offset 0 */
+	x = (i >> 24) & 0x7f;
 	o->can_0x615_x615.OutsideTemp = x;
 	/* AC_Status: start-bit 6, length 2, endianess intel, scaling 1, offset 0 */
 	x = (i >> 6) & 0x3;
@@ -2236,6 +2240,9 @@ static int unpack_can_0x615_x615(can_obj_r53_h_t *o, uint64_t data, uint8_t dlc,
 	/* Hood: start-bit 11, length 1, endianess motorola, scaling 1, offset 0 */
 	x = (m >> 51) & 0x1;
 	o->can_0x615_x615.Hood = x;
+	/* OutsideTempSign: start-bit 31, length 1, endianess intel, scaling 1, offset 0 */
+	x = (i >> 31) & 0x1;
+	o->can_0x615_x615.OutsideTempSign = x;
 	/* Handbrake: start-bit 33, length 1, endianess motorola, scaling 1, offset 0 */
 	x = (m >> 25) & 0x1;
 	o->can_0x615_x615.Handbrake = x;
@@ -2244,15 +2251,15 @@ static int unpack_can_0x615_x615(can_obj_r53_h_t *o, uint64_t data, uint8_t dlc,
 	return 8;
 }
 
-int decode_can_0x615_OutsideTemp(const can_obj_r53_h_t *o, int8_t *out) {
+int decode_can_0x615_OutsideTemp(const can_obj_r53_h_t *o, uint8_t *out) {
 	assert(o);
 	assert(out);
-	int8_t rval = (int8_t)(o->can_0x615_x615.OutsideTemp);
+	uint8_t rval = (uint8_t)(o->can_0x615_x615.OutsideTemp);
 	*out = rval;
 	return 0;
 }
 
-int encode_can_0x615_OutsideTemp(can_obj_r53_h_t *o, int8_t in) {
+int encode_can_0x615_OutsideTemp(can_obj_r53_h_t *o, uint8_t in) {
 	assert(o);
 	o->can_0x615_x615.OutsideTemp = in;
 	return 0;
@@ -2308,6 +2315,20 @@ int encode_can_0x615_Hood(can_obj_r53_h_t *o, uint8_t in) {
 	return 0;
 }
 
+int decode_can_0x615_OutsideTempSign(const can_obj_r53_h_t *o, uint8_t *out) {
+	assert(o);
+	assert(out);
+	uint8_t rval = (uint8_t)(o->can_0x615_x615.OutsideTempSign);
+	*out = rval;
+	return 0;
+}
+
+int encode_can_0x615_OutsideTempSign(can_obj_r53_h_t *o, uint8_t in) {
+	assert(o);
+	o->can_0x615_x615.OutsideTempSign = in;
+	return 0;
+}
+
 int decode_can_0x615_Handbrake(const can_obj_r53_h_t *o, uint8_t *out) {
 	assert(o);
 	assert(out);
@@ -2330,6 +2351,7 @@ int print_can_0x615_x615(const can_obj_r53_h_t *o, FILE *output) {
 	r = print_helper(r, fprintf(output, "AC_Status = (wire: %.0f)\n", (double)(o->can_0x615_x615.AC_Status)));
 	r = print_helper(r, fprintf(output, "RunningLights2 = (wire: %.0f)\n", (double)(o->can_0x615_x615.RunningLights2)));
 	r = print_helper(r, fprintf(output, "Hood = (wire: %.0f)\n", (double)(o->can_0x615_x615.Hood)));
+	r = print_helper(r, fprintf(output, "OutsideTempSign = (wire: %.0f)\n", (double)(o->can_0x615_x615.OutsideTempSign)));
 	r = print_helper(r, fprintf(output, "Handbrake = (wire: %.0f)\n", (double)(o->can_0x615_x615.Handbrake)));
 	return r;
 }

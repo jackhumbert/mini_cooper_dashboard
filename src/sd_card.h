@@ -1,3 +1,7 @@
+#define SD_MOSI 11
+#define SD_MISO 13
+#define SD_SCK 12
+#define SD_CS 10
 
 #ifdef __cplusplus
 extern "C"

@@ -222,7 +222,7 @@ void get_latest_logs(int fd) {
   }
   uint64_t num_logs = strtol(buf, NULL, 16);
   printf("Current log: %llu\n", num_logs);
-  get_log(fd, num_logs - 1, 1);
+  // get_log(fd, num_logs - 1, 1);
   get_log(fd, num_logs, 1);
 }
 

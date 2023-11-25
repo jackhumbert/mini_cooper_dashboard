@@ -1,6 +1,7 @@
 #include "can.h"
 #include "messages.h"
 #include "dev.h"
+#include "sd_card.h"
 
 void process_packet(uint8_t * data) {
     uint32_t id;
@@ -102,6 +103,8 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 update_changed(engine_temp);
                 decode_can_0x329_Throttle_Position(&can_data, &get_dash()->throttle_position);
                 update_changed(throttle_position);
+                decode_can_0x329_CruiseActive(&can_data, &get_dash()->cruise_active);
+                update_changed(cruise_active);
                 return 0;
             case 0x336: 
                 // get_dash()->x336 = *(uint64_t*)data;
@@ -152,6 +155,9 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 // get_dash()->x615 = *(uint64_t*)data;
                 // get_changed()->x615 = 1;
                 decode_can_0x615_OutsideTemp(&can_data, &get_dash()->outside_temp);
+                decode_can_0x615_OutsideTempSign(&can_data, &get_dash()->outside_temp_sign);
+                if (get_dash()->outside_temp_sign)
+                    get_dash()->outside_temp *= -1;
                 update_changed(outside_temp);
                 decode_can_0x615_Handbrake(&can_data, &get_dash()->handbrake);
                 update_changed(handbrake);
@@ -171,6 +177,8 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 update_changed(stalk_state);
                 decode_can_0x61a_OdometerOnes(&can_data, &get_dash()->odometer);
                 update_changed(odometer);
+                decode_can_0x61a_OdometerTenths(&can_data, &get_dash()->trip_odometer);
+                update_changed(trip_odometer);
                 return 0;
             case 0x61F: 
                 // get_dash()->x61F = *(uint64_t*)data;

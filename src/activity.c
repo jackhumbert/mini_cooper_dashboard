@@ -42,12 +42,12 @@ void activity_update(uint8_t activity) {
 
 void activity_create(lv_obj_t * parent) {
     success_led  = lv_led_create(parent);
-    lv_obj_align(success_led, LV_ALIGN_TOP_RIGHT, -110, 5);
+    lv_obj_align(success_led, LV_ALIGN_TOP_RIGHT, -95, 5);
     lv_led_set_brightness(success_led, 0);
     lv_led_set_color(success_led, lv_palette_main(LV_PALETTE_GREEN));
 
     failure_led  = lv_led_create(parent);
-    lv_obj_align(failure_led, LV_ALIGN_TOP_RIGHT, -80, 5);
+    lv_obj_align(failure_led, LV_ALIGN_TOP_RIGHT, -70, 5);
     lv_led_set_brightness(failure_led, 0);
     lv_led_set_color(failure_led, lv_palette_main(LV_PALETTE_RED));
 

@@ -1,5 +1,7 @@
 #include "screen_brightness.hpp"
-#include <Wire.h>
+#if not DASH_SIMULATION
+    #include <Wire.h>
+#endif
 #include "screen.h"
 
 #define SCREEN_FADE_TIME 1
@@ -8,9 +10,10 @@ extern LGFX gfx;
 TaskHandle_t screen_fade_task;
 
 void ScreenBrightness::update(void) {
-    if (get_queued()->running_lights) {
-        uint8_t end_value = get_cache()->running_lights ? get_cache()->interior_light_level * 4 : 255;
-        gfx.setBrightness(end_value);
+    if (get_queued()->running_lights || get_queued()->interior_light_level) {
+        // uint8_t end_value = get_cache()->running_lights ? get_cache()->interior_light_level * 4 : 255;
+        // gfx.setBrightness(end_value);
+        fade_in();
     }
 }
 
@@ -27,16 +30,22 @@ static void screen_fade_cb(void * parameter) {
         vTaskDelay(1);
     }
     gfx.setBrightness(end_value);
+    screen_fade_task = NULL;
     vTaskDelete(NULL);
 };
 
 void ScreenBrightness::fade_in(void) {
-    xTaskCreatePinnedToCore(
-      screen_fade_cb, /* Function to implement the task */
-      "Screen Fade In", /* Name of the task */
-      1000,  /* Stack size in words */
-      NULL,  /* Task input parameter */
-      2,  /* Priority of the task */
-      &screen_fade_task,  /* Task handle. */
-      0); /* Core where the task should run */
+    if (screen_fade_task != NULL) {
+        vTaskDelete(screen_fade_task);
+        screen_fade_task = NULL;
+    } else {
+        xTaskCreatePinnedToCore(
+            screen_fade_cb, /* Function to implement the task */
+            "Screen Fade In", /* Name of the task */
+            1000,  /* Stack size in words */
+            NULL,  /* Task input parameter */
+            2,  /* Priority of the task */
+            &screen_fade_task,  /* Task handle. */
+            0); /* Core where the task should run */
+    }
 }

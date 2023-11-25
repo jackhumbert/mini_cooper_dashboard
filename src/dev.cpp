@@ -6,8 +6,18 @@
 #include <SD.h>
 
 ESP32Time rtc(-18000);  // offset in seconds GMT+1
+extern bool sd_mounted;
 
 static int list_logs() {
+    if (!sd_mounted) {
+        SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
+        if (!SD.begin()) {
+            add_message("SD Card Mount Failed");
+            return -1;
+        }
+        sd_mounted = true;
+    }
+
     char number_buffer[8];
     File number_file = SD.open("/log_number.txt", "r", true);
     long log_number = 0;

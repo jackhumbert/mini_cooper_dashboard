@@ -166,11 +166,13 @@ typedef struct dashboard_t {
     // 0x613
     double odometer_fp;
     uint64_t odometer;
+    uint64_t trip_odometer;
     uint16_t running_clock;
     uint8_t fuel_level;
     uint8_t low_fuel_light;
 
     int8_t outside_temp;
+    uint8_t outside_temp_sign;
     uint8_t hood;
 
     // 0x61A
@@ -183,6 +185,7 @@ typedef struct dashboard_t {
     uint8_t right_turn_signal;
     uint8_t handbrake;
     uint8_t cruise;
+    uint8_t cruise_active;
     uint8_t interior_light_level;
 
     uint8_t left_door;
@@ -273,12 +276,14 @@ typedef struct dashboard_changed_t {
     uint8_t eml_light;
 
     uint8_t odometer;
+    uint8_t trip_odometer;
     uint8_t running_clock;
     uint8_t fuel_level;
     uint8_t low_fuel_light;
     uint8_t oil_pressure;
 
     uint8_t outside_temp;
+    uint8_t outside_temp_sign;
     uint8_t hood;
 
     // 0x61A
@@ -291,6 +296,7 @@ typedef struct dashboard_changed_t {
     uint8_t right_turn_signal;
     uint8_t handbrake;
     uint8_t cruise;
+    uint8_t cruise_active;
     uint8_t interior_light_level;
 
     uint8_t left_door;

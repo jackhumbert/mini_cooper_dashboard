@@ -128,7 +128,8 @@ void CAN_Task_loop(void * p) {
                 offset++;
             
             if (offset) {
-                while (Serial.available() < offset);
+                while (Serial.available() < offset)
+                    vTaskDelay(1);
                 Serial.readBytes(buffer + 12, offset);
             }
 

@@ -19,6 +19,15 @@ void Speed::update(void) {
         lv_color_t color = get_cache()->cruise ? GREEN_ON : GREEN_OFF;
         lv_obj_set_style_text_color(cruise_label, color, 0);
     }
+    if (get_queued()->cruise_active) {
+        if (get_cache()->cruise_active) {
+            lv_obj_set_style_text_color(speed_label, GREEN_ON, 0);
+            lv_obj_set_style_text_color(speed_label2, GREEN_ON, 0);
+        } else {
+            lv_obj_set_style_text_color(speed_label, IMPORTANT_TEXT, 0);
+            lv_obj_set_style_text_color(speed_label2, IMPORTANT_TEXT, 0);
+        }
+    }
 }
 
 Speed::Speed(lv_obj_t * parent) {

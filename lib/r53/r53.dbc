@@ -45,11 +45,12 @@ BO_ 809 x329_DME2: 8 DME_Etc
    SG_ CruiseActive : 51|1@1+ (1,0) [0|0] "" DME_Etc
 
 BO_ 1557 x615: 8 DME_Etc
-   SG_ OutsideTemp : 24|8@1- (1,0) [0|0] "deg_c" DME_Etc
+   SG_ OutsideTemp : 24|7@1+ (1,0) [0|0] "deg_c" Vector__XXX
    SG_ Handbrake : 33|1@0+ (1,0) [0|1] "" Vector__XXX
    SG_ RunningLights2 : 10|1@0+ (1,0) [0|1] "" Vector__XXX
    SG_ AC_Status : 6|2@1+ (1,0) [0|1] "" Vector__XXX
    SG_ Hood : 11|1@0+ (1,0) [0|1] "" Vector__XXX
+   SG_ OutsideTempSign : 31|1@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 1349 x545_DME4: 8 DME_Etc
    SG_ Fuel_Consumption : 8|16@1+ (1,0) [0|0] "mpg" DME_Etc
@@ -179,6 +180,8 @@ BO_ 1281 x501: 8 DME_Etc
 BA_DEF_ BO_ "GenMsgBackgroundColor" STRING ;
 BA_DEF_ BO_ "GenMsgForegroundColor" STRING ;
 BA_DEF_ BO_ "isj1939dbc" INT 0 0;
+BA_DEF_ BO_ "matchingcriteria" INT 0 0;
+BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_DEF_ BO_ "matchingcriteria" INT 0 0;
 BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_DEF_ BO_ "matchingcriteria" INT 0 0;

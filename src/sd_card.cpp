@@ -6,10 +6,6 @@
 
 // SD CARD
 
-#define SD_MOSI 11
-#define SD_MISO 13
-#define SD_SCK 12
-#define SD_CS 10
 #define RING_BUF_CAPACITY 16 * 512
 
 static char log_filename[20];
@@ -217,6 +213,15 @@ void sd_card_clear_messages(void) {
 }
 
 int sd_card_get_log(unsigned char * data) {
+    if (!sd_mounted) {
+        SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
+        if (!SD.begin()) {
+            add_message("SD Card Mount Failed");
+            return -1;
+        }
+    }
+    sd_mounted = true;
+
     char filename[20];
     sprintf(filename, "/log_%08llu.crtd", *(uint64_t*)data);
 
@@ -318,8 +323,6 @@ void playback_latest_log_task(void * _) {
     }
 
     playback_log_file.close();
-    SD.end();
-    SPI.end();
     vTaskDelete(NULL);
 }
 

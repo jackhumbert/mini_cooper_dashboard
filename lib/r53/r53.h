@@ -171,10 +171,11 @@ typedef PREPACK struct {
 } POSTPACK can_0x613_x613_Instrument_Cluster_t;
 
 typedef PREPACK struct {
-	int8_t OutsideTemp; /* scaling 1.0, offset 0.0, units deg_c  */
+	uint8_t OutsideTemp; /* scaling 1.0, offset 0.0, units deg_c  */
 	uint8_t AC_Status; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t RunningLights2; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Hood; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t OutsideTempSign; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Handbrake; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x615_x615_t;
 
@@ -485,14 +486,16 @@ int decode_can_0x613_LowFuelLight(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x613_LowFuelLight(can_obj_r53_h_t *o, uint8_t in);
 
 
-int decode_can_0x615_OutsideTemp(const can_obj_r53_h_t *o, int8_t *out);
-int encode_can_0x615_OutsideTemp(can_obj_r53_h_t *o, int8_t in);
+int decode_can_0x615_OutsideTemp(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x615_OutsideTemp(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x615_AC_Status(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x615_AC_Status(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x615_RunningLights2(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x615_RunningLights2(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x615_Hood(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x615_Hood(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x615_OutsideTempSign(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x615_OutsideTempSign(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x615_Handbrake(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x615_Handbrake(can_obj_r53_h_t *o, uint8_t in);
 

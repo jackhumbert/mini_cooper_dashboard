@@ -87,9 +87,9 @@ void apply_day_theme(void) {
         lv_style_set_arc_color(&dash_style_gauge, AMBER_ON);
         lv_style_set_arc_color(&dash_style_gauge_bg, AMBER_OFF);
     } else {
-        lv_style_set_text_color(&dash_style_label, AMBER_ON);
-        lv_style_set_arc_color(&dash_style_gauge, IMPORTANT_TEXT);
-        lv_style_set_arc_color(&dash_style_gauge_bg, AMBER_HALF);
+        lv_style_set_text_color(&dash_style_label, lv_color_hsv_to_rgb(8, 100, 50));
+        lv_style_set_arc_color(&dash_style_gauge, lv_color_hsv_to_rgb(10, 100, 100));
+        lv_style_set_arc_color(&dash_style_gauge_bg, lv_color_hsv_to_rgb(5, 100, 8));
     }
     lv_obj_refresh_style(lv_scr_act(), LV_PART_ANY, LV_STYLE_PROP_ANY);
     // lv_obj_invalidate(lv_scr_act());

@@ -3,4 +3,6 @@
 
 ## Todo
 
-- [ ] Segmented Odometer with tens place
+- [ ] Gas price/fill-up data tracking
+- [ ] Time elapsed during playback
+- [ ] Scrubbable playback

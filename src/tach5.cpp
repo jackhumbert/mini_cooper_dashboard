@@ -127,10 +127,17 @@ void Tach5::event(const lv_obj_class_t * cls, lv_event_t * event) {
         arc_dsc.color = lv_obj_get_style_arc_color(this, LV_PART_MAIN);
         arc_dsc.width = 20;
 
-        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER, this->end_angle, redline_angle);
+        lv_point_t redline_end = {
+            .x = (lv_coord_t)round(arc_center.x + (redline_x_comp * (INDIC_RADIUS + INDIC_OVERSHOOT))),
+            .y = (lv_coord_t)round(arc_center.y + (redline_y_comp * (INDIC_RADIUS + INDIC_OVERSHOOT)))
+        };
 
-        arc_dsc.color = RED_OFF;
-        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER, redline_angle, this->start_angle + INDIC_ANGLE_WIDTH);
+        // bg mask start
+        static lv_draw_mask_line_param_t bg_mask_param;
+        lv_draw_mask_line_points_init(&bg_mask_param, arc_center.x, arc_center.y, redline_end.x, redline_end.y, LV_DRAW_MASK_LINE_SIDE_LEFT);
+        int16_t bg_mask_id = lv_draw_mask_add(&bg_mask_param, NULL);
+
+        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER, this->end_angle, redline_angle);
 
         // top line
         lv_draw_arc_dsc_init(&arc_dsc);
@@ -139,8 +146,29 @@ void Tach5::event(const lv_obj_class_t * cls, lv_event_t * event) {
 
         lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER + 3, this->start_angle, redline_angle);
 
+        // bg mask end
+        lv_draw_mask_free_param(&bg_mask_param);
+        lv_draw_mask_remove_id(bg_mask_id);
+
+        // red bg mask start
+        static lv_draw_mask_line_param_t red_bg_mask_param;
+        lv_draw_mask_line_points_init(&red_bg_mask_param, arc_center.x, arc_center.y, redline_end.x, redline_end.y, LV_DRAW_MASK_LINE_SIDE_RIGHT);
+        int16_t red_bg_mask_id = lv_draw_mask_add(&red_bg_mask_param, NULL);
+
+        // redline background
         arc_dsc.color = RED_HALF;
+        arc_dsc.width = 20;
+        lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER, redline_angle, this->start_angle + INDIC_ANGLE_WIDTH);
+
+        arc_dsc.color = RED_HALF;
+        arc_dsc.width = 1;
         lv_draw_arc(ctx, &arc_dsc, &arc_center, INDIC_RADIUS_INNER + 3, redline_angle, this->start_angle + INDIC_ANGLE_WIDTH);
+
+        // red bg mask end
+        lv_draw_mask_free_param(&red_bg_mask_param);
+        lv_draw_mask_remove_id(red_bg_mask_id);
+
+
 
         for (int i = 0; i < 9; i++) {
             // dashes
@@ -183,9 +211,9 @@ void Tach5::event(const lv_obj_class_t * cls, lv_event_t * event) {
             .y = (lv_coord_t)round(arc_center.y + (y_comp * (INDIC_RADIUS + INDIC_OVERSHOOT)))
         };
 
+        // mask start
         lv_draw_mask_line_points_init(&line_mask_param, arc_center.x, arc_center.y, arc_end.x, arc_end.y, LV_DRAW_MASK_LINE_SIDE_LEFT);
         line_mask_id = lv_draw_mask_add(&line_mask_param, NULL);
-
 
         static lv_draw_arc_dsc_t arc_dsc2;
         lv_draw_arc_dsc_init(&arc_dsc2);
@@ -198,6 +226,7 @@ void Tach5::event(const lv_obj_class_t * cls, lv_event_t * event) {
         lv_draw_arc(ctx, &arc_dsc2, &arc_center, INDIC_RADIUS_INNER, this->start_angle, this->end_angle + 1);
         lv_event_send(this, LV_EVENT_DRAW_PART_END, &arc_dsc2);
 
+        // mask end
         lv_draw_mask_free_param(&line_mask_param);
         lv_draw_mask_remove_id(line_mask_id);
 

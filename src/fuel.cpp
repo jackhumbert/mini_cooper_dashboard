@@ -18,10 +18,30 @@ void Fuel::update(void) {
 
 static void indicator_draw(lv_event_t * e) {
 	lv_event_code_t code = lv_event_get_code(e);
-	lv_obj_draw_part_dsc_t *dsc = (lv_obj_draw_part_dsc_t *)lv_event_get_draw_part_dsc(e);
     Fuel * t = (Fuel*)lv_event_get_user_data(e);
 	
+	if (code == LV_EVENT_DRAW_MAIN_BEGIN) {
+	    lv_draw_ctx_t *ctx = lv_event_get_draw_ctx(e);
+
+        lv_area_t scale_area;
+        lv_obj_get_content_coords(t->meter, &scale_area);
+
+        static lv_draw_arc_dsc_t arc_dsc;
+        lv_draw_arc_dsc_init(&arc_dsc);
+        // lv_style_get_prop(&dash_style_gauge, LV_STYLE_ARC_COLOR, (lv_style_value_t*)&arc_dsc.color);
+        arc_dsc.color = AMBER_HALF;
+        arc_dsc.width = 1;
+
+        lv_point_t center = {
+            .x = (int)round((scale_area.x1 + scale_area.x2) / 2) + 1,
+            .y = (int)round((scale_area.y1 + scale_area.y2) / 2) + 1
+        };
+
+        lv_draw_arc(ctx, &arc_dsc, &center, 120/2 + 2, 135, 270 + 135);
+    }
+
 	if (code == LV_EVENT_DRAW_PART_BEGIN) {
+	    lv_obj_draw_part_dsc_t *dsc = (lv_obj_draw_part_dsc_t *)lv_event_get_draw_part_dsc(e);
         if (dsc->sub_part_ptr == t->background) {
             if (lv_obj_has_state(t->meter, LV_STATE_USER_1)) {
                 lv_style_get_prop(&dash_style_red_gauge_bg, LV_STYLE_ARC_COLOR, (lv_style_value_t*)&dsc->arc_dsc->color);
@@ -45,7 +65,7 @@ Fuel::Fuel(lv_obj_t * parent) {
     lv_obj_remove_style_all(lv_obj);
     lv_obj_set_scrollbar_mode(lv_obj, LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_scroll_dir(lv_obj, LV_DIR_NONE);
-    lv_obj_set_size(lv_obj, GAUGE_SIZE);
+    lv_obj_set_size(lv_obj, 126, 126);
     lv_obj_align(lv_obj, LV_ALIGN_TOP_RIGHT, -41, 357);
 
     meter = lv_meter_create(lv_obj);
@@ -55,12 +75,12 @@ Fuel::Fuel(lv_obj_t * parent) {
     lv_obj_remove_style(meter, NULL, LV_PART_MAIN);
     // lv_obj_add_style(meter, &dash_style_gauge, LV_PART_MAIN);
     // lv_obj_set_style_blend_mode(meter, LV_BLEND_MODE_ADDITIVE, 0);
-    lv_obj_align(meter, LV_ALIGN_TOP_MID, 0, 0);
+    lv_obj_align(meter, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_set_size(meter, GAUGE_SIZE);
 
     /*Add a scale first*/
     lv_meter_scale_t * scale = lv_meter_add_scale(meter);
-    lv_meter_set_scale_ticks(meter, scale, 5, 2, 50, DASH_BACKGROUND);
+    lv_meter_set_scale_ticks(meter, scale, 9, 2, 50, DASH_BACKGROUND);
     // lv_meter_set_scale_major_ticks(meter, scale, 5, 3, 50, DASH_BACKGROUND, 20);
     lv_meter_set_scale_range(meter, scale, 0, TANK_SIZE_GALLONS * 10, 270, 135);
 
@@ -74,6 +94,7 @@ Fuel::Fuel(lv_obj_t * parent) {
     indicator = lv_meter_add_arc(meter, scale, GAUGE_WIDTH, AMBER_ON, -1);
     lv_meter_set_indicator_start_value(meter, indicator, 0);
 
+    lv_obj_add_event_cb(lv_obj, indicator_draw, LV_EVENT_DRAW_MAIN_BEGIN, this);
     lv_obj_add_event_cb(meter, indicator_draw, LV_EVENT_DRAW_PART_BEGIN, this);
 
     DASH_FONT(RAJDHANI_REGULAR, 24);

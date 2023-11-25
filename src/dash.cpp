@@ -103,8 +103,8 @@ static void reset_serial(lv_event_t * e) {
     lv_obj_t * obj = lv_event_get_target(e);
 
     if(code == LV_EVENT_CLICKED) {
-        Serial.end();
-        Serial.begin(115200);
+        // Serial.end();
+        // Serial.begin(115200);
     }
 }
 
@@ -162,7 +162,8 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     widgets.push_back(std::unique_ptr<Widget>(new Coolant(canvas)));
     widgets.push_back(std::unique_ptr<Widget>(new Fuel(canvas)));
     widgets.push_back(std::unique_ptr<Widget>(new Accel(canvas)));
-    widgets.push_back(std::unique_ptr<Widget>(new Odometer(canvas)));
+    widgets.push_back(std::unique_ptr<Widget>(new Odometer(canvas, false, 0)));
+    widgets.push_back(std::unique_ptr<Widget>(new Odometer(canvas, true, 1)));
     widgets.push_back(std::unique_ptr<Widget>(new ScreenBrightness()));
 
     lv_obj_t * turn_left = turn_signal_left_create(canvas);
