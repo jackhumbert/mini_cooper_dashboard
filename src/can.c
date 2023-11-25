@@ -63,6 +63,8 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
             case 0x153:
                 decode_can_0x153_Speed(&can_data, &get_dash()->speed);
                 update_changed(speed);
+                decode_can_0x153_ABSLight(&can_data, &get_dash()->abs_light);
+                update_changed(abs_light);
                 // get_dash()->x153 = *(uint64_t*)data;
                 // get_changed()->x153 = 1;
                 return 0;
@@ -70,17 +72,26 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
             case 0x1F3:  // unk4 something that counts down
                 // get_dash()->x1F3 = *(uint64_t*)data;
                 // get_changed()->x1F3 = 1;
-                decode_can_0x1f3_ForwardForce(&can_data, &get_dash()->forward_force);
+                // decode_can_0x1f3_ForwardForce(&can_data, &get_dash()->forward_force);
+                // get_dash()->forward_force -= 512;
+                decode_can_0x1f3_AX_REF(&can_data, &get_dash()->forward_force);
                 get_dash()->forward_force -= 512;
                 update_changed(forward_force);
-                decode_can_0x1f3_LateralForce(&can_data, &get_dash()->lateral_force);
-                decode_can_0x1f3_LateralForceSign(&can_data, &get_dash()->lateral_force_sign);
-                get_dash()->lateral_force *= get_dash()->lateral_force_sign ? -1 : 1;
+                // decode_can_0x1f3_LateralForce(&can_data, &get_dash()->lateral_force);
+                // decode_can_0x1f3_LateralForceSign(&can_data, &get_dash()->lateral_force_sign);
+                // get_dash()->lateral_force *= get_dash()->lateral_force_sign ? -1 : 1;
+                decode_can_0x1f3_AY_REF(&can_data, &get_dash()->lateral_force);
+                get_dash()->lateral_force -= 512;
                 update_changed(lateral_force);
                 return 0;
             case 0x1F5:
                 // get_dash()->x1F5 = *(uint64_t*)data;
                 // get_changed()->x1F5 = 1;
+                decode_can_0x1f5_Steering_Angle(&can_data, &get_dash()->steering_angle);
+                decode_can_0x1f5_Steering_Angle_Direction(&can_data, &get_dash()->steering_angle_direction);
+                if (get_dash()->steering_angle_direction)
+                    get_dash()->steering_angle *= -1;
+                update_changed(steering_angle);
                 return 0;
             case 0x1F8: 
                 // get_dash()->x1F8 = *(uint64_t*)data;
@@ -103,7 +114,7 @@ int decode_can_message(dbcc_time_stamp_t timestamp, unsigned long id, uint8_t * 
                 update_changed(engine_temp);
                 decode_can_0x329_Throttle_Position(&can_data, &get_dash()->throttle_position);
                 update_changed(throttle_position);
-                decode_can_0x329_CruiseActive(&can_data, &get_dash()->cruise_active);
+                decode_can_0x329_CruiseState(&can_data, &get_dash()->cruise_active);
                 update_changed(cruise_active);
                 return 0;
             case 0x336: 

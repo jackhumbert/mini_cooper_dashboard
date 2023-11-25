@@ -5,8 +5,8 @@
 
 void Accel::update(void) {
     if (get_queued()->lateral_force || get_queued()->forward_force) {
-        int x = round(get_cache()->lateral_force / 512.0 * ACCEL_SIZE / 2);
-        int y = round(get_cache()->forward_force / 512.0 * ACCEL_SIZE / 2);
+        int x = round(get_cache()->lateral_force / 512.0 * ACCEL_SIZE / 2 * 2.0);
+        int y = round(get_cache()->forward_force / 512.0 * ACCEL_SIZE / 2 * 2.0);
         if (lv_obj_get_style_translate_x(center, 0) != x) {
             lv_obj_set_style_translate_x(center, x, 0);
         }

@@ -27,6 +27,7 @@ extern "C"
 #include "accel.hpp"
 #include "odometer.hpp"
 #include "screen_brightness.hpp"
+#include "wheel.hpp"
 
 extern void start_screen_fade(void);
 
@@ -162,6 +163,7 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     widgets.push_back(std::unique_ptr<Widget>(new Coolant(canvas)));
     widgets.push_back(std::unique_ptr<Widget>(new Fuel(canvas)));
     widgets.push_back(std::unique_ptr<Widget>(new Accel(canvas)));
+    widgets.push_back(std::unique_ptr<Widget>(new Wheel(canvas)));
     widgets.push_back(std::unique_ptr<Widget>(new Odometer(canvas, false, 0)));
     widgets.push_back(std::unique_ptr<Widget>(new Odometer(canvas, true, 1)));
     widgets.push_back(std::unique_ptr<Widget>(new ScreenBrightness()));

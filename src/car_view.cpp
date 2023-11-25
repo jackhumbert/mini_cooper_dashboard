@@ -52,6 +52,13 @@ void CarView::update(void) {
             lv_obj_set_style_img_recolor(battery_obj, RED_OFF, 0);
         }
     }
+    if (get_queued()->abs_light) {
+        if (get_cache()->abs_light) {
+            lv_obj_set_style_img_recolor(abs_obj, AMBER_ON, 0);
+        } else {
+            lv_obj_set_style_img_recolor(abs_obj, AMBER_OFF, 0);
+        }
+    }
 }
 
 CarView::CarView(lv_obj_t * parent) {

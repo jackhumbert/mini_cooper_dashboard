@@ -37,12 +37,15 @@ BO_ 790 x316_DME1: 8 DME_Etc
    SG_ RPM : 16|16@1+ (0.156,0) [0|0] "" DME_Etc
    SG_ Key : 0|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ AC_Clutch : 6|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ CRK_Error : 1|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ TCS_OK : 2|1@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 809 x329_DME2: 8 DME_Etc
    SG_ Engine_Temp : 8|8@1+ (0.75,-48.373) [0|0] "deg_c" Vector__XXX
    SG_ Throttle_Position : 40|8@1+ (1,0) [0|0] "%" DME_Etc
-   SG_ Cycling_Number : 0|8@1+ (1,0) [0|0] "" DME_Etc
-   SG_ CruiseActive : 51|1@1+ (1,0) [0|0] "" DME_Etc
+   SG_ MUX_INFO : 0|6@1+ (1,0) [0|0] "" DME_Etc
+   SG_ CruiseState : 51|3@1+ (1,0) [0|0] "" DME_Etc
+   SG_ MUX_CODE : 6|2@1+ (1,0) [0|0] "" DME_Etc
 
 BO_ 1557 x615: 8 DME_Etc
    SG_ OutsideTemp : 24|7@1+ (1,0) [0|0] "deg_c" Vector__XXX
@@ -62,11 +65,14 @@ BO_ 1349 x545_DME4: 8 DME_Etc
    SG_ EML : 4|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ CheckGasCap : 6|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ OverheatLight : 27|1@1+ (1,0) [0|0] "" DME_Etc
-   SG_ OilLevel : 25|1@1+ (1,0) [0|0] "" DME_Etc
+   SG_ OilLoss : 25|1@1+ (1,0) [0|0] "" DME_Etc
    SG_ RPM7k : 28|1@1+ (1,0) [0|0] "" DME_Etc
    SG_ RPM6_5k : 29|1@1+ (1,0) [0|0] "" DME_Etc
    SG_ RPM5_5k : 30|1@1+ (1,0) [0|0] "" DME_Etc
-   SG_ Unk7 : 56|8@1+ (1,0) [0|0] "" DME_Etc
+   SG_ Unk7 : 56|8@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ OilConsumption : 24|1@1+ (1,0) [0|0] "" DME_Etc
+   SG_ OilSensorMalfunction : 26|1@1+ (1,0) [0|0] "" DME_Etc
+   SG_ UpshiftIndicator : 31|1@1+ (1,0) [0|0] "" DME_Etc
 
 BO_ 1555 x613_Instrument_Cluster: 8 DME_Etc
    SG_ OdometerTens : 0|16@1+ (10,0) [0|0] "" Vector__XXX
@@ -84,21 +90,21 @@ BO_ 496 x1F0_ABS_1: 8 DME_Etc
    SG_ Wheel_4_Right_Rear_Speed : 48|12@1+ (0.0625,0) [0|0] "" Vector__XXX
 
 BO_ 501 x1F5_Steering_Angle_Sensor: 8 DME_Etc
-   SG_ Steering_Angle : 0|15@1+ (0.045,0) [0|0] "" DME_Etc
-   SG_ Steering_Angle_Velocity : 16|15@1+ (0.045,0) [0|0] "" DME_Etc
+   SG_ Steering_Angle : 0|15@1+ (0.045,0) [0|0] "deg" DME_Etc
+   SG_ Steering_Angle_Velocity : 16|15@1+ (0.045,0) [0|0] "deg_per_sec" DME_Etc
    SG_ Steering_Angle_Direction : 15|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Steering_Angle_Velocity_Direction : 31|1@1+ (1,0) [0|0] "" Vector__XXX
-   SG_ Steering_Counter : 44|4@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ PSTE_CNT : 44|4@1+ (1,0) [0|0] "" Vector__XXX
    SG_ unk39 : 39|1@1+ (1,0) [0|0] "" Vector__XXX
-   SG_ unk40 : 40|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ PSTE_STATUS : 40|4@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 339 ASC_1: 8 DME_Etc
    SG_ Speed : 11|13@1+ (0.0625,-0.625) [0|0] "" DME_Etc
    SG_ Brake_Pedal_Pressed : 4|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Tyre_Pressure_Set : 0|1@1+ (1,0) [0|0] "" Vector__XXX
-   SG_ Unk4 : 40|8@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ Unk5 : 40|8@1+ (1,0) [0|0] "" Vector__XXX
    SG_ CheckEngineLight : 9|1@1+ (1,0) [0|0] "" Vector__XXX
-   SG_ unk7 : 7|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ ABSLight : 7|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ unk6 : 6|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ unk2 : 2|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ unk8 : 8|1@1+ (1,0) [0|0] "" Vector__XXX
@@ -108,10 +114,21 @@ BO_ 339 ASC_1: 8 DME_Etc
 
 BO_ 499 x1F3: 8 DME_Etc
    SG_ ForwardForce : 24|10@1+ (1,0) [0|1024] "" Vector__XXX
-   SG_ unk38 : 38|10@1+ (1,0) [0|4] "" Vector__XXX
+   SG_ AY_REF : 38|10@1+ (1,0) [0|0] "" Vector__XXX
    SG_ unk59 : 59|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ LateralForce : 6|9@1+ (1,0) [0|1024] "" Vector__XXX
    SG_ LateralForceSign : 15|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ BAS_DEF : 16|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ Q_ACC_BAS : 17|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ BAS_FBR : 18|2@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ BAS_STAT : 20|4@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ DSC_REG : 34|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ S_HBA : 35|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ BAS_CODE : 36|2@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ BAS_DATEN : 48|8@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ FDR_MUL : 1|15@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ FDR_COM : 0|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ AX_REF : 24|10@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 1381 x565: 8 DME_Etc
    SG_ IDK2_unk1 : 55|1@1+ (1,0) [0|1] "" Vector__XXX
@@ -210,6 +227,8 @@ BA_DEF_ BO_ "matchingcriteria" INT 0 0;
 BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_DEF_ BO_ "matchingcriteria" INT 0 0;
 BA_DEF_ BO_ "filterlabeling" INT 0 0;
+BA_DEF_ BO_ "matchingcriteria" INT 0 0;
+BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_ "GenMsgBackgroundColor" BO_ 790 "#ffffff";
 BA_ "GenMsgForegroundColor" BO_ 790 "#000000";
 BA_ "GenMsgBackgroundColor" BO_ 809 "#ffffff";
@@ -230,9 +249,21 @@ BA_DEF_DEF_ "matchingcriteria" 0;
 BA_DEF_DEF_ "filterlabeling" 0;
 BA_DEF_DEF_ "matchingcriteria" 0;
 BA_DEF_DEF_ "filterlabeling" false;
+CM_ SG_ 790 CRK_Error "Crankshaft_sensor_state";
+CM_ SG_ 1555 Unk40 "Driver_side_fuel_maybe?";
+CM_ SG_ 501 PSTE_CNT "Telegram_Counter";
+CM_ SG_ 501 PSTE_STATUS "Internal_Status_Code";
+CM_ SG_ 339 Tyre_Pressure_Set "LV_ASC_REQ";
+CM_ SG_ 339 ABSLight "LV_ABS_LED";
+CM_ SG_ 339 unk6 "LV_EBV";
+CM_ SG_ 339 unk2 "LV_ASC_PASV";
+CM_ SG_ 499 ForwardForce "AX_REF";
+CM_ SG_ 499 LateralForce "FDR_MUL";
 CM_ BO_ 822 "Values seem to be engine-related";
 VAL_ 790 Key 0 "Off" 1 "On";
 VAL_ 790 AC_Clutch 0 "Off" 1 "On";
+VAL_ 809 CruiseState 0 "Inactive" 1 "Constant_Drive" 2 "Resume" 5 "Set/Acceleration" 7 "Deceleration";
+VAL_ 809 MUX_CODE 0 "CAN_LEVEL" 2 "OBD_STEUR" 3 "MD_NORM";
 VAL_ 1349 Charge_Light 0 "Off" 1 "On";
 VAL_ 1349 Oil_Pressure_Light 0 "Off" 1 "On";
 VAL_ 339 Brake_Pedal_Pressed 0 "Not_pressed" 1 "Pressed";

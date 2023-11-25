@@ -57,10 +57,10 @@ typedef enum {
 
 typedef PREPACK struct {
 	uint16_t Speed; /* scaling 0.1, offset -0.6, units none  */
-	uint8_t Unk4; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t Unk5; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Brake_Pedal_Pressed; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t unk6; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t unk7; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t ABSLight; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t unk8; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t CheckEngineLight; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t unk32; /* scaling 1.0, offset 0.0, units none  */
@@ -78,21 +78,32 @@ typedef PREPACK struct {
 } POSTPACK can_0x1f0_x1F0_ABS_1_t;
 
 typedef PREPACK struct {
+	uint16_t FDR_MUL; /* scaling 1.0, offset 0.0, units none  */
 	uint16_t ForwardForce; /* scaling 1.0, offset 0.0, units none  */
-	uint16_t unk38; /* scaling 1.0, offset 0.0, units none  */
+	uint16_t AY_REF; /* scaling 1.0, offset 0.0, units none  */
+	uint16_t AX_REF; /* scaling 1.0, offset 0.0, units none  */
 	uint16_t LateralForce; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t LateralForceSign; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t BAS_DATEN; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t BAS_STAT; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t BAS_FBR; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t BAS_CODE; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t unk59; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t LateralForceSign; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t BAS_DEF; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t Q_ACC_BAS; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t DSC_REG; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t S_HBA; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t FDR_COM; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x1f3_x1F3_t;
 
 typedef PREPACK struct {
-	uint16_t Steering_Angle; /* scaling 0.0, offset 0.0, units none  */
-	uint16_t Steering_Angle_Velocity; /* scaling 0.0, offset 0.0, units none  */
-	uint8_t Steering_Counter; /* scaling 1.0, offset 0.0, units none  */
+	uint16_t Steering_Angle; /* scaling 0.0, offset 0.0, units deg  */
+	uint16_t Steering_Angle_Velocity; /* scaling 0.0, offset 0.0, units deg_per_sec  */
+	uint8_t PSTE_STATUS; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t PSTE_CNT; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Steering_Angle_Direction; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Steering_Angle_Velocity_Direction; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t unk39; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t unk40; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x1f5_x1F5_Steering_Angle_Sensor_t;
 
 typedef PREPACK struct {
@@ -103,14 +114,17 @@ typedef PREPACK struct {
 typedef PREPACK struct {
 	uint16_t RPM; /* scaling 0.2, offset 0.0, units none  */
 	uint8_t Key; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t CRK_Error; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t TCS_OK; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t AC_Clutch; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x316_x316_DME1_t;
 
 typedef PREPACK struct {
-	uint8_t Cycling_Number; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Engine_Temp; /* scaling 0.8, offset -48.4, units deg_c  */
 	uint8_t Throttle_Position; /* scaling 1.0, offset 0.0, units %  */
-	uint8_t CruiseActive; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t MUX_INFO; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t CruiseState; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t MUX_CODE; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x329_x329_DME2_t;
 
 typedef PREPACK struct {
@@ -132,14 +146,17 @@ typedef PREPACK struct {
 	uint8_t OilTemp; /* scaling 1.0, offset -48.4, units deg_c  */
 	uint8_t Unk7; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t CheckGasCap; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t OilLevel; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t OverheatLight; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t OilConsumption; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t OilLoss; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t OilSensorMalfunction; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t CheckEngineLight; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t RPM7k; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t RPM6_5k; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t RPM5_5k; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t UpshiftIndicator; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Charge_Light; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t Oil_Pressure_Light; /* scaling 1.0, offset 0.0, units none  */
-	uint8_t RPM7k; /* scaling 1.0, offset 0.0, units none  */
+	uint8_t OverheatLight; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t CruiseLight; /* scaling 1.0, offset 0.0, units none  */
 	uint8_t EML; /* scaling 1.0, offset 0.0, units none  */
 } POSTPACK can_0x545_x545_DME4_t;
@@ -310,14 +327,14 @@ int print_message(const can_obj_r53_h_t *o, const unsigned long id, FILE *output
 
 int decode_can_0x153_Speed(const can_obj_r53_h_t *o, double *out);
 int encode_can_0x153_Speed(can_obj_r53_h_t *o, double in);
-int decode_can_0x153_Unk4(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x153_Unk4(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x153_Unk5(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x153_Unk5(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x153_Brake_Pedal_Pressed(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x153_Brake_Pedal_Pressed(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x153_unk6(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x153_unk6(can_obj_r53_h_t *o, uint8_t in);
-int decode_can_0x153_unk7(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x153_unk7(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x153_ABSLight(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x153_ABSLight(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x153_unk8(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x153_unk8(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x153_CheckEngineLight(const can_obj_r53_h_t *o, uint8_t *out);
@@ -344,32 +361,54 @@ int decode_can_0x1f0_Wheel_4_Right_Rear_Speed(const can_obj_r53_h_t *o, double *
 int encode_can_0x1f0_Wheel_4_Right_Rear_Speed(can_obj_r53_h_t *o, double in);
 
 
+int decode_can_0x1f3_FDR_MUL(const can_obj_r53_h_t *o, uint16_t *out);
+int encode_can_0x1f3_FDR_MUL(can_obj_r53_h_t *o, uint16_t in);
 int decode_can_0x1f3_ForwardForce(const can_obj_r53_h_t *o, uint16_t *out);
 int encode_can_0x1f3_ForwardForce(can_obj_r53_h_t *o, uint16_t in);
-int decode_can_0x1f3_unk38(const can_obj_r53_h_t *o, uint16_t *out);
-int encode_can_0x1f3_unk38(can_obj_r53_h_t *o, uint16_t in);
+int decode_can_0x1f3_AY_REF(const can_obj_r53_h_t *o, uint16_t *out);
+int encode_can_0x1f3_AY_REF(can_obj_r53_h_t *o, uint16_t in);
+int decode_can_0x1f3_AX_REF(const can_obj_r53_h_t *o, uint16_t *out);
+int encode_can_0x1f3_AX_REF(can_obj_r53_h_t *o, uint16_t in);
 int decode_can_0x1f3_LateralForce(const can_obj_r53_h_t *o, uint16_t *out);
 int encode_can_0x1f3_LateralForce(can_obj_r53_h_t *o, uint16_t in);
-int decode_can_0x1f3_LateralForceSign(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x1f3_LateralForceSign(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x1f3_BAS_DATEN(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x1f3_BAS_DATEN(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x1f3_BAS_STAT(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x1f3_BAS_STAT(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x1f3_BAS_FBR(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x1f3_BAS_FBR(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x1f3_BAS_CODE(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x1f3_BAS_CODE(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x1f3_unk59(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x1f3_unk59(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x1f3_LateralForceSign(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x1f3_LateralForceSign(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x1f3_BAS_DEF(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x1f3_BAS_DEF(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x1f3_Q_ACC_BAS(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x1f3_Q_ACC_BAS(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x1f3_DSC_REG(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x1f3_DSC_REG(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x1f3_S_HBA(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x1f3_S_HBA(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x1f3_FDR_COM(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x1f3_FDR_COM(can_obj_r53_h_t *o, uint8_t in);
 
 
 int decode_can_0x1f5_Steering_Angle(const can_obj_r53_h_t *o, double *out);
 int encode_can_0x1f5_Steering_Angle(can_obj_r53_h_t *o, double in);
 int decode_can_0x1f5_Steering_Angle_Velocity(const can_obj_r53_h_t *o, double *out);
 int encode_can_0x1f5_Steering_Angle_Velocity(can_obj_r53_h_t *o, double in);
-int decode_can_0x1f5_Steering_Counter(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x1f5_Steering_Counter(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x1f5_PSTE_STATUS(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x1f5_PSTE_STATUS(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x1f5_PSTE_CNT(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x1f5_PSTE_CNT(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x1f5_Steering_Angle_Direction(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x1f5_Steering_Angle_Direction(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x1f5_Steering_Angle_Velocity_Direction(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x1f5_Steering_Angle_Velocity_Direction(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x1f5_unk39(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x1f5_unk39(can_obj_r53_h_t *o, uint8_t in);
-int decode_can_0x1f5_unk40(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x1f5_unk40(can_obj_r53_h_t *o, uint8_t in);
 
 
 int decode_can_0x1f8_Unk0(const can_obj_r53_h_t *o, uint8_t *out);
@@ -382,18 +421,24 @@ int decode_can_0x316_RPM(const can_obj_r53_h_t *o, double *out);
 int encode_can_0x316_RPM(can_obj_r53_h_t *o, double in);
 int decode_can_0x316_Key(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x316_Key(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x316_CRK_Error(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x316_CRK_Error(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x316_TCS_OK(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x316_TCS_OK(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x316_AC_Clutch(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x316_AC_Clutch(can_obj_r53_h_t *o, uint8_t in);
 
 
-int decode_can_0x329_Cycling_Number(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x329_Cycling_Number(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x329_Engine_Temp(const can_obj_r53_h_t *o, double *out);
 int encode_can_0x329_Engine_Temp(can_obj_r53_h_t *o, double in);
 int decode_can_0x329_Throttle_Position(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x329_Throttle_Position(can_obj_r53_h_t *o, uint8_t in);
-int decode_can_0x329_CruiseActive(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x329_CruiseActive(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x329_MUX_INFO(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x329_MUX_INFO(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x329_CruiseState(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x329_CruiseState(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x329_MUX_CODE(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x329_MUX_CODE(can_obj_r53_h_t *o, uint8_t in);
 
 
 int decode_can_0x336_Unk0(const can_obj_r53_h_t *o, uint16_t *out);
@@ -424,22 +469,28 @@ int decode_can_0x545_Unk7(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x545_Unk7(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x545_CheckGasCap(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x545_CheckGasCap(can_obj_r53_h_t *o, uint8_t in);
-int decode_can_0x545_OilLevel(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x545_OilLevel(can_obj_r53_h_t *o, uint8_t in);
-int decode_can_0x545_OverheatLight(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x545_OverheatLight(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x545_OilConsumption(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x545_OilConsumption(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x545_OilLoss(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x545_OilLoss(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x545_OilSensorMalfunction(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x545_OilSensorMalfunction(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x545_CheckEngineLight(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x545_CheckEngineLight(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x545_RPM7k(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x545_RPM7k(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x545_RPM6_5k(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x545_RPM6_5k(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x545_RPM5_5k(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x545_RPM5_5k(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x545_UpshiftIndicator(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x545_UpshiftIndicator(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x545_Charge_Light(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x545_Charge_Light(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x545_Oil_Pressure_Light(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x545_Oil_Pressure_Light(can_obj_r53_h_t *o, uint8_t in);
-int decode_can_0x545_RPM7k(const can_obj_r53_h_t *o, uint8_t *out);
-int encode_can_0x545_RPM7k(can_obj_r53_h_t *o, uint8_t in);
+int decode_can_0x545_OverheatLight(const can_obj_r53_h_t *o, uint8_t *out);
+int encode_can_0x545_OverheatLight(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x545_CruiseLight(const can_obj_r53_h_t *o, uint8_t *out);
 int encode_can_0x545_CruiseLight(can_obj_r53_h_t *o, uint8_t in);
 int decode_can_0x545_EML(const can_obj_r53_h_t *o, uint8_t *out);

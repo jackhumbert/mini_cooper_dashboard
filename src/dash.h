@@ -103,6 +103,7 @@ typedef struct dashboard_t {
 
     // 0x153
     double speed;
+    uint8_t abs_light;
     uint8_t tire_pressure_set;
     uint8_t brake_pedal_pressed;
 
@@ -218,6 +219,7 @@ typedef struct dashboard_changed_t {
 
     // 0x153
     uint8_t speed;
+    uint8_t abs_light;
     uint8_t tire_pressure_set;
     uint8_t brake_pedal_pressed;
 
