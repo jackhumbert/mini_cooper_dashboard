@@ -5,7 +5,7 @@
 
 void Wheel::update(void) {
     if (get_queued()->steering_angle) {
-        int angle = round(get_cache()->steering_angle * 10);
+        int angle = round(get_cache()->steering_angle * -10);
         if (lv_obj_get_style_transform_angle(lv_obj, 0) != angle) {
             lv_obj_set_style_transform_angle(lv_obj, angle, 0);
         }
