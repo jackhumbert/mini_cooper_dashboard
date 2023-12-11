@@ -7,3 +7,6 @@
 [submodule "lib/dbcc"]
 	path = lib/dbcc
 	url = https://github.com/howerj/dbcc.git
+[submodule "lib/circle"]
+	path = lib/circle
+	url = https://github.com/rsta2/circle.git

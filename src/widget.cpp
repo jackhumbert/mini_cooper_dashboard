@@ -1,6 +1,6 @@
 #include "widget.hpp"
-#include <new>
-#include <iostream>
+#include <circle/new.h>
+// #include <iostream>
 
 static const lv_obj_class_t lv_class = {
     .base_class = &lv_obj_class,

@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(raspi C CXX)
+
+add_custom_target(circle ./makeall
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../lib/circle
+)
+
+add_custom_target(circle_lvgl make
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../lib/circle/addon/lvgl
+)
+
+add_custom_target(dash make
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+)
+
+add_custom_target(dash_install make install
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+)

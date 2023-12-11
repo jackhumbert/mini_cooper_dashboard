@@ -1,0 +1,6 @@
+PREFIX = aarch64-none-elf-
+AARCH = 64
+RASPPI = 3
+
+SDCARD = /Volumes/RASPI
+USB_GADGET_VENDOR_ID = 0xFEED

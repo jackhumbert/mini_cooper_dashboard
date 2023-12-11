@@ -11,7 +11,7 @@ static lv_obj_t * time_label;
 static bool overflow;
 long offset = -18000;
 
-#if not DASH_SIMULATION
+#if ESP32
   #include <ESP32Time.h>
   extern ESP32Time rtc;
 #endif
@@ -22,7 +22,7 @@ static uint64_t epoch_offset = 1700229360 - 9903 * 60;
 
 void Clock::update(void) {
     if (get_queued()->running_clock) {
-      #if DASH_SIMULATION
+      #if not ESP32
         uint16_t corrected = get_dash()->running_clock + epoch_offset;
         int hour = corrected / 60 % 24;
         int min = corrected % 60;

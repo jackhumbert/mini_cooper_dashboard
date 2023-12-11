@@ -1,6 +1,6 @@
 #include "tach5.hpp"
-#include <new>
-#include <iostream>
+#include <circle/new.h>
+// #include <iostream>
 
 
 #define MY_CLASS (const lv_obj_class_t*)&lv_class

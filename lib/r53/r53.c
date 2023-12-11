@@ -297,18 +297,18 @@ int print_can_0x153_ASC_1(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "Speed = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.Speed)));
-	r = print_helper(r, fprintf(output, "Unk5 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.Unk5)));
-	r = print_helper(r, fprintf(output, "Brake_Pedal_Pressed = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.Brake_Pedal_Pressed)));
-	r = print_helper(r, fprintf(output, "unk6 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.unk6)));
-	r = print_helper(r, fprintf(output, "ABSLight = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.ABSLight)));
-	r = print_helper(r, fprintf(output, "unk8 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.unk8)));
-	r = print_helper(r, fprintf(output, "CheckEngineLight = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.CheckEngineLight)));
-	r = print_helper(r, fprintf(output, "unk32 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.unk32)));
-	r = print_helper(r, fprintf(output, "unk60 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.unk60)));
-	r = print_helper(r, fprintf(output, "Tyre_Pressure_Set = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.Tyre_Pressure_Set)));
-	r = print_helper(r, fprintf(output, "unk63 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.unk63)));
-	r = print_helper(r, fprintf(output, "unk2 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.unk2)));
+	// r = print_helper(r, fprintf(output, "Speed = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.Speed)));
+	// r = print_helper(r, fprintf(output, "Unk5 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.Unk5)));
+	// r = print_helper(r, fprintf(output, "Brake_Pedal_Pressed = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.Brake_Pedal_Pressed)));
+	// r = print_helper(r, fprintf(output, "unk6 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.unk6)));
+	// r = print_helper(r, fprintf(output, "ABSLight = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.ABSLight)));
+	// r = print_helper(r, fprintf(output, "unk8 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.unk8)));
+	// r = print_helper(r, fprintf(output, "CheckEngineLight = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.CheckEngineLight)));
+	// r = print_helper(r, fprintf(output, "unk32 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.unk32)));
+	// r = print_helper(r, fprintf(output, "unk60 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.unk60)));
+	// r = print_helper(r, fprintf(output, "Tyre_Pressure_Set = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.Tyre_Pressure_Set)));
+	// r = print_helper(r, fprintf(output, "unk63 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.unk63)));
+	// r = print_helper(r, fprintf(output, "unk2 = (wire: %.0f)\n", (double)(o->can_0x153_ASC_1.unk2)));
 	return r;
 }
 
@@ -429,10 +429,10 @@ int print_can_0x1f0_x1F0_ABS_1(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "Wheel_1_Left_Front_Speed = (wire: %.0f)\n", (double)(o->can_0x1f0_x1F0_ABS_1.Wheel_1_Left_Front_Speed)));
-	r = print_helper(r, fprintf(output, "Wheel_2_Right_Front_Speed = (wire: %.0f)\n", (double)(o->can_0x1f0_x1F0_ABS_1.Wheel_2_Right_Front_Speed)));
-	r = print_helper(r, fprintf(output, "Wheel_3_Left_Rear_Speed = (wire: %.0f)\n", (double)(o->can_0x1f0_x1F0_ABS_1.Wheel_3_Left_Rear_Speed)));
-	r = print_helper(r, fprintf(output, "Wheel_4_Right_Rear_Speed = (wire: %.0f)\n", (double)(o->can_0x1f0_x1F0_ABS_1.Wheel_4_Right_Rear_Speed)));
+	// r = print_helper(r, fprintf(output, "Wheel_1_Left_Front_Speed = (wire: %.0f)\n", (double)(o->can_0x1f0_x1F0_ABS_1.Wheel_1_Left_Front_Speed)));
+	// r = print_helper(r, fprintf(output, "Wheel_2_Right_Front_Speed = (wire: %.0f)\n", (double)(o->can_0x1f0_x1F0_ABS_1.Wheel_2_Right_Front_Speed)));
+	// r = print_helper(r, fprintf(output, "Wheel_3_Left_Rear_Speed = (wire: %.0f)\n", (double)(o->can_0x1f0_x1F0_ABS_1.Wheel_3_Left_Rear_Speed)));
+	// r = print_helper(r, fprintf(output, "Wheel_4_Right_Rear_Speed = (wire: %.0f)\n", (double)(o->can_0x1f0_x1F0_ABS_1.Wheel_4_Right_Rear_Speed)));
 	return r;
 }
 
@@ -797,22 +797,22 @@ int print_can_0x1f3_x1F3(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "FDR_MUL = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.FDR_MUL)));
-	r = print_helper(r, fprintf(output, "ForwardForce = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.ForwardForce)));
-	r = print_helper(r, fprintf(output, "AY_REF = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.AY_REF)));
-	r = print_helper(r, fprintf(output, "AX_REF = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.AX_REF)));
-	r = print_helper(r, fprintf(output, "LateralForce = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.LateralForce)));
-	r = print_helper(r, fprintf(output, "BAS_DATEN = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.BAS_DATEN)));
-	r = print_helper(r, fprintf(output, "BAS_STAT = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.BAS_STAT)));
-	r = print_helper(r, fprintf(output, "BAS_FBR = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.BAS_FBR)));
-	r = print_helper(r, fprintf(output, "BAS_CODE = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.BAS_CODE)));
-	r = print_helper(r, fprintf(output, "unk59 = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.unk59)));
-	r = print_helper(r, fprintf(output, "LateralForceSign = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.LateralForceSign)));
-	r = print_helper(r, fprintf(output, "BAS_DEF = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.BAS_DEF)));
-	r = print_helper(r, fprintf(output, "Q_ACC_BAS = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.Q_ACC_BAS)));
-	r = print_helper(r, fprintf(output, "DSC_REG = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.DSC_REG)));
-	r = print_helper(r, fprintf(output, "S_HBA = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.S_HBA)));
-	r = print_helper(r, fprintf(output, "FDR_COM = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.FDR_COM)));
+	// r = print_helper(r, fprintf(output, "FDR_MUL = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.FDR_MUL)));
+	// r = print_helper(r, fprintf(output, "ForwardForce = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.ForwardForce)));
+	// r = print_helper(r, fprintf(output, "AY_REF = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.AY_REF)));
+	// r = print_helper(r, fprintf(output, "AX_REF = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.AX_REF)));
+	// r = print_helper(r, fprintf(output, "LateralForce = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.LateralForce)));
+	// r = print_helper(r, fprintf(output, "BAS_DATEN = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.BAS_DATEN)));
+	// r = print_helper(r, fprintf(output, "BAS_STAT = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.BAS_STAT)));
+	// r = print_helper(r, fprintf(output, "BAS_FBR = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.BAS_FBR)));
+	// r = print_helper(r, fprintf(output, "BAS_CODE = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.BAS_CODE)));
+	// r = print_helper(r, fprintf(output, "unk59 = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.unk59)));
+	// r = print_helper(r, fprintf(output, "LateralForceSign = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.LateralForceSign)));
+	// r = print_helper(r, fprintf(output, "BAS_DEF = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.BAS_DEF)));
+	// r = print_helper(r, fprintf(output, "Q_ACC_BAS = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.Q_ACC_BAS)));
+	// r = print_helper(r, fprintf(output, "DSC_REG = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.DSC_REG)));
+	// r = print_helper(r, fprintf(output, "S_HBA = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.S_HBA)));
+	// r = print_helper(r, fprintf(output, "FDR_COM = (wire: %.0f)\n", (double)(o->can_0x1f3_x1F3.FDR_COM)));
 	return r;
 }
 
@@ -992,13 +992,13 @@ int print_can_0x1f5_x1F5_Steering_Angle_Sensor(const can_obj_r53_h_t *o, FILE *o
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "Steering_Angle = (wire: %.0f)\n", (double)(o->can_0x1f5_x1F5_Steering_Angle_Sensor.Steering_Angle)));
-	r = print_helper(r, fprintf(output, "Steering_Angle_Velocity = (wire: %.0f)\n", (double)(o->can_0x1f5_x1F5_Steering_Angle_Sensor.Steering_Angle_Velocity)));
-	r = print_helper(r, fprintf(output, "PSTE_STATUS = (wire: %.0f)\n", (double)(o->can_0x1f5_x1F5_Steering_Angle_Sensor.PSTE_STATUS)));
-	r = print_helper(r, fprintf(output, "PSTE_CNT = (wire: %.0f)\n", (double)(o->can_0x1f5_x1F5_Steering_Angle_Sensor.PSTE_CNT)));
-	r = print_helper(r, fprintf(output, "Steering_Angle_Direction = (wire: %.0f)\n", (double)(o->can_0x1f5_x1F5_Steering_Angle_Sensor.Steering_Angle_Direction)));
-	r = print_helper(r, fprintf(output, "Steering_Angle_Velocity_Direction = (wire: %.0f)\n", (double)(o->can_0x1f5_x1F5_Steering_Angle_Sensor.Steering_Angle_Velocity_Direction)));
-	r = print_helper(r, fprintf(output, "unk39 = (wire: %.0f)\n", (double)(o->can_0x1f5_x1F5_Steering_Angle_Sensor.unk39)));
+	// r = print_helper(r, fprintf(output, "Steering_Angle = (wire: %.0f)\n", (double)(o->can_0x1f5_x1F5_Steering_Angle_Sensor.Steering_Angle)));
+	// r = print_helper(r, fprintf(output, "Steering_Angle_Velocity = (wire: %.0f)\n", (double)(o->can_0x1f5_x1F5_Steering_Angle_Sensor.Steering_Angle_Velocity)));
+	// r = print_helper(r, fprintf(output, "PSTE_STATUS = (wire: %.0f)\n", (double)(o->can_0x1f5_x1F5_Steering_Angle_Sensor.PSTE_STATUS)));
+	// r = print_helper(r, fprintf(output, "PSTE_CNT = (wire: %.0f)\n", (double)(o->can_0x1f5_x1F5_Steering_Angle_Sensor.PSTE_CNT)));
+	// r = print_helper(r, fprintf(output, "Steering_Angle_Direction = (wire: %.0f)\n", (double)(o->can_0x1f5_x1F5_Steering_Angle_Sensor.Steering_Angle_Direction)));
+	// r = print_helper(r, fprintf(output, "Steering_Angle_Velocity_Direction = (wire: %.0f)\n", (double)(o->can_0x1f5_x1F5_Steering_Angle_Sensor.Steering_Angle_Velocity_Direction)));
+	// r = print_helper(r, fprintf(output, "unk39 = (wire: %.0f)\n", (double)(o->can_0x1f5_x1F5_Steering_Angle_Sensor.unk39)));
 	return r;
 }
 
@@ -1085,8 +1085,8 @@ int print_can_0x1f8_x1F8(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "Unk0 = (wire: %.0f)\n", (double)(o->can_0x1f8_x1F8.Unk0)));
-	r = print_helper(r, fprintf(output, "Unk2 = (wire: %.0f)\n", (double)(o->can_0x1f8_x1F8.Unk2)));
+	// r = print_helper(r, fprintf(output, "Unk0 = (wire: %.0f)\n", (double)(o->can_0x1f8_x1F8.Unk0)));
+	// r = print_helper(r, fprintf(output, "Unk2 = (wire: %.0f)\n", (double)(o->can_0x1f8_x1F8.Unk2)));
 	return r;
 }
 
@@ -1222,11 +1222,11 @@ int print_can_0x316_x316_DME1(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "RPM = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.RPM)));
-	r = print_helper(r, fprintf(output, "Key = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.Key)));
-	r = print_helper(r, fprintf(output, "CRK_Error = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.CRK_Error)));
-	r = print_helper(r, fprintf(output, "TCS_OK = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.TCS_OK)));
-	r = print_helper(r, fprintf(output, "AC_Clutch = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.AC_Clutch)));
+	// r = print_helper(r, fprintf(output, "RPM = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.RPM)));
+	// r = print_helper(r, fprintf(output, "Key = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.Key)));
+	// r = print_helper(r, fprintf(output, "CRK_Error = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.CRK_Error)));
+	// r = print_helper(r, fprintf(output, "TCS_OK = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.TCS_OK)));
+	// r = print_helper(r, fprintf(output, "AC_Clutch = (wire: %.0f)\n", (double)(o->can_0x316_x316_DME1.AC_Clutch)));
 	return r;
 }
 
@@ -1364,11 +1364,11 @@ int print_can_0x329_x329_DME2(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "Engine_Temp = (wire: %.0f)\n", (double)(o->can_0x329_x329_DME2.Engine_Temp)));
-	r = print_helper(r, fprintf(output, "Throttle_Position = (wire: %.0f)\n", (double)(o->can_0x329_x329_DME2.Throttle_Position)));
-	r = print_helper(r, fprintf(output, "MUX_INFO = (wire: %.0f)\n", (double)(o->can_0x329_x329_DME2.MUX_INFO)));
-	r = print_helper(r, fprintf(output, "CruiseState = (wire: %.0f)\n", (double)(o->can_0x329_x329_DME2.CruiseState)));
-	r = print_helper(r, fprintf(output, "MUX_CODE = (wire: %.0f)\n", (double)(o->can_0x329_x329_DME2.MUX_CODE)));
+	// r = print_helper(r, fprintf(output, "Engine_Temp = (wire: %.0f)\n", (double)(o->can_0x329_x329_DME2.Engine_Temp)));
+	// r = print_helper(r, fprintf(output, "Throttle_Position = (wire: %.0f)\n", (double)(o->can_0x329_x329_DME2.Throttle_Position)));
+	// r = print_helper(r, fprintf(output, "MUX_INFO = (wire: %.0f)\n", (double)(o->can_0x329_x329_DME2.MUX_INFO)));
+	// r = print_helper(r, fprintf(output, "CruiseState = (wire: %.0f)\n", (double)(o->can_0x329_x329_DME2.CruiseState)));
+	// r = print_helper(r, fprintf(output, "MUX_CODE = (wire: %.0f)\n", (double)(o->can_0x329_x329_DME2.MUX_CODE)));
 	return r;
 }
 
@@ -1489,10 +1489,10 @@ int print_can_0x336_x336(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "Unk0 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk0)));
-	r = print_helper(r, fprintf(output, "Unk2 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk2)));
-	r = print_helper(r, fprintf(output, "Unk4 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk4)));
-	r = print_helper(r, fprintf(output, "Unk6 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk6)));
+	// r = print_helper(r, fprintf(output, "Unk0 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk0)));
+	// r = print_helper(r, fprintf(output, "Unk2 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk2)));
+	// r = print_helper(r, fprintf(output, "Unk4 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk4)));
+	// r = print_helper(r, fprintf(output, "Unk6 = (wire: %.0f)\n", (double)(o->can_0x336_x336.Unk6)));
 	return r;
 }
 
@@ -1624,10 +1624,10 @@ int print_can_0x501_x501(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "Unk1 = (wire: %.0f)\n", (double)(o->can_0x501_x501.Unk1)));
-	r = print_helper(r, fprintf(output, "Unk3 = (wire: %.0f)\n", (double)(o->can_0x501_x501.Unk3)));
-	r = print_helper(r, fprintf(output, "unk40 = (wire: %.0f)\n", (double)(o->can_0x501_x501.unk40)));
-	r = print_helper(r, fprintf(output, "Unk56 = (wire: %.0f)\n", (double)(o->can_0x501_x501.Unk56)));
+	// r = print_helper(r, fprintf(output, "Unk1 = (wire: %.0f)\n", (double)(o->can_0x501_x501.Unk1)));
+	// r = print_helper(r, fprintf(output, "Unk3 = (wire: %.0f)\n", (double)(o->can_0x501_x501.Unk3)));
+	// r = print_helper(r, fprintf(output, "unk40 = (wire: %.0f)\n", (double)(o->can_0x501_x501.unk40)));
+	// r = print_helper(r, fprintf(output, "Unk56 = (wire: %.0f)\n", (double)(o->can_0x501_x501.Unk56)));
 	return r;
 }
 
@@ -2016,23 +2016,23 @@ int print_can_0x545_x545_DME4(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "Fuel_Consumption = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.Fuel_Consumption)));
-	r = print_helper(r, fprintf(output, "OilTemp = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.OilTemp)));
-	r = print_helper(r, fprintf(output, "Unk7 = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.Unk7)));
-	r = print_helper(r, fprintf(output, "CheckGasCap = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.CheckGasCap)));
-	r = print_helper(r, fprintf(output, "OilConsumption = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.OilConsumption)));
-	r = print_helper(r, fprintf(output, "OilLoss = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.OilLoss)));
-	r = print_helper(r, fprintf(output, "OilSensorMalfunction = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.OilSensorMalfunction)));
-	r = print_helper(r, fprintf(output, "CheckEngineLight = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.CheckEngineLight)));
-	r = print_helper(r, fprintf(output, "RPM7k = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.RPM7k)));
-	r = print_helper(r, fprintf(output, "RPM6_5k = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.RPM6_5k)));
-	r = print_helper(r, fprintf(output, "RPM5_5k = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.RPM5_5k)));
-	r = print_helper(r, fprintf(output, "UpshiftIndicator = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.UpshiftIndicator)));
-	r = print_helper(r, fprintf(output, "Charge_Light = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.Charge_Light)));
-	r = print_helper(r, fprintf(output, "Oil_Pressure_Light = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.Oil_Pressure_Light)));
-	r = print_helper(r, fprintf(output, "OverheatLight = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.OverheatLight)));
-	r = print_helper(r, fprintf(output, "CruiseLight = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.CruiseLight)));
-	r = print_helper(r, fprintf(output, "EML = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.EML)));
+	// r = print_helper(r, fprintf(output, "Fuel_Consumption = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.Fuel_Consumption)));
+	// r = print_helper(r, fprintf(output, "OilTemp = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.OilTemp)));
+	// r = print_helper(r, fprintf(output, "Unk7 = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.Unk7)));
+	// r = print_helper(r, fprintf(output, "CheckGasCap = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.CheckGasCap)));
+	// r = print_helper(r, fprintf(output, "OilConsumption = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.OilConsumption)));
+	// r = print_helper(r, fprintf(output, "OilLoss = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.OilLoss)));
+	// r = print_helper(r, fprintf(output, "OilSensorMalfunction = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.OilSensorMalfunction)));
+	// r = print_helper(r, fprintf(output, "CheckEngineLight = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.CheckEngineLight)));
+	// r = print_helper(r, fprintf(output, "RPM7k = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.RPM7k)));
+	// r = print_helper(r, fprintf(output, "RPM6_5k = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.RPM6_5k)));
+	// r = print_helper(r, fprintf(output, "RPM5_5k = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.RPM5_5k)));
+	// r = print_helper(r, fprintf(output, "UpshiftIndicator = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.UpshiftIndicator)));
+	// r = print_helper(r, fprintf(output, "Charge_Light = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.Charge_Light)));
+	// r = print_helper(r, fprintf(output, "Oil_Pressure_Light = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.Oil_Pressure_Light)));
+	// r = print_helper(r, fprintf(output, "OverheatLight = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.OverheatLight)));
+	// r = print_helper(r, fprintf(output, "CruiseLight = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.CruiseLight)));
+	// r = print_helper(r, fprintf(output, "EML = (wire: %.0f)\n", (double)(o->can_0x545_x545_DME4.EML)));
 	return r;
 }
 
@@ -2269,15 +2269,15 @@ int print_can_0x565_x565(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "OilPressure = (wire: %.0f)\n", (double)(o->can_0x565_x565.OilPressure)));
-	r = print_helper(r, fprintf(output, "IDK2_unk4 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk4)));
-	r = print_helper(r, fprintf(output, "Unk7 = (wire: %.0f)\n", (double)(o->can_0x565_x565.Unk7)));
-	r = print_helper(r, fprintf(output, "Unk4 = (wire: %.0f)\n", (double)(o->can_0x565_x565.Unk4)));
-	r = print_helper(r, fprintf(output, "IDK2_unk6 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk6)));
-	r = print_helper(r, fprintf(output, "IDK2_unk1 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk1)));
-	r = print_helper(r, fprintf(output, "IDK2_unk5 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk5)));
-	r = print_helper(r, fprintf(output, "IDK2_unk2 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk2)));
-	r = print_helper(r, fprintf(output, "IDK2_unk3 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk3)));
+	// r = print_helper(r, fprintf(output, "OilPressure = (wire: %.0f)\n", (double)(o->can_0x565_x565.OilPressure)));
+	// r = print_helper(r, fprintf(output, "IDK2_unk4 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk4)));
+	// r = print_helper(r, fprintf(output, "Unk7 = (wire: %.0f)\n", (double)(o->can_0x565_x565.Unk7)));
+	// r = print_helper(r, fprintf(output, "Unk4 = (wire: %.0f)\n", (double)(o->can_0x565_x565.Unk4)));
+	// r = print_helper(r, fprintf(output, "IDK2_unk6 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk6)));
+	// r = print_helper(r, fprintf(output, "IDK2_unk1 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk1)));
+	// r = print_helper(r, fprintf(output, "IDK2_unk5 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk5)));
+	// r = print_helper(r, fprintf(output, "IDK2_unk2 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk2)));
+	// r = print_helper(r, fprintf(output, "IDK2_unk3 = (wire: %.0f)\n", (double)(o->can_0x565_x565.IDK2_unk3)));
 	return r;
 }
 
@@ -2335,7 +2335,7 @@ int print_can_0x610_x610(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "VIN = (wire: %.0f)\n", (double)(o->can_0x610_x610.VIN)));
+	// r = print_helper(r, fprintf(output, "VIN = (wire: %.0f)\n", (double)(o->can_0x610_x610.VIN)));
 	return r;
 }
 
@@ -2540,13 +2540,13 @@ int print_can_0x613_x613_Instrument_Cluster(const can_obj_r53_h_t *o, FILE *outp
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "OdometerTens = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.OdometerTens)));
-	r = print_helper(r, fprintf(output, "Running_Clock = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Running_Clock)));
-	r = print_helper(r, fprintf(output, "Fuel_Level = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Fuel_Level)));
-	r = print_helper(r, fprintf(output, "Unk40 = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Unk40)));
-	r = print_helper(r, fprintf(output, "Unk46 = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Unk46)));
-	r = print_helper(r, fprintf(output, "Unk52 = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Unk52)));
-	r = print_helper(r, fprintf(output, "LowFuelLight = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.LowFuelLight)));
+	// r = print_helper(r, fprintf(output, "OdometerTens = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.OdometerTens)));
+	// r = print_helper(r, fprintf(output, "Running_Clock = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Running_Clock)));
+	// r = print_helper(r, fprintf(output, "Fuel_Level = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Fuel_Level)));
+	// r = print_helper(r, fprintf(output, "Unk40 = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Unk40)));
+	// r = print_helper(r, fprintf(output, "Unk46 = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Unk46)));
+	// r = print_helper(r, fprintf(output, "Unk52 = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.Unk52)));
+	// r = print_helper(r, fprintf(output, "LowFuelLight = (wire: %.0f)\n", (double)(o->can_0x613_x613_Instrument_Cluster.LowFuelLight)));
 	return r;
 }
 
@@ -2712,12 +2712,12 @@ int print_can_0x615_x615(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "OutsideTemp = (wire: %.0f)\n", (double)(o->can_0x615_x615.OutsideTemp)));
-	r = print_helper(r, fprintf(output, "AC_Status = (wire: %.0f)\n", (double)(o->can_0x615_x615.AC_Status)));
-	r = print_helper(r, fprintf(output, "RunningLights2 = (wire: %.0f)\n", (double)(o->can_0x615_x615.RunningLights2)));
-	r = print_helper(r, fprintf(output, "Hood = (wire: %.0f)\n", (double)(o->can_0x615_x615.Hood)));
-	r = print_helper(r, fprintf(output, "OutsideTempSign = (wire: %.0f)\n", (double)(o->can_0x615_x615.OutsideTempSign)));
-	r = print_helper(r, fprintf(output, "Handbrake = (wire: %.0f)\n", (double)(o->can_0x615_x615.Handbrake)));
+	// r = print_helper(r, fprintf(output, "OutsideTemp = (wire: %.0f)\n", (double)(o->can_0x615_x615.OutsideTemp)));
+	// r = print_helper(r, fprintf(output, "AC_Status = (wire: %.0f)\n", (double)(o->can_0x615_x615.AC_Status)));
+	// r = print_helper(r, fprintf(output, "RunningLights2 = (wire: %.0f)\n", (double)(o->can_0x615_x615.RunningLights2)));
+	// r = print_helper(r, fprintf(output, "Hood = (wire: %.0f)\n", (double)(o->can_0x615_x615.Hood)));
+	// r = print_helper(r, fprintf(output, "OutsideTempSign = (wire: %.0f)\n", (double)(o->can_0x615_x615.OutsideTempSign)));
+	// r = print_helper(r, fprintf(output, "Handbrake = (wire: %.0f)\n", (double)(o->can_0x615_x615.Handbrake)));
 	return r;
 }
 
@@ -2768,7 +2768,7 @@ int print_can_0x618_x618(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "Unk2 = (wire: %.0f)\n", (double)(o->can_0x618_x618.Unk2)));
+	// r = print_helper(r, fprintf(output, "Unk2 = (wire: %.0f)\n", (double)(o->can_0x618_x618.Unk2)));
 	return r;
 }
 
@@ -2986,15 +2986,15 @@ int print_can_0x61a_x61A(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "OdometerOnes = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.OdometerOnes)));
-	r = print_helper(r, fprintf(output, "CustomValue = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.CustomValue)));
-	r = print_helper(r, fprintf(output, "Unk4 = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.Unk4)));
-	r = print_helper(r, fprintf(output, "OdometerTenths = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.OdometerTenths)));
-	r = print_helper(r, fprintf(output, "StalkState = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.StalkState)));
-	r = print_helper(r, fprintf(output, "unk63 = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.unk63)));
-	r = print_helper(r, fprintf(output, "SyncClockNotRunning = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.SyncClockNotRunning)));
-	r = print_helper(r, fprintf(output, "unk27 = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.unk27)));
-	r = print_helper(r, fprintf(output, "SyncClockRunning = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.SyncClockRunning)));
+	// r = print_helper(r, fprintf(output, "OdometerOnes = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.OdometerOnes)));
+	// r = print_helper(r, fprintf(output, "CustomValue = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.CustomValue)));
+	// r = print_helper(r, fprintf(output, "Unk4 = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.Unk4)));
+	// r = print_helper(r, fprintf(output, "OdometerTenths = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.OdometerTenths)));
+	// r = print_helper(r, fprintf(output, "StalkState = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.StalkState)));
+	// r = print_helper(r, fprintf(output, "unk63 = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.unk63)));
+	// r = print_helper(r, fprintf(output, "SyncClockNotRunning = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.SyncClockNotRunning)));
+	// r = print_helper(r, fprintf(output, "unk27 = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.unk27)));
+	// r = print_helper(r, fprintf(output, "SyncClockRunning = (wire: %.0f)\n", (double)(o->can_0x61a_x61A.SyncClockRunning)));
 	return r;
 }
 
@@ -3411,24 +3411,24 @@ int print_can_0x61f_x61F(const can_obj_r53_h_t *o, FILE *output) {
 	assert(o);
 	assert(output);
 	int r = 0;
-	r = print_helper(r, fprintf(output, "InteriorLightLevel = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.InteriorLightLevel)));
-	r = print_helper(r, fprintf(output, "AutomaticLights = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.AutomaticLights)));
-	r = print_helper(r, fprintf(output, "unk19 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unk19)));
-	r = print_helper(r, fprintf(output, "unk17 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unk17)));
-	r = print_helper(r, fprintf(output, "unk16 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unk16)));
-	r = print_helper(r, fprintf(output, "LeftTurnSignal = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.LeftTurnSignal)));
-	r = print_helper(r, fprintf(output, "Brights = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.Brights)));
-	r = print_helper(r, fprintf(output, "unkStartup24 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unkStartup24)));
-	r = print_helper(r, fprintf(output, "RunningHandbrake = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.RunningHandbrake)));
-	r = print_helper(r, fprintf(output, "unkStartup26 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unkStartup26)));
-	r = print_helper(r, fprintf(output, "RightTurnSignal = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.RightTurnSignal)));
-	r = print_helper(r, fprintf(output, "unkStartup28 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unkStartup28)));
-	r = print_helper(r, fprintf(output, "unkStartup29 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unkStartup29)));
-	r = print_helper(r, fprintf(output, "unkStartup30 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unkStartup30)));
-	r = print_helper(r, fprintf(output, "Cruise = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.Cruise)));
-	r = print_helper(r, fprintf(output, "RunningLights = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.RunningLights)));
-	r = print_helper(r, fprintf(output, "unk38 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unk38)));
-	r = print_helper(r, fprintf(output, "unkStartup18 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unkStartup18)));
+	// r = print_helper(r, fprintf(output, "InteriorLightLevel = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.InteriorLightLevel)));
+	// r = print_helper(r, fprintf(output, "AutomaticLights = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.AutomaticLights)));
+	// r = print_helper(r, fprintf(output, "unk19 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unk19)));
+	// r = print_helper(r, fprintf(output, "unk17 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unk17)));
+	// r = print_helper(r, fprintf(output, "unk16 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unk16)));
+	// r = print_helper(r, fprintf(output, "LeftTurnSignal = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.LeftTurnSignal)));
+	// r = print_helper(r, fprintf(output, "Brights = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.Brights)));
+	// r = print_helper(r, fprintf(output, "unkStartup24 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unkStartup24)));
+	// r = print_helper(r, fprintf(output, "RunningHandbrake = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.RunningHandbrake)));
+	// r = print_helper(r, fprintf(output, "unkStartup26 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unkStartup26)));
+	// r = print_helper(r, fprintf(output, "RightTurnSignal = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.RightTurnSignal)));
+	// r = print_helper(r, fprintf(output, "unkStartup28 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unkStartup28)));
+	// r = print_helper(r, fprintf(output, "unkStartup29 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unkStartup29)));
+	// r = print_helper(r, fprintf(output, "unkStartup30 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unkStartup30)));
+	// r = print_helper(r, fprintf(output, "Cruise = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.Cruise)));
+	// r = print_helper(r, fprintf(output, "RunningLights = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.RunningLights)));
+	// r = print_helper(r, fprintf(output, "unk38 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unk38)));
+	// r = print_helper(r, fprintf(output, "unkStartup18 = (wire: %.0f)\n", (double)(o->can_0x61f_x61F.unkStartup18)));
 	return r;
 }
 

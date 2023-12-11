@@ -3,8 +3,10 @@
 #include "dev.h"
 #include "sd_card.h"
 
+#define xTaskGetTickCount() 0
+
 void process_packet(uint8_t * data) {
-    uint32_t id;
+    uint32_t id = 0;
 
     for(int i=0; i<4; i++) {
         id <<= 8;
@@ -18,25 +20,25 @@ void process_packet(uint8_t * data) {
     uint16_t can_id = id & 0xFFFF;
     dbcc_time_stamp_t ts = (id >> 16) & 0xFFFF;
 
-    pthread_mutex_lock(&get_dash()->mutex);
+    mutex_lock(&get_dash()->mutex);
     if (decode_can_message(ts, can_id, (uint8_t*)data + 4) < 0) {
         get_changed()->activity |= ACTIVITY_ERROR;
         sd_card_logf("%08.3f CER Could not decode latest message\n", xTaskGetTickCount() / 1000.0);
     } else {
         get_changed()->activity |= ACTIVITY_SUCCESS;
     }
-    pthread_mutex_unlock(&get_dash()->mutex);
+    mutex_unlock(&get_dash()->mutex);
     // vTaskDelete(process_packet_task);
 }
 
 static can_obj_r53_h_t can_data;
 
-static uint64_t u64_from_can_msg(const uint8_t m[8]) {
+uint64_t u64_from_can_msg(const uint8_t m[8]) {
 	return ((uint64_t)m[7] << 56) | ((uint64_t)m[6] << 48) | ((uint64_t)m[5] << 40) | ((uint64_t)m[4] << 32) 
 		| ((uint64_t)m[3] << 24) | ((uint64_t)m[2] << 16) | ((uint64_t)m[1] << 8) | ((uint64_t)m[0] << 0);
 }
 
-static void u64_to_can_msg(const uint64_t u, uint8_t m[8]) {
+void u64_to_can_msg(const uint64_t u, uint8_t m[8]) {
 	m[7] = u >> 56;
 	m[6] = u >> 48;
 	m[5] = u >> 40;

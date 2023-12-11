@@ -37,18 +37,21 @@ extern void start_screen_fade(void);
 
 #include "bit_table.hpp"
 
-#if not DASH_SIMULATION
+#if ESP32
     #include <Arduino.h>
+#else
+    #define xTaskGetTickCount() 0
 #endif
-#include <vector>
-#include <memory>
+// #include <vector>
+// #include <memory>
+// #include <linux/pthread.h>
 
 static dashboard_t dashboard;
 static dashboard_t dashboard_cache;
 static dashboard_changed_t dashboard_changed;
 static dashboard_changed_t dashboard_queued;
 static lv_obj_t * canvas;
-std::vector<std::unique_ptr<Widget>> widgets;
+Widget * widgets[32];
 
 dashboard_t * get_dash(void) {
     return &dashboard;
@@ -143,7 +146,7 @@ static void toggle_logging(lv_event_t * e) {
 }
 
 lv_obj_t * dash_create(lv_disp_t * disp) {
-	pthread_mutex_init(&dashboard.mutex, NULL);
+	mutex_init(&dashboard.mutex);
     theme_init();
 
     lv_obj_set_style_bg_color(lv_scr_act(), DASH_BACKGROUND, 0);
@@ -153,20 +156,20 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     canvas = lv_scr_act();
 
     // tach = new Tach4(canvas);
-    widgets.push_back(std::unique_ptr<Widget>(Tach5::create(canvas)));
-    widgets.push_back(std::unique_ptr<Widget>(new Speed(canvas)));
-    widgets.push_back(std::unique_ptr<Widget>(new Clock(canvas)));
-    widgets.push_back(std::unique_ptr<Widget>(new OutsideTemp(canvas)));
-    widgets.push_back(std::unique_ptr<Widget>(new CarView(canvas)));
-    widgets.push_back(std::unique_ptr<Widget>(new OilPressure(canvas)));
-    widgets.push_back(std::unique_ptr<Widget>(new OilTemp(canvas)));
-    widgets.push_back(std::unique_ptr<Widget>(new Coolant(canvas)));
-    widgets.push_back(std::unique_ptr<Widget>(new Fuel(canvas)));
-    widgets.push_back(std::unique_ptr<Widget>(new Accel(canvas)));
-    widgets.push_back(std::unique_ptr<Widget>(new Wheel(canvas)));
-    widgets.push_back(std::unique_ptr<Widget>(new Odometer(canvas, false, 0)));
-    widgets.push_back(std::unique_ptr<Widget>(new Odometer(canvas, true, 1)));
-    widgets.push_back(std::unique_ptr<Widget>(new ScreenBrightness()));
+    widgets[0] = Tach5::create(canvas);
+    widgets[1] = new Speed(canvas);
+    widgets[2] = new Clock(canvas);
+    widgets[3] = new OutsideTemp(canvas);
+    widgets[4] = new CarView(canvas);
+    widgets[5] = new OilPressure(canvas);
+    widgets[6] = new OilTemp(canvas);
+    widgets[7] = new Coolant(canvas);
+    widgets[8] = new Fuel(canvas);
+    widgets[9] = new Accel(canvas);
+    widgets[10] = new Wheel(canvas);
+    widgets[11] = new Odometer(canvas, false, 0);
+    widgets[12] = new Odometer(canvas, true, 1);
+    widgets[13] = new ScreenBrightness();
 
     lv_obj_t * turn_left = turn_signal_left_create(canvas);
     lv_obj_align(turn_left, LV_ALIGN_TOP_LEFT, 295 - 24, 308 - 40);
@@ -272,15 +275,16 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
 }
 
 void dash_loop(void) {
-    pthread_mutex_lock(&get_dash()->mutex);
+    mutex_lock(&get_dash()->mutex);
     memcpy(&dashboard_queued, &dashboard_changed, sizeof(dashboard_changed_t));
     memcpy(&dashboard_cache, &dashboard, sizeof(dashboard_t));
     memset(&dashboard_changed, 0, sizeof(dashboard_changed_t));
-	pthread_mutex_unlock(&get_dash()->mutex);
+	mutex_unlock(&get_dash()->mutex);
 
     if (events || true) {
         for (auto &widget : widgets) {
-            widget->update();
+            if (widget)
+                widget->update();
         }
         if (dashboard_queued.x610) {
             uint8_t * vin = (uint8_t*)&dashboard_cache.x610;

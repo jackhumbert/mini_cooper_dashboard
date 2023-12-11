@@ -1,5 +1,9 @@
 #include "odometer.hpp"
+#ifdef ESP32
 #include <Wire.h>
+#else
+#define xTaskGetTickCount() 0
+#endif
 
 #define ODO_SEGMENT_WIDTH 19
 #define ODO_WIDTH (ODO_SEGMENT_WIDTH * ODO_SEGMENTS)

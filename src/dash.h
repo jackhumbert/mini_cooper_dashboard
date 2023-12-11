@@ -1,11 +1,10 @@
 #pragma once
 
-#include "lvgl.h"
+#include <lvgl.h>
 #include "font.h"
 #include "theme.h"
 
 #include <math.h>
-#include <pthread.h>
 
 #define CANVAS_WIDTH  800
 #define CANVAS_HEIGHT 480
@@ -47,9 +46,16 @@
 #if DASH_SIMULATION
     #include <stdlib.h>
     #define ps_malloc malloc
-#else
-    #include <esp32-hal-psram.h>
 #endif
+#if ESP32
+    #include <esp32-hal-psram.h>
+    #include <Arduino.h>
+#endif
+
+
+// #include <pthread.h>
+
+#include <linux/mutex.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -82,7 +88,7 @@ typedef enum {
 } stalk_state_t;
 
 typedef struct dashboard_t {
-	pthread_mutex_t	mutex;
+	struct mutex mutex;
 
     uint64_t x153;
     uint64_t x1F3;

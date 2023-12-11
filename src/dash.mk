@@ -1,0 +1,3 @@
+INCLUDE += -I $(DASHHOME)
+
+OBJS += $(DASHHOME)/dash.o

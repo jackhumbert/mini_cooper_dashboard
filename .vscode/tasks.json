@@ -1,0 +1,24 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Launch Qemu",
+            // "command": "${workspaceRoot}/start_rasp3.sh",
+            "isBackground": true,
+
+            "command": "echo Starting QEMU&${workspaceRoot}/start_rasp3.sh",
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "^(Starting QEMU)",
+                    "line": 1,
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^(Starting QEMU)",
+                    "endsPattern": "^(Starting QEMU)"
+                }
+            }
+        }
+    ],
+    "version": "2.0.0"
+}

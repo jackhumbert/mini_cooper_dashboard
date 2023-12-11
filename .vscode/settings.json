@@ -6,6 +6,7 @@
         "interface/ftdi/esp32_devkitj_v1.cfg",
         "target/esp32s3.cfg"
     ],
+    "debug.onTaskErrors": "debugAnyway",
     "idf.espIdfPath": "/Users/jackhumbert/esp/esp-idf",
     "idf.toolsPath": "/Users/jackhumbert/.espressif",
     "files.associations": {
