@@ -82,10 +82,32 @@ static void rb_flusher(void * parameter) {
 
 bool sd_mounted = false;
 
+unsigned long long get_time_offset(void) {
+    if (!sd_mounted) {
+        SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
+        // pthread_mutex_init(&log_file_mutex, NULL);
+        if (!SD.begin()) {
+            add_message("SD Card Mount Failed");
+            return 0;
+        }
+    }
+    sd_mounted = true;
+    char time_buffer[8];
+    File time_file = SD.open("/time_offset.txt", FILE_READ);
+    unsigned long long time_offset = 0;
+    if (time_file.size()) {
+        time_file.readBytes(time_buffer, time_file.size());
+        time_offset = strtol(time_buffer, NULL, 10);
+    }
+    time_file.close();
+    add_message_fmt("Setting time offset: %llu", time_offset);
+    return time_offset;
+}
+
 bool sd_card_init() {
     if (!sd_mounted) {
         SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
-        pthread_mutex_init(&log_file_mutex, NULL);
+        // pthread_mutex_init(&log_file_mutex, NULL);
         if (!SD.begin()) {
             add_message("SD Card Mount Failed");
             return false;

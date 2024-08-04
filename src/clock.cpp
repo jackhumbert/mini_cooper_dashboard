@@ -2,10 +2,14 @@
 #include "time.h"
 #include <sys/time.h>
 #include "messages.h"
+#include "sd_card.h"
 
 #define SEC_PER_DAY   86400
 #define SEC_PER_HOUR  3600
 #define SEC_PER_MIN   60
+
+// #define OVERFLOW_ADD 0x10000
+#define OVERFLOW_ADD 54015
 
 static lv_obj_t * time_label;
 static bool overflow;
@@ -17,11 +21,23 @@ long offset = -18000;
 #endif
 
 // eventually expose a ui to change this via Preferences, and account for uint16_t overflow
-static uint64_t epoch_offset = 1700229360 - 9903 * 60;
+// static uint64_t epoch_offset = 1700229360ull - 9903 * 60 + (OVERFLOW_ADD * 60 * 5);
+// Fri Nov 10 2023 11:53:00 GMT-0500 (Eastern Standard Time)
+static uint64_t epoch_offset = 1699635180ull;
+// static uint64_t epoch_offset = 1699635180ull + (OVERFLOW_ADD * 60 * 7);
+// November 15 2023, 3:07 AM
+// August 3 2024, 2:00 PM
 
+// June 29, 4:27 ??
+
+bool loaded_from_file = false;
 
 void Clock::update(void) {
     if (get_queued()->running_clock) {
+      if (!loaded_from_file) {
+        epoch_offset += get_time_offset();
+        loaded_from_file = true;
+      }
       #if DASH_SIMULATION
         uint16_t corrected = get_dash()->running_clock + epoch_offset;
         int hour = corrected / 60 % 24;

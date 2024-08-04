@@ -2,3 +2,6 @@ build/
 bin/
 .DS_Store
 .pio
+*.d
+*.o
+lib/circle

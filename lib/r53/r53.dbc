@@ -79,7 +79,7 @@ BO_ 1555 x613_Instrument_Cluster: 8 DME_Etc
    SG_ Fuel_Level : 16|7@1+ (1,0) [0|0] "" Vector__XXX
    SG_ Running_Clock : 24|16@1+ (1,0) [0|0] "minutes" DME_Etc
    SG_ Unk40 : 40|6@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ Unk52 : 52|4@1- (1,0) [0|1] "" Vector__XXX
+   SG_ Unk52 : 52|4@1+ (1,0) [0|1] "" Vector__XXX
    SG_ Unk46 : 46|6@1+ (1,0) [0|1] "" Vector__XXX
    SG_ LowFuelLight : 23|1@1+ (1,0) [0|0] "" Vector__XXX
 
@@ -111,6 +111,7 @@ BO_ 339 ASC_1: 8 DME_Etc
    SG_ unk60 : 60|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ unk63 : 63|1@1+ (1,0) [0|0] "" Vector__XXX
    SG_ unk32 : 32|1@1+ (1,0) [0|0] "" Vector__XXX
+   SG_ unk819 : 56|7@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 499 x1F3: 8 DME_Etc
    SG_ ForwardForce : 24|10@1+ (1,0) [0|1024] "" Vector__XXX
@@ -229,6 +230,8 @@ BA_DEF_ BO_ "matchingcriteria" INT 0 0;
 BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_DEF_ BO_ "matchingcriteria" INT 0 0;
 BA_DEF_ BO_ "filterlabeling" INT 0 0;
+BA_DEF_ BO_ "matchingcriteria" INT 0 0;
+BA_DEF_ BO_ "filterlabeling" INT 0 0;
 BA_ "GenMsgBackgroundColor" BO_ 790 "#ffffff";
 BA_ "GenMsgForegroundColor" BO_ 790 "#000000";
 BA_ "GenMsgBackgroundColor" BO_ 809 "#ffffff";
@@ -250,6 +253,7 @@ BA_DEF_DEF_ "filterlabeling" 0;
 BA_DEF_DEF_ "matchingcriteria" 0;
 BA_DEF_DEF_ "filterlabeling" false;
 CM_ SG_ 790 CRK_Error "Crankshaft_sensor_state";
+CM_ SG_ 1349 Unk7 "Temp_in_F_maybe";
 CM_ SG_ 1555 Unk40 "Driver_side_fuel_maybe?";
 CM_ SG_ 501 PSTE_CNT "Telegram_Counter";
 CM_ SG_ 501 PSTE_STATUS "Internal_Status_Code";

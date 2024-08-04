@@ -1,6 +1,7 @@
 #include "widget.hpp"
 
-#define TANK_SIZE_GALLONS 13.2
+// #define TANK_SIZE_GALLONS 13.2
+#define TANK_SIZE_GALLONS 14
 
 class Fuel : public Widget {
 public:
