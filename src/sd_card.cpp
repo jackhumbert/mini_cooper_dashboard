@@ -6,8 +6,6 @@
 
 // SD CARD
 
-#define RING_BUF_CAPACITY 16 * 512
-
 static char log_filename[20];
 
 static File log_file;
@@ -104,6 +102,12 @@ unsigned long long get_time_offset(void) {
     return time_offset;
 }
 
+bool is_logging = false;
+
+bool sd_card_is_logging(void) {
+    return is_logging;
+}
+
 bool sd_card_init() {
     if (!sd_mounted) {
         SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
@@ -159,6 +163,7 @@ bool sd_card_init() {
         &rb_flusher_task, // Task handle.
         1);
 
+    is_logging = true;
     sd_card_logf("%08.3f CXX R53 Custom Dash by Jack Humbert\n", xTaskGetTickCount() / 1000.0);
     return true;
 }
@@ -183,6 +188,7 @@ void stop_logging(void) {
     set_log_filename("");
     log_file.close();
     SPI.end();
+    is_logging = false;
     add_message_fmt("Closed: %s", log_filename);
 }
 

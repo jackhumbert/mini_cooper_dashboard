@@ -3,7 +3,7 @@
 
 // DISPLAY
 
-#define DISPLAY_BUFFER_SIZE 800 * 160
+#define DISPLAY_BUFFER_SIZE 600 * 160
 // #define DISPLAY_BUFFER_SIZE (unsigned int)((800 * 480) * 0.40)
 
 static lv_disp_draw_buf_t draw_buf;

@@ -1,12 +1,21 @@
 #include "outside_temp.hpp"
+#include "tiny_display.h"
 
 void OutsideTemp::update(void) {
     if (get_queued()->outside_temp) {
         lv_label_set_text_fmt(lv_obj, "%d°F", get_dash()->outside_temp * 9/5 + 32);
+        auto data = get_peer_data();
+        if (data) {
+            data->outside_temp = (float)get_dash()->outside_temp * 9/5 + 32;
+            send_peer_data();
+        }
     }
 }
 
 OutsideTemp::OutsideTemp(lv_obj_t * parent) {
+
+    setup_peer_data();
+
     DASH_FONT(RAJDHANI_REGULAR, 36);
  
     static lv_style_t style;

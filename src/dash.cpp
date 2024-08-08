@@ -239,21 +239,21 @@ lv_obj_t * dash_create(lv_disp_t * disp) {
     lv_label_set_text(logging_label, "Enable Logging");
 }
 
-{
-    lv_obj_t * msg_clea = lv_btn_create(canvas);
-    lv_obj_add_flag(msg_clea, LV_OBJ_FLAG_CHECKABLE);
-    lv_obj_add_event_cb(msg_clea, change_theme, LV_EVENT_ALL, NULL);
-    lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -5, 90);
+// {
+//     lv_obj_t * msg_clea = lv_btn_create(canvas);
+//     lv_obj_add_flag(msg_clea, LV_OBJ_FLAG_CHECKABLE);
+//     lv_obj_add_event_cb(msg_clea, change_theme, LV_EVENT_ALL, NULL);
+//     lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -5, 90);
 
-    lv_obj_t * label = lv_label_create(msg_clea);
-    lv_label_set_text(label, "Change Theme");
-}
+//     lv_obj_t * label = lv_label_create(msg_clea);
+//     lv_label_set_text(label, "Change Theme");
+// }
 
 {
     lv_obj_t * msg_clea = lv_btn_create(canvas);
     lv_obj_add_flag(msg_clea, LV_OBJ_FLAG_CHECKABLE);
     lv_obj_add_event_cb(msg_clea, playback_latest, LV_EVENT_ALL, NULL);
-    lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -5, 130);
+    lv_obj_align(msg_clea, LV_ALIGN_TOP_RIGHT, -5, 90);
 
     lv_obj_t * label = lv_label_create(msg_clea);
     lv_label_set_text(label, "Playback Latest");

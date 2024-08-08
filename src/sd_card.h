@@ -8,6 +8,7 @@ extern "C"
 {
 #endif
 
+bool sd_card_is_logging(void);
 bool sd_card_init(void);
 void sd_card_dump_messages(void);
 void sd_card_clear_messages(void);

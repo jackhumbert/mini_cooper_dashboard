@@ -3,6 +3,7 @@
 #include <sys/time.h>
 #include "messages.h"
 #include "sd_card.h"
+#include "tiny_display.h"
 
 #define SEC_PER_DAY   86400
 #define SEC_PER_HOUR  3600
@@ -54,6 +55,11 @@ void Clock::update(void) {
       #else
         int day = rtc.getDayofYear();
         rtc.setTime(epoch_offset + get_cache()->running_clock * 60);
+        auto data = get_peer_data();
+        if (data) {
+          data->time = rtc.getLocalEpoch();
+          send_peer_data();
+        }
         if (day != rtc.getDayofYear()) {
           add_message(rtc.getTime("%A, %B %d %Y").c_str());
         }
@@ -63,6 +69,8 @@ void Clock::update(void) {
 }
 
 Clock::Clock(lv_obj_t * parent) {
+
+    setup_peer_data();
 
     DASH_FONT(RAJDHANI_REGULAR, 36);
  
